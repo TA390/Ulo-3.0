@@ -13,9 +13,36 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import url
+
+# LIBRARY IMPORTS
+# ----------------------------------------------------------------------------------------
+
+# Standard library imports
+
+# Core django imports
+from django.conf import settings
+from django.conf.urls import include, url
 from django.contrib import admin
 
+# Thrid party app imports
+
+# Project imports
+
+# ----------------------------------------------------------------------------------------
+
+
+
+
+# ----------------------------------------------------------------------------------------
+
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
+
+	# # Landing Page
+	# url(r'^$', HomeAuthView.as_view(), name='home'),
+
 ]
+
+# ----------------------------------------------------------------------------------------
+
+
+
