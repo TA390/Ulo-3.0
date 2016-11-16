@@ -1,0 +1,25 @@
+{% extends base_template %}
+{% load staticfiles %}
+
+{% block css %}
+  <link class="css_file" href="{% static 'css/accounts/not_my_account_no_user.css' %}" rel="stylesheet" type="text/css">
+{% endblock css %}
+
+{% block content %}
+<div id="not_my_account_no_user">
+
+	<h1 class="panel">Your email address is not associated with an Ulo account.</h1>
+
+	<p class="panel">
+		We did not find an account registered to your email address. To create an account <a class="bold" href="{% url 'signup' %}" title="Sign up">sign up</a>.
+	</p>
+
+	<h2 class="panel">Why did I receieve an email from Ulo?</h2>
+	
+	<ul class="list">
+		<li>Another user entered your email address by mistake when creating an account.</li>
+		<li>Your email address was previously associated with an Ulo account.</li>
+	</ul>
+
+</div>
+{% endblock content %}

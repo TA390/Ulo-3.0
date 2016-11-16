@@ -1,0 +1,63 @@
+{% extends base_template %}
+{% load staticfiles %}
+
+{% block css %}
+	<link class="css_file" href="{% static 'css/accounts/deactivate.css' %}" rel="stylesheet" type="text/css">
+{% endblock css %}
+
+{% block content %}
+<div id="deactivate">
+
+	<div class="centre">
+
+		<h1>We are sad to see you go.</h1>
+
+		<p class="text">
+			Remember, you can reactivate your account by logging in before your information is deleted permanently in 30 days time.
+		</p>
+
+		<form id="deactivate_form" class="cf" action="{% url 'accounts:deactivate' %}" method="post">
+
+			{% csrf_token %}
+
+			{% if form.non_field_errors %}
+			<div id="deactivate_form_errors" class="form_errors">
+				
+				{% for error in form.non_field_errors %}
+				<p class="validation error">{{ error }}</p>
+				{% endfor %}
+			
+			</div>
+			{% endif %}
+
+			
+			<div id="deactivate_password_container">
+
+				{% for error in form.password.errors %}
+					<p class="validation error">{{ error }}</p>
+				{% endfor %}
+
+				{{ form.password }}
+
+			</div>
+
+
+			<input id="deactivate_submit" type="submit" name="submit" value="Deactivate">
+
+			<a id="deactivate_cancel" href="{% url 'settings:account' %}" title="Cancel">
+				Cancel
+			</a>
+			
+
+		</form>
+
+	</div>
+
+</div>
+{% endblock content %}
+
+{% block js %}
+	<script class="js_file" src="{% static 'js/helpers/validation.js' %}"></script>
+	<script class="js_file" src="{% static 'js/accounts/deactivate.js' %}"></script>
+{% endblock js %}
+

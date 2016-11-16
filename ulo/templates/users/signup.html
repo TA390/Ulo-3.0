@@ -1,0 +1,115 @@
+{% extends base_template %}
+{% load staticfiles i18n %}
+
+
+{% block title %}{{ site_name }} Sign Up{% endblock title %}
+
+{% block css %}
+	<link class="css_file" href="{% static 'css/users/signup.css' %}" rel="stylesheet" type="text/css">
+{% endblock css %}
+
+
+{% block content %}
+<div id="signup">
+
+	<div id="signup_form_container">
+
+		<div id="signup_header">
+			<h1 class="thin">Join {{ site_name }}</h1>
+		</div>
+
+		<form id="signup_form" action="{% url 'signup' %}" method="post">
+
+			{% csrf_token %}
+
+
+			{% if form.non_field_errors %}
+			<div id="signup_form_errors" class="form_errors">
+				{% for error in form.non_field_errors %}
+				<p class="validation error">{{ error }}</p>
+				{% endfor %}
+			</div>
+			{% endif %}
+
+			<div id="signup_name_container" class="field">
+
+				{% for error in form.name.errors %}
+					<p class="validation error">{{ error }}</p>
+				{% endfor %}
+
+				{{ form.name }}
+
+			</div>
+
+			<div id="signup_username_container" class="field">
+
+				{% for error in form.username.errors %}
+					<p class="validation error">{{ error }}</p>
+				{% endfor %}
+
+				<div id="username_field">
+					{{ form.username }}
+					<span class="icon"></span>
+				</div>
+			</div>
+
+			<div id="signup_email_container" class="field">
+				
+				{% for error in form.email.errors %}
+					<p class="validation error">{{ error }}</p>
+				{% endfor %}
+
+				{{ form.email }}
+
+			</div>
+
+			<div id="signup_password_container" class="field">
+				
+				{% for error in form.password.errors %}
+					<p class="validation error">{{ error }}</p>
+				{% endfor %}
+
+				{{ form.password }}
+
+			</div>
+
+			<div id="signup_dob_container" class="field">
+				
+				{% for error in form.dob.errors %}
+					<p class="validation error">{{ error }}</p>
+				{% endfor %}
+
+				<div class="inline_field">
+					<span class="inline label">{{ form.dob.label_tag }}</span>
+					<span class="inline field box_border">{{ form.dob }}</span>
+				</div>
+
+			</div>
+
+			<div id="signup_submit_container">
+			
+				<input id="signup_submit" name="submit" type="submit" value="Sign up">
+			
+			</div>
+		
+
+			<div id="terms_and_conditions">
+
+				<p class="text">
+					By joining {{ site_name }}, you agree to our <a href="#" class="bold">Terms of Service</a> and <a href="#" class="bold">Privacy Policy</a> including <a href="#" class="bold">Cookie Use</a>.
+				</p>
+
+			</div>
+
+		</form>
+
+	</div>
+
+</div>
+{% endblock content %}
+
+{% block js %}
+	<script class="js_file" src="{% static 'js/helpers/validation.js' %}"></script>
+	<script class="js_file" src="{% static 'js/users/signup.js' %}"></script>
+{% endblock js %}
+

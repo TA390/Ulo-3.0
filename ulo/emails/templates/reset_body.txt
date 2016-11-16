@@ -1,0 +1,6 @@
+Hi {{ name }}, 
+
+We received a request to reset your password. If you made this request then follow the link below to reset your password. If this request was not made by you then please ignore this email. 
+
+{{protocol}}://{{domain}}{% url 'accounts:password_reset' token=tokens.0 %}
+

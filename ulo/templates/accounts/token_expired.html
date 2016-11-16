@@ -1,0 +1,15 @@
+{% extends base_template %}
+{% load staticfiles %}
+
+{% block css %}
+	<link class="css_file" href="{% static 'css/accounts/token_expired.css' %}" rel="stylesheet" type="text/css">
+{% endblock css %}
+
+
+{% block content %}
+<div id="token_expired">
+
+	<h1 class="thin">Sorry, this link has expired.</h1>
+
+</div>
+{% endblock content %}

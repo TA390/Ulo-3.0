@@ -1,0 +1,19 @@
+{% extends base_template %}
+{% load staticfiles i18n %}
+
+{% block title %}Page Not Found{% endblock title %}
+
+{% block css %}
+	<link class="css_file" href="{% static 'css/404.css' %}" rel="stylesheet" type="text/css">
+{% endblock css %}
+
+{% block content %}
+<div id="error_404">
+
+	<h1>Ooops!!! 404</h1>
+	<h2>Page Not found</h2>
+
+	<p>This is not the page you were looking for.</p>
+
+</div>
+{% endblock content %}

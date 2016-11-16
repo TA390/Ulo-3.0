@@ -1,0 +1,132 @@
+{% extends base_template %}
+{% load staticfiles i18n %}
+
+
+{% block css %}
+	<link class="css_file" href="{% static 'css/users/profile_update.css' %}" rel="stylesheet" type="text/css">
+{% endblock css %}
+
+{% block content %}
+<div id="profile_edit">
+
+	<div class="centre">
+
+		<h1 class="thin">Edit Profile</h1>
+		
+		<a class="back bold" href="{% url 'users:profile' user.username %}" title="Back to profile">Back to profile</a>
+		
+
+		<div class="user_names">
+
+			<div class="edit_names">
+				
+				<a class="bold" href="{% url 'settings:account' %}" title="Edit name and username">edit</a>
+			
+			</div>
+				
+			<div class="names">
+				
+				<span class="bold ellipsis">{{ user.name }}&nbsp;</span>
+				<span class="ellipsis">@{{ user.username }}&nbsp;</span>
+				
+			</div>
+
+		</div>
+
+
+		<form id="profile_edit_form" action="{% url 'users:profile_update' %}" method="post">
+
+			{% csrf_token %}
+
+
+			{% if form.non_field_errors %}
+			<div id="profile_edit_form_errors" class="form_errors">
+				{% for error in form.non_field_errors %}
+				<p class="validation error">{{ error }}</p>
+				{% endfor %}
+			</div>
+			{% endif %}
+
+
+			<div class="field">
+
+				{{ form.blurb.label_tag }}
+
+				<div id="blurb_container">
+
+					{% for error in form.blurb.errors %}
+						<p class="validation error">{{ error }}</p>
+					{% endfor %}
+
+					{{ form.blurb }}
+
+				</div>
+
+			</div>
+
+
+			<div class="field">
+
+				{{ form.location.label_tag }}
+
+				<div id="location_container">
+
+					{% for error in form.location.errors %}
+						<p class="validation error">{{ error }}</p>
+					{% endfor %}
+
+					{{ form.location }}
+
+				</div>
+
+			</div>
+
+
+			<div class="field">
+
+				{{ form.dob.label_tag }}
+
+				<div id="dob_container">
+						
+					{% for error in form.dob.errors %}
+						<p class="validation error">{{ error }}</p>
+					{% endfor %}
+
+					<div class="dob_fields cf">
+						{{ form.dob }}
+					</div>
+
+				</div>
+
+			</div>
+
+
+			<div class="field">
+
+				{{ form.gender.label_tag }}
+
+				<div id="gender_container">
+						
+					{% for error in form.gender.errors %}
+						<p class="validation error">{{ error }}</p>
+					{% endfor %}
+
+					{{ form.gender }}
+
+				</div>
+
+			</div>
+
+
+			<div class="submit_container">
+
+				<input id="profile_edit_submit" name="submit" type="submit" value="Save Changes">
+			
+			</div>
+
+		</form>
+
+	</div>
+
+</div>
+{% endblock content %}

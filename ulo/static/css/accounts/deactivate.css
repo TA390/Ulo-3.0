@@ -1,0 +1,94 @@
+/* -------------------------------------------------------------------------- */
+
+#deactivate{
+
+	margin: 20px;	
+
+}
+
+#deactivate .centre{
+
+	display: block;
+	margin: auto;
+	padding: 20px;
+	border-radius: 4px;
+	max-width: 600px;
+	background-color: #F6F6F6;
+
+}
+
+/* -------------------------------------------------------------------------- */
+
+#deactivate h1{
+
+	margin: 0;
+	font-size: 24px;
+
+}
+
+#deactivate p.text{
+
+	margin: 20px 0;
+
+}
+
+/* -------------------------------------------------------------------------- */
+
+#deactivate_form{
+
+	padding-top: 20px;
+	border-top: 1px solid #333;
+
+}
+
+#deactivate_form p.validation{
+
+	margin: 0 0 10px 0;
+	color: #1C82DA;
+
+}
+
+#deactivate_password,
+#deactivate_submit,
+#deactivate_cancel{
+
+	display: block;
+	padding: 0 15px;
+	height: 40px;
+	line-height: 40px;
+	border: none;
+	border-radius: 4px;
+
+}
+
+#deactivate_password{
+
+	width: 100%;
+
+}
+
+#deactivate_submit,
+#deactivate_cancel{
+
+	float: left;
+	margin: 20px 10px 0 0;
+
+}
+
+#deactivate_submit{
+
+	background-color: #333;
+	color: #FFF;
+
+}
+
+#deactivate_cancel{
+
+	background-color: #FFF;
+	color: #333;
+	text-decoration: none;
+
+}
+
+/* -------------------------------------------------------------------------- */
+

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8">
+		<title>{{site_name}} Email Confirmation</title>
+		<style type="text/css">
+		</style>
+	</head>
+
+	<body>
+		<h2>Hi {{name}},</h2>
+
+		<p>
+		Complete your account registration by confirming your email address.
+		</p>
+
+		<a href="{{protocol}}://{{domain}}{% url 'accounts:verification' token=tokens.0 %}">
+			confirm email address
+		</a>
+		<br/>
+		<br/>
+		<small>
+			If you do not wish to receive emails from {{site_name}} in the future, please <a href="#">unsubscribe</a>. If you did not create an {{site_name}} account using this email address, click <a href="{{protocol}}://{{domain}}{% url 'accounts:not_my_account' token=tokens.1 %}">not my account</a>.
+		</small>
+	</body>
+</html>

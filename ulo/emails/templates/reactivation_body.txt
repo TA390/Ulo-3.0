@@ -1,0 +1,7 @@
+Hi {{ name }}, 
+
+We received a request to reactivate your account. Everything is now up and running.
+ 
+If you did not create an {{site_name}} account or login to your account recently, follow the link:
+
+{{protocol}}://{{domain}}{% url 'accounts:not_my_account' token=tokens.0 %}

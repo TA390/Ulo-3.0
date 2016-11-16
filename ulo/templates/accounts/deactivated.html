@@ -1,0 +1,23 @@
+{% extends base_template %}
+{% load staticfiles %}
+
+{% block css %}
+	<link class="css_file" href="{% static 'css/accounts/deactivated.css' %}" rel="stylesheet" type="text/css">
+{% endblock css %}
+
+{% block content %}
+<div id="deactivated">
+
+	<div class="centre">
+
+		<h1>Account Deactivated</h1>
+		<p class="bold">Your account has been deactivated and will be deleted permanently in 30 days.</p>
+
+		<p>To reactivate your account <a class="bold" href="{% url 'login' %}" title="Log in">log in</a> before we delete it permanently.</p>
+
+		<p class="valediction">Good-bye for now.</p>
+
+	</div>
+	
+</div>
+{% endblock content %}

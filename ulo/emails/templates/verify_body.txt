@@ -1,0 +1,9 @@
+Hi {{name}},
+
+Complete your account registration by confirming your email address. Copy the link into your browser.
+
+{{protocol}}://{{domain}}{% url 'accounts:verification' token=tokens.0 %}
+
+
+If you did not create an {{site_name}} account using this email address let us know using the link:
+{{protocol}}://{{domain}}{% url 'accounts:not_my_account' token=tokens.1 %}

@@ -1,0 +1,22 @@
+{% extends base_template %}
+{% load staticfiles %}
+
+{% block css %}
+	<link class="css_file" href="{% static 'css/accounts/not_my_account_confirmed.css' %}" rel="stylesheet" type="text/css">
+{% endblock css %}
+
+{% block content %}
+<div id="not_my_account_confirmed">
+
+	<div class="centre">
+
+		<h1>The account has been suspended and will be removed permanently in 30 days.</h1>
+		
+		<h2>Why was my email address used?</h2>
+		
+		<p>When creating an Ulo account another user may have entered your email address by mistake or was attempting to engage in misconduct. Your report will help identify improper behaviour on Ulo.</p>
+	
+	</div>
+	
+</div>
+{% endblock content %}

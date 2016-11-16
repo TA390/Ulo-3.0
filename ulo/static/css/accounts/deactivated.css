@@ -1,0 +1,55 @@
+/* -------------------------------------------------------------------------- */
+
+#deactivated{
+
+	text-align: center;
+	margin: 20px;
+
+}
+
+#deactivated > .centre{
+
+	display: inline-block;
+	vertical-align: top;
+	padding: 0 20px;
+	border-radius: 4px;
+	background-color: #F6F6F6;
+
+}
+
+#deactivated h1{
+
+	font-size: 24px;
+
+}
+
+#deactivated p{
+
+	margin: 20px 0;
+
+}
+
+#deactivated a{
+
+	text-decoration: none;
+	color: #1C82DA;
+
+}
+
+#deactivated a:hover{
+
+	text-decoration: underline;
+
+}
+
+#deactivated p.valediction{
+
+	padding-top: 20px;
+	border-top: 1px solid #333;
+	font-size: 15px;
+
+}
+
+
+/* -------------------------------------------------------------------------- */
+

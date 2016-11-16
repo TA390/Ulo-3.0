@@ -116,6 +116,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'emails',
+    'ulo',
+    'users'
 
 ]
 
@@ -136,6 +139,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'ulo.middleware.AjaxRequestMiddleware',
 
 ]
 
@@ -166,6 +170,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'ulo.context_processors.base_template',
         
             ],
         
@@ -173,31 +178,6 @@ TEMPLATES = [
     
     },
 ]
-
-# ----------------------------------------------------------------------------------------
-
-
-
-
-# DATABASE
-# ----------------------------------------------------------------------------------------
-
-# https://docs.djangoproject.com/en/1.10/ref/settings/#databases
-
-DATABASES = {
-
-    'default': {
-
-        'ENGINE': 'django.db.backends.mysql', 
-        'NAME': 'ulo3_db', 
-        'USER': 'root', 
-        'PASSWORD': '', 
-        'HOST': '', 
-        'PORT': '',      
-    
-    }
-
-}
 
 # ----------------------------------------------------------------------------------------
 
@@ -299,7 +279,7 @@ USE_THOUSAND_SEPARATOR = True
 # CSRF SETTINGS
 # ----------------------------------------------------------------------------------------
 # The view to render when the csrf middleware validation fails.
-# CSRF_FAILURE_VIEW = 'ulo.views.csrf_failure'
+CSRF_FAILURE_VIEW = 'ulo.views.csrf_failure'
 
 # https://docs.djangoproject.com/en/1.10/ref/settings/#csrf-cookie-httponly
 # The hidden csrf token must be sent with all js/ajax requests as this prevents js from
@@ -314,15 +294,15 @@ CSRF_COOKIE_HTTPONLY = True
 # USER MODEL
 # ----------------------------------------------------------------------------------------
 
-# AUTHENTICATION_BACKENDS = ('users.models.UserModelBackend',)
+AUTHENTICATION_BACKENDS = ('users.models.UserModelBackend',)
 
-# AUTH_USER_MODEL = 'users.User'
+AUTH_USER_MODEL = 'users.User'
 
 # ----------------------------------------------------------------------------------------
 
 
 
-
+# CUSTOM SETTINGS
 # ----------------------------------------------------------------------------------------
 
 SITE_DOMAIN = 'Ulo.com'

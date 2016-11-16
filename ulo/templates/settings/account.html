@@ -1,0 +1,163 @@
+{% extends base_template %}
+{% load staticfiles %}
+
+{% block css %}
+    <link class="css_file" href="{% static 'css/settings/setting.css' %}" rel="stylesheet" type="text/css">
+{% endblock css %}
+
+{% block content %}
+<div id="account" class="settings">
+
+    <div class="centre">
+
+        <div class="wrapper">
+
+            <div id="tabs" class="cf">
+
+                <a id="account_settings" class="tab selected" href="{% url 'settings:account' %}">
+                  
+                    <span class="text">Account</span>
+
+                </a>
+
+                <a id="password_settings" class="tab" href="{% url 'settings:password' %}">
+                  
+                    <span class="text">Password</span>
+
+                </a>
+
+            </div>
+
+
+            <div id="tab_content">
+
+                <div id="account_settings_tab">
+
+                    <form id="account_form" action="{% url 'settings:account' %}" method="post">
+                        
+                        {% csrf_token %}
+
+                        {% if account_form.non_field_errors %}
+                        <div id="account_form_errors" class="form_errors">
+                            {% for error in account_form.non_field_errors %}
+                                <p class="validation error">{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+
+
+                        <div class="field">
+
+                            {{ account_form.name.label_tag }}
+                            
+                            <div id="account_name_container">
+
+                                {% for error in account_form.name.errors %}
+                                <p class="validation error">{{ error }}</p>
+                                {% endfor %}
+
+                                {{ account_form.name }}
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="field">
+
+                            {{ account_form.username.label_tag }}
+
+                            <div id="account_username_container">
+
+                                {% for error in account_form.username.errors %}
+                                <p class="validation error">{{ error }}</p>
+                                {% endfor %}
+                                
+                                {{ account_form.username }}
+
+                            </div>
+
+                        </div>
+                        
+
+                        <div class="field">
+                            
+                            {{ account_form.email.label_tag }}
+                            
+                            <div id="account_email_container">
+
+                                {% for error in account_form.email.errors %}
+                                <p class="validation error">{{ error }}</p>
+                                {% endfor %}
+
+                                {{ account_form.email }}
+
+                            </div>
+
+                                
+                            {% if not user.email_confirmed %}
+                            
+                            <div id="confirm_email">
+                                
+                                <p>Check your email to confirm your address.</p>
+                                <a class="bold" href="{% url 'accounts:resend_verification' %}">Resend Email Confirmation</a>
+                                
+                            </div>
+                            
+                            {% endif %}
+                        
+                        </div>
+                        
+
+                        <div class="field submit_container">
+                            
+                            <div id="account_password_container">
+
+                                {% for error in account_form.password.errors %}
+                                <p class="validation error">{{ error }}</p>
+                                {% endfor %}
+
+                                <div class="table">
+
+                                    <div class="cell">{{ account_form.password }}</div>
+
+                                    <div class="cell">
+
+                                        <input id="account_submit" class="submit_btn" type="submit" value="Save">
+
+                                    </div>
+
+                                </div>
+                            
+                            </div>
+                        
+                        </div>
+
+                      
+                    </form>
+
+
+                    <div class="deactivate_account">
+
+                        <a class="bold" href="{% url 'accounts:deactivate' %}">Deactivate my account</a>
+                    
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+</div>
+{% endblock content %}
+
+{% block js %}
+    <script class="js_file" src="{% static 'js/helpers/validation.js' %}"></script>
+    <script class="js_file" src="{% static 'js/settings/setting.js' %}"></script>
+{% endblock js %}
+

@@ -1,0 +1,1065 @@
+/* FONT */
+/* -------------------------------------------------------------------------- */
+
+@import url("fonts/font.css");
+
+b, .bold{
+
+	font-family: 'open_sansregular', Helvetica, Arial, Verdana, sans-serif;
+
+}
+
+.thin{
+
+	font-family: 'open_sanslight', Helvetica, Arial, Verdana, sans-serif;
+
+}
+
+/* END FONT */
+/* -------------------------------------------------------------------------- */
+
+
+
+
+/* PAGE STRUCTURE */
+/* -------------------------------------------------------------------------- */
+
+html, body{
+
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	min-height: 100%;
+	background-color: #FFF;
+	color: #333333;
+
+}
+
+body.preload *{
+
+	-moz-transition: none !important;
+
+}
+
+ul{
+
+	margin: 0;
+	padding: 0;
+	list-style: none;
+
+}
+
+a{
+
+	color: #1C82DA;
+	text-decoration: none;
+
+}
+
+button{
+
+	margin: 0;
+	padding: 0;
+	border: none;
+	outline: none;
+	cursor: pointer;
+
+}
+
+/* Disable double-tap-to-zoom for fast click response on mobile browsers */
+a,
+button{
+
+	-ms-touch-action: manipulation;	/* IE10  */
+	touch-action: manipulation;		/* IE11+ */
+
+}
+
+/* Remove text/search cancel button */
+input[type=text]::-ms-clear {  display: none; width: 0; height: 0; }
+input[type=text]::-ms-reveal {  display: none; width: 0; height: 0; }
+input[type="search"]::-webkit-search-decoration,
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-results-button,
+input[type="search"]::-webkit-search-results-decoration { display: none; }
+
+/* END PAGE STRUCTURE */
+/* -------------------------------------------------------------------------- */
+
+
+
+
+/* CLEAR FIX BY NICOLAS GALLAGHER */
+/* -------------------------------------------------------------------------- */
+
+/* http://nicolasgallagher.com/micro-clearfix-hack/ */
+
+.cf:before,
+.cf:after{
+
+    content: " ";
+    display: table;
+
+}
+
+.cf:after {
+
+    clear: both;
+
+}
+
+/*
+	For IE 6/7 only. Include this rule to trigger hasLayout and contain floats.
+ */
+.cf {
+
+    *zoom: 1;
+
+}
+
+/* END CLEAR FIX BY NICOLAS GALLAGHER */
+/* -------------------------------------------------------------------------- */
+
+
+
+
+/* ACCESSIBILITY */
+/* -------------------------------------------------------------------------- */
+
+#skip_nav{
+
+	position: absolute;
+	left: -9999em;
+
+}
+
+/* END ACCESSIBILITY */
+/* -------------------------------------------------------------------------- */
+
+
+
+
+/* NAV BAR */
+/* -------------------------------------------------------------------------- */
+
+header, nav{
+
+	width: 100%;
+	height: 48px;
+	line-height: 48px;
+	background-color: #333;
+	color: #FFF;
+
+}
+
+nav{
+
+	display: block;
+
+}
+
+nav div.col{
+
+	height: 48px;
+	line-height: 48px;
+	text-align: center;
+
+}
+
+span.page_loading{
+
+	z-index: 10;
+	position: absolute;
+	top: 48px; left: 0;
+	transition: width 0.6s ease;
+	height: 1px;
+	background-color: #1C82DA;
+
+}
+
+/* ---------------------------------- */
+
+#nav_search{
+
+	z-index: 4;
+	position: relative;
+	float: left;
+	padding: 0 20px;
+	width: 46px;
+	transition: all 0.4s ease;
+	background-color: #333;
+
+}
+
+#nav_search.open{
+
+	position: absolute;
+	top: 0; left: 0;
+	width: 100%;
+
+}
+
+div.search_wrapper{
+
+	display: table;
+	width: 100%;
+	height: 100%;
+
+}
+
+#nav_search .cell{
+
+	display: table-cell;
+	vertical-align: middle;
+
+}
+
+#nav_search button{
+
+	display: block;
+	background-color: transparent;
+
+}
+
+
+#nav_search .search_form{
+
+	position: relative;
+	display: none;
+
+}
+
+#nav_search.open .search_form{
+
+	display: block;
+
+}
+
+#nav_search.open .search_data{
+
+	margin-left: 36px;
+
+}
+
+div.search_close{
+
+	margin: 11px auto;
+	float: left;
+
+}
+
+#nav_search_form{
+
+	position: relative;
+	display: block;
+	overflow: hidden;
+
+}
+
+div.search_close,
+#nav_search_form,
+div.search_data{
+
+	margin-right: 10px;
+
+}
+
+#nav_search_form input{
+
+	padding: 0 30px 0 0;
+	width: 100%;
+	height: 26px;
+	line-height: 26px;
+	border: none;
+	outline: none;
+	background-color: transparent;
+
+}
+
+	#nav_search_form button{
+
+	position: absolute;
+	top: 11px; right: 0;
+
+}
+
+
+div.search_submit{
+
+	width: 26px;
+
+}
+
+/* ---------------------------------- */
+
+div.search_data{
+
+	display: block;
+	position: absolute;
+	top: 48px; left: 0; right: 0;
+	line-height: normal;
+	text-align: left;
+
+}
+
+div.search_data.open{
+
+	box-shadow: 0 0 1px 1px rgba(51, 51, 51, 0.4);
+
+}
+
+
+#filter_ul{
+
+	height: 0;
+	transition: height 0.2s ease;
+	background-color: #333;
+	overflow: hidden;
+
+}
+
+#filter_ul li{
+
+	padding: 10px;
+	cursor: pointer;
+
+}
+
+#filter_ul li:hover,
+#filter_ul li.selected{
+
+	background-color: #444;
+
+}
+
+
+#suggestions ul{
+
+	color: #333;
+	background-color: #FFF;
+
+}
+
+#suggestions a{
+
+	display: block;
+	padding: 6px 10px;
+	color: #333;
+
+}
+
+#suggestions a:hover,
+#suggestions a:hover span{
+
+	color: #FFF;
+	background-color: #333;
+
+}
+
+
+ul.post_suggestions div.title{
+
+	font-size: 1em;
+	max-height: 2.8em;
+	overflow: hidden;
+
+	display: -webkit-box;
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical;
+
+	text-overflow: -o-ellipsis-lastline;
+
+}
+
+
+ul.user_suggestions img{
+
+	float: left;
+	margin-right: 6px;
+	width: 36px;
+	height: 36px;
+	border-radius: 4px;
+
+}
+
+ul.user_suggestions div.names{
+
+	overflow: hidden;
+
+}
+
+ul.user_suggestions span{
+
+	display: block;
+
+}
+
+ul.user_suggestions span.username{
+
+	font-size: 12px;
+	color: #999;
+
+}
+
+/* ---------------------------------- */
+
+div.nav_logo{
+
+	margin: auto;
+	position: absolute;
+	top: 0; left: 0; right: 10px;
+	width: 26px;
+
+}
+
+div.nav_logo a{
+
+	display: inline-block;
+	vertical-align: middle;
+	margin: auto;
+
+}
+
+/* ---------------------------------- */
+
+div.nav_menu{
+
+	float: right;
+
+}
+
+#toggle_nav_ul{
+
+	display: inline-block;
+	vertical-align: middle;
+	margin: auto 20px;
+
+}
+
+#nav_ul{
+
+	z-index: 2;
+	position: absolute;
+	top: 48px; left: 0; right: 0;
+	display: block;
+	padding: 0 10px;
+	width: 100%;
+	min-width: 0;
+	height: 0;
+	transition: all 0.4s ease;
+	overflow: hidden;
+	text-align: left;
+
+}
+
+#nav_ul.open{
+
+	height: 100%;
+	height: -webkit-calc(100% - 48px);
+	height: -moz-calc(100% - 48px);
+	height: calc(100% - 48px);
+	background-color: rgba(51, 51, 51, 0.96);
+	overflow: scroll;
+
+}
+
+body.nav_ul_open{
+
+	overflow: hidden;
+
+}
+
+#nav_ul a{
+
+	display: block;
+	padding: 0 10px;
+	color: #FFF;
+
+}
+
+#nav_ul a:hover{
+
+	color: #A9A9A9;
+
+}
+
+/* -------------------------------------------------------------------------- */
+
+@media all and (min-width: 760px){
+
+	#nav_search, #nav_search.open{
+
+		position: relative;
+		width: 40%;
+		max-width: 360px;
+
+	}
+
+	#nav_search .search_form{
+
+		display: block;
+
+	}
+
+	#nav_search.open .search_data{
+
+		margin-left: 0;
+
+	}
+
+	div.search_close{
+
+		display: none;
+
+	}
+
+	/* ---------------------------------- */
+
+	div.nav_menu{
+
+		width: 45%;
+		overflow: hidden;
+
+	}
+
+	#toggle_nav_ul{
+
+		display: none;
+
+	}
+
+	#nav_ul, 
+	#nav_ul.open{
+
+		position: relative;
+		top: 0;
+		background-color: #333;
+		overflow: visible;
+		text-align: right;
+
+	}
+
+	body.nav_ul_open{
+
+		overflow: visible;
+
+	}
+
+	#nav_ul li{
+
+		display: inline-block;
+		vertical-align: middle;
+		/* 100 / Max number of buttons */
+		max-width: 25%;
+	
+	}
+
+}
+
+/* END NAV BAR */
+/* -------------------------------------------------------------------------- */
+
+
+
+
+/* MESSAGES */
+/* -------------------------------------------------------------------------- */
+
+#messages{
+
+	display: none;
+	position: absolute;
+	top: 0; left: 0; right: 0;
+
+	padding: 0 10px 10px 10px;
+	text-align: center;
+	overflow: hidden;
+
+}
+
+#messages.show{
+
+	display: block;
+
+}
+
+#messages > .wrapper{
+
+	display: inline-block;
+	vertical-align: top;
+	max-width: 100%;
+
+}
+
+#messages .container{
+
+	z-index: 9000;
+	position: relative;
+	min-width: 0;
+	max-width: 600px;
+	padding: 15px;
+	border: 1px solid #333;
+	border-radius: 0 0 4px 4px;
+	border-top: none;
+	background-color: #FFF;
+
+}
+
+#messages .text{
+
+	margin-right: 40px;
+
+}
+
+#messages p{
+
+	margin: 0 0 10px 0;
+	word-wrap: break-word;
+
+}
+
+#messages p:last-child{
+
+	margin: 0;
+
+}
+
+#messages div.close{
+
+	position: absolute;
+	top: 15px; right: 12px; bottom: 15px;
+	
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+}
+
+#messages button{
+
+	display: block;
+	background-color: transparent;
+
+}
+
+/* ---------------------------------- */
+
+#messages.no_js{
+
+	position: relative;
+	padding: 0 5px;
+	background-color: #F6F6F6;
+
+}
+
+#messages.no_js .container{
+
+	background-color: #F6F6F6;
+	max-width: 1200px;
+	border: none;
+
+}
+
+#messages.no_js .text{
+
+	margin-right: 0;
+
+}
+
+
+
+/* END MESSAGES */
+/* -------------------------------------------------------------------------- */
+
+
+
+
+/* PAGE CONTAINERS */
+/* -------------------------------------------------------------------------- */
+
+/* Outer container */
+#content_container{
+
+	position: absolute;
+	top: 48px; left:0; right:0; bottom:0;
+
+}
+
+/* Content container */
+#main_content{
+
+	position: relative;
+	width: 100%;
+	height: 100%;
+
+}
+
+/* Page container */
+.container{
+
+	margin: auto;
+	min-width: 320px;
+	max-width: 1200px;
+
+}
+
+/* END PAGE CONTAINERS */
+/* -------------------------------------------------------------------------- */
+
+
+
+
+/* CLASSES */
+/* -------------------------------------------------------------------------- */
+
+.hide{
+
+	display: none;
+
+}
+
+.show{
+
+	display: block;
+
+}
+
+.hidden{
+
+	visibility: hidden;
+
+}
+
+.box_border{
+
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+
+}
+
+.ellipsis{
+
+	text-overflow: ellipsis;
+	white-space:nowrap;
+	overflow: hidden;
+
+}
+
+
+@-webkit-keyframes pulse{
+
+	0%, 100%{
+
+		opacity: 0.4;
+		-webkit-transform: scale(0.5);
+
+	}
+	
+	50%{
+
+		opacity: 0.8;
+		-webkit-transform: scale(1);
+
+	}
+
+}
+
+@-moz-keyframes pulse{
+
+	0%, 100%{
+
+		opacity: 0.4;
+		-moz-transform: scale(0.5);
+
+	}
+	
+	50%{
+
+		opacity: 0.8;
+		-moz-transform: scale(1);
+
+	}
+
+}
+
+@-o-keyframes pulse{
+
+	0%, 100%{
+
+		opacity: 0.4;
+		-o-transform: scale(0.5);
+
+	}
+	
+	50%{
+
+		opacity: 0.8;
+		-o-transform: scale(1);
+
+	}
+
+}
+
+@keyframes pulse{
+
+	0%, 100%{
+
+		opacity: 1;
+
+	}
+	
+	50%{
+
+		opacity: 0.4;
+
+	}
+
+}
+
+.animation{
+
+	display: none;
+	position: absolute;
+	top: 0; left: 0; right: 0; bottom: 0;
+	margin: auto;
+
+}
+
+.pulse{
+
+/*	display: block;
+	width: 20px;
+	height: 20px;
+	border-radius: 100%;
+	background-color: #1C82DA;*/
+
+	-webkit-animation: 2s linear 0s infinite normal none running pulse;
+	-moz-animation: 2s linear 0s infinite normal none running pulse;
+	-o-animation: 2s linear 0s infinite normal none running pulse;
+	animation: 2s linear 0s infinite normal none running pulse;
+
+}
+
+/* END CLASSES */
+/* -------------------------------------------------------------------------- */
+
+
+
+
+/* ICONS */
+/* -------------------------------------------------------------------------- */
+
+.icon{
+
+	display: block;
+	width: 26px;
+	height: 26px;
+	background-repeat: no-repeat;
+	background-size: 26px 858px;
+	background-image: url("../icons/icons.svg");
+
+}
+
+.icon_logo{
+
+	background-position: 0 0;
+
+}
+
+.icon_search{
+
+	background-position: 0 -26px;
+
+}
+
+.icon_cross_white{
+
+	background-position: 0 -52px;
+
+}
+
+.icon_down_arrow_white{
+
+	background-position: 0 -78px;
+
+}
+
+.icon_up_arrow_white{
+
+	background-position: 0 -104px;
+
+}
+
+.icon_left_arrow_white{
+
+	background-position: 0 -130px;
+
+}
+
+.icon_right_arrow_white{
+
+	background-position: 0 -156px;
+
+}
+
+.icon_camera{
+
+	background-position: 0 -182px;
+
+}
+
+
+.icon_filter_video{
+
+	background-position: 0 -208px;
+
+}
+.icon_filter_user{
+
+	background-position: 0 -234px;
+
+}
+.icon_filter_image{
+
+	background-position: 0 -260px;
+
+}
+.icon_filter{
+
+	background-position: 0 -286px;
+
+}
+
+
+.icon_menu_white{
+
+	background-position: 0 -312px;
+
+}
+
+.icon_down_arrow{
+
+	background-position: 0 -338px;
+
+}
+
+.icon_up_arrow{
+
+	background-position: 0 -364px;
+
+}
+
+.icon_left_arrow{
+
+	background-position: 0 -390px;
+
+}
+
+.icon_right_arrow{
+
+	background-position: 0 -416px;
+
+}
+
+.icon_menu{
+
+	background-position: 0 -442px;
+
+}
+
+.icon_follow{
+
+	background-position: 0 -468px;
+
+}
+
+.icon_unfollow{
+
+	background-position: 0 -494px;
+
+}
+
+.icon_colour_picker{
+
+	background-position: 0 -520px;
+
+}
+
+.icon_edit{
+
+	background-position: 0 -546px;
+
+}
+
+.icon_camera_white{
+
+	background-position: 0 -572px;
+
+}
+
+.icon_cross{
+
+	background-position: 0 -598px;
+
+}
+
+.icon_rotate{
+
+	background-position: 0 -624px;
+
+}
+
+.icon_play{
+
+	background-position: 0 -650px;
+
+}
+
+.icon_pause{
+
+	background-position: 0 -676px;
+
+}
+
+.icon_volume{
+
+	background-position: 0 -702px;
+
+}
+
+.icon_mute{
+
+	background-position: 0 -728px;
+
+}
+
+.icon_expand{
+
+	background-position: 0 -754px;
+
+}
+
+.icon_loop{
+
+	background-position: 0 -780px;
+
+}
+
+.icon_repeat{
+
+	background-position: 0 -806px;
+
+}
+
+.icon_location{
+
+	background-position: 0 -832px;
+
+}
+
+/* END ICONS */
+/* -------------------------------------------------------------------------- */
+
+
+

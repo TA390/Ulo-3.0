@@ -1,0 +1,12 @@
+Hi {{ name }},
+<br/>
+<br/>
+<h6>We received a request to reset your password.</h6>
+
+<p>
+If you made this request then follow the link below to reset your password. If this request was not made by you then please ignore this email.
+</p>
+<a href="{{protocol}}://{{domain}}{% url 'accounts:password_reset' token=tokens.0 %}">reset password</a>
+<br/>
+<br/>
+<br/>

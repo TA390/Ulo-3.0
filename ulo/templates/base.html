@@ -1,0 +1,324 @@
+{# base html template #}
+{% load staticfiles i18n %}
+
+<!DOCTYPE html>
+
+<html lang="en">
+
+  <head>
+
+    <!-- Meta ======================================================================== -->
+
+    <meta charset="utf-8">
+
+    <meta http-equiv="x-ua-compatible" content="IE=edge">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Used by search engines -->
+    <meta name="description" content="Video sharing">
+
+    <!-- Search keywords -->
+    <meta name="keywords" content="video, music, vlogs, social, sharing, free, upload">
+    
+    <!-- Indicates if the search engine should add this page to their results -->
+    <meta name="robots" content="follow">
+    
+    <meta name="author" content="TA">
+
+    <!-- Page specific Meta. Each tag must be given the class "meta_tag" -->
+    {% block meta %}{% endblock meta %}
+
+    <!-- END Meta ==================================================================== -->
+
+
+    <!-- Page Title ================================================================== -->
+    
+    <title>{% block title %}{{ site_name }}{% endblock title %}</title>
+
+    <!-- END Page Title ============================================================== -->
+
+    
+    <!-- CSS ========================================================================= -->
+
+    <!-- Site wide CSS -->
+    <link href="{% static 'css/base.css' %}" rel="stylesheet" type="text/css">
+
+    <!-- Page specific CSS. Each link must be given the class "css_file" -->
+    {% block css %}{% endblock css %}
+    
+    <!-- END CSS ===================================================================== -->
+
+  </head>
+
+
+  <body class="preload">
+
+    <!-- Allow screen readers to jump over the navigation menu ======================= -->
+    
+    <a id="skip_nav" href="#main_content" title="Skip navigation">Skip navigation</a>
+    
+    <!-- End Allow screen readers to jump over the navigation menu =================== -->
+
+
+    <!-- navigation ================================================================== -->
+
+    <header role="banner">
+        
+        <nav class="nav_bar container" role="navigation">
+            
+            <div id="nav_search" class="col box_border">
+
+                <div class="search_wrapper">
+
+                    <div class="cell">
+                        
+                        <div class="search_form">
+
+                            <div class="search_close">
+
+                                <button class="close icon icon_cross_white" type="button">
+                                
+                                    <span class="hide">Close</span>
+
+                                </button>
+
+                            </div>
+
+                            <form id="nav_search_form" href="#" method="get">
+
+                                <input class="box_border" type="search" name="q" autofocus="autofocus" value="{{ q }}" autocomplete="off" placeholder="Search {{ site_name }}">
+
+                                <button class="toggle_filter_ul" data-toggle="filter_ul" type="button">
+
+                                    <span class="icon icon_down_arrow_white"></span>
+                                    <span class="hide">Filters</span>
+
+                                </button>
+
+                            </form>
+
+
+                            <div class="search_data">
+
+                                <ul id="filter_ul">
+
+                                    <li class="filter" data-icon="filter_video">
+                                        Videos
+                                    </li>
+                                    
+                                    <li class="filter" data-icon="filter_user">
+                                        Accounts
+                                    </li>
+                                
+                                </ul>
+
+                                <div id="suggestions">
+
+                                    <ul class="post_suggestions hide">
+
+                                        <li>
+                                            <a href="#">
+                                                <div class="title">
+                                                    Post title 1 kfsghkdfsg kfjlgh dslfkjgh ldfskjgh sdkjlfghskjldfhgkjl ksg lkashfkjlsd fkjlsadhf kladsjfhkjlasdfh
+                                                </div>
+                                            </a>
+                                        </li>
+                                        
+                                        <li>
+                                            <a href="#">Post title 2</a>
+                                        </li>
+                                    
+                                    </ul>
+
+                                    <ul class="user_suggestions hide">
+
+                                        <li>
+                                            <a href="#">
+                                                <img src="https://x1.xingassets.com/assets/frontend_minified/img/users/nobody_m.original.jpg">
+                                                
+                                                <div class="names">
+                                                    <span class="name ellipsis">Taha Abdallakljghsdkjfjdfkljdsgjdfsklgjs;ldfjg;lkdfshg</span>
+                                                    <span class="username ellipsis">@tahabdalla</span>
+                                                </div>
+                                            </a>
+                                        </li>
+                                    
+                                    </ul>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="cell search_submit">
+
+                        <button class="submit icon icon_search" type="button">
+                            
+                            <span class="hide">Search</span>
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col nav_logo">
+
+                <a href="{% url 'home' %}" class="icon icon_logo" data-apl="true" title="Home">
+                    <span class="hide">Home</span>
+                </a>
+
+            </div>
+
+            <div class="col nav_menu">
+
+                <a href="{% url 'navigation' %}" id="toggle_nav_ul" data-toggle="nav_ul" title="Menu">
+                    <span class="icon icon_menu_white"></span>
+                    <span class="hide">Menu</span>
+                </a>
+
+                <ul id="nav_ul" class="box_border container">
+
+                    {% if user.is_authenticated %}
+
+                    <li>
+                        
+                        <a href="{% url 'users:profile' user.username %}" class="ellipsis" data-apl="true" title="Profile">{{ user.get_short_name }}dfljkhgkldsjhgkldjhsgklsjhgfkldsjhglkhsd</a>
+
+                    </li><li>
+                        
+                        <a href="#" class="ellipsis" data-apl="true" title="Post">Post</a>
+
+                    </li><li>
+                        
+                        <a href="#" class="ellipsis" data-apl="true" title="Settings">Settings</a>
+
+                    </li><li>
+                        
+                        <a href="{% url 'logout' %}" class="ellipsis" title="Log out">Log&nbsp;out</a>
+
+                    </li>
+
+                    {% else %}
+
+                    <li>
+                        
+                        <a href="{% url 'signup' %}" class="ellipsis" data-apl="true" title="Sign up">Sign&nbsp;up</a>
+
+                    </li><li>
+                        
+                        <a href="{% url 'login' %}" class="ellipsis" data-apl="true" title="Log in">Log&nbsp;in</a>
+
+                    </li>
+
+                    {% endif %}
+                
+                </ul>
+
+            </div>
+
+        </nav>
+
+        <span class="page_loading"></span>
+
+    </header>
+
+    <!-- END navigation ============================================================== -->
+
+
+    
+
+
+    <!-- Main Content ================================================================ -->
+    
+    <div id="content_container">
+
+        <!-- messages ==================================================================== -->
+
+        <div id="messages" class="box_border{% if messages %} show no_js"{% endif %}">
+
+            <div class="wrapper">
+
+                <div class="container box_border">
+                     
+                    <div class="text"> 
+                    
+                        {% for message in messages %}
+                        <p {% if message.tags %}class="{{ message.tags }}"{% endif %}>
+                            
+                            {{ message }}
+                        
+                        </p>
+                        {% endfor %}
+                    
+                    </div>
+
+                </div>
+
+            </div>
+            
+        </div>
+
+        <!-- end messages ================================================================ -->
+
+        <!-- email confirmation ====================================================== -->
+
+        {% if user.email_confirmed == False %}
+<!--             <div id="email_confirmation">
+                <form id="email_confirmation_form" class="container box_border" action="{% url 'accounts:resend_verification' %}" method="get">
+
+                    <p class="confirmation_text">
+                        A confirmation message has been sent to <b>{{user.email}}</b>. Confirm your email address to complete your account registration.
+                    </p>
+                    
+                    <button id="resend_confirmation" type="submit">
+                        Resend Email Confirmation
+                    </button>
+                    
+                    <a data-apl="true" id="change_email" class="bold" href="{% url 'settings:account' %}">
+                        Change&nbsp;email&nbsp;address
+                    </a>
+            
+                </form>
+            
+            </div> -->
+        {% endif %}
+
+        <!-- END email confirmation ================================================== -->
+
+        <main role="main" id="main_content" class="container">
+
+            {% block content %}{% endblock content %}
+            
+        </main>
+
+    </div>
+
+    <!-- END Main Content ============================================================ -->
+    
+
+    <!-- Javascript ================================================================== -->
+    
+    {% block base_js %}
+    
+    <!-- Site wide Javascript files -->
+    <script src="{% static 'js/libraries/jquery-1.12.2.min.js' %}"></script>
+    <script src="{% static 'js/polyfills/fastclick.min.js' %}"></script>
+    <script src="{% static 'js/base.js' %}"></script>
+    
+    {% endblock base_js %}
+
+    <!-- Page specific Javascript files. Each file must be given the class "js_file" -->
+    {% block js %}{% endblock js %}
+
+    <!-- END Javascript ============================================================== -->
+
+
+  </body>
+</html>

@@ -1,0 +1,591 @@
+{% extends base_template %}
+{% load staticfiles i18n ulo_humanise ulo_user %}
+
+
+{% block title %}{{ profile.name }} @{{ profile.username }}{% endblock title %}
+
+{% block css %}
+
+	{% if is_own_page %}
+	<link class="css_file" href="{% static 'css/uploads/upload.css' %}" rel="stylesheet" type="text/css">
+	{% endif %}
+	<link class="css_file" href="{% static 'css/users/profile.css' %}" rel="stylesheet" type="text/css">
+	
+{% endblock css %}
+
+{% block content %}
+<div id="profile" data-user-id="{{ profile.id }}">
+
+	<div class="profile_header">
+		<div class="container box_border">
+			
+
+			<div class="cf">
+
+				<div id="profile_picture">
+					
+					<img src="{{ profile.get_picture }}">
+
+					{% if is_own_page %}
+
+					<div id="picture_actions">
+
+						<span class="caret_up"></span>
+
+						<ul class="picture_menu">
+							<li>
+								<button class="change_picture" type="button">
+									Change
+									<input accept="image/gif,image/jpeg,image/jpg,image/png" capture="capture" class="file" id="picture" name="picture" type="file">
+								</button>
+							</li>
+							
+							<li>
+								<button class="delete_picture" type="button">Delete</button>
+							</li>
+
+						</ul>
+
+					</div>
+
+					{% endif %}
+
+				</div>
+
+				<div id="profile_information">
+
+					<div class="profile_actions">
+
+					{% if is_own_page %}
+					
+						<a class="edit_profile" data-apl="true" href="{% url 'users:profile_update' %}" title="Edit Profile">
+							<span class="icon icon_edit"></span
+							><span class="text lrg">Edit</span>
+						</a>
+					
+					{% else%}
+							
+						{% if is_following %}
+
+							<a class="connect unfollow" href="{% url 'users:unfollow' profile.id %}" title="Unfollow">
+								<span class="icon icon_unfollow"></span
+								><span class="text lrg">Unfollow</span>
+							</a>
+						
+						{% else %}
+						
+							<a class="connect follow" href="{% url 'users:follow' profile.id %}" title="Follow">
+								<span class="icon icon_follow"></span
+								><span class="text lrg">Follow</span>
+							</a>
+						
+						{% endif %}
+
+					{% endif %}
+
+					</div>
+
+					<div class="profile_names">
+					
+						<h1 class="thin ellipsis">{{ profile.name }}</h1>
+						<span class="username ellipsis">@{{ profile.username }}</span>
+					
+					</div>
+
+
+					{% if profile.blurb != '' %}
+
+					<p class="blurb">{{ profile.blurb }}</p>
+					
+					{% endif %}
+
+
+					{% if profile.location != '' %}
+					
+					<p class="location">
+						
+						<div class="location_icon">
+							
+							<span class="icon icon_location"></span>
+
+						</div>
+					
+						{{ profile.location }}
+
+					</p>
+
+					{% endif %}
+
+				</div>
+
+			</div>
+
+			<div id="profile_tabs">
+
+				{% if tab == 'posts' %}
+
+				<a id="posts" class="tab selected" href="{% url 'users:profile' profile.username %}" title="Posts">
+					
+					<span class="full_count">{{ profile.posts_count }}</span>
+					<span class="abbr_count bold">{{ profile.posts_count|abbreviate }}</span>
+					<span class="text">posts</span>
+				
+				</a>
+				
+				<a id="followers" class="tab" href="{% url 'users:followers' profile.username %}" title="Followers">
+					
+					<span class="full_count">{{ profile.followers_count }}</span>
+					<span class="abbr_count bold">{{ profile.followers_count|abbreviate }}</span>
+					<span class="text">followers</span>
+					
+				</a>
+				
+				<a id="following" class="tab" href="{% url 'users:following' profile.username %}" title="Following">
+					
+					<span class="full_count">{{ profile.following_count }}</span>
+					<span class="abbr_count bold">{{ profile.following_count|abbreviate }}</span>
+					<span class="text">following</span>
+					
+				</a>
+
+				{% elif tab == 'followers' %}
+
+				<a id="posts" class="tab" href="{% url 'users:profile' profile.username %}" title="Posts">
+					
+					<span class="full_count">{{ profile.posts_count }}</span>
+					<span class="abbr_count bold">{{ profile.posts_count|abbreviate }}</span>
+					<span class="text">posts</span>
+				
+				</a>
+				
+				<a id="followers" class="tab selected" href="{% url 'users:followers' profile.username %}" title="Followers">
+					
+					<span class="full_count">{{ profile.followers_count }}</span>
+					<span class="abbr_count bold">{{ profile.followers_count|abbreviate }}</span>
+					<span class="text">followers</span>
+					
+				</a>
+				
+				<a id="following" class="tab" href="{% url 'users:following' profile.username %}" title="Following">
+					
+					<span class="full_count">{{ profile.following_count }}</span>
+					<span class="abbr_count bold">{{ profile.following_count|abbreviate }}</span>
+					<span class="text">following</span>
+					
+				</a>
+
+				{% else %}
+
+				<a id="posts" class="tab" href="{% url 'users:profile' profile.username %}" title="Posts">
+					
+					<span class="full_count">{{ profile.posts_count }}</span>
+					<span class="abbr_count bold">{{ profile.posts_count|abbreviate }}</span>
+					<span class="text">posts</span>
+				
+				</a>
+				
+				<a id="followers" class="tab" href="{% url 'users:followers' profile.username %}" title="Followers">
+					
+					<span class="full_count">{{ profile.followers_count }}</span>
+					<span class="abbr_count bold">{{ profile.followers_count|abbreviate }}</span>
+					<span class="text">followers</span>
+					
+				</a>
+				
+				<a id="following" class="tab selected" href="{% url 'users:following' profile.username %}" title="Following">
+					
+					<span class="full_count">{{ profile.following_count }}</span>
+					<span class="abbr_count bold">{{ profile.following_count|abbreviate }}</span>
+					<span class="text">following</span>
+					
+				</a>
+
+
+				{% endif %}
+
+
+			</div>
+
+		</div>
+	</div>
+
+	<div id="tab_content" class="container box_border">
+
+		{% if tab == 'posts' %}
+
+		<div id="posts_tab">
+
+			<div class="content">
+
+			{% for post in content %}
+
+				<div class="item">
+
+					<div class="spacing">
+
+						<a class="post_thumbnail" href="{% url 'posts:detail' post.cid %}" data-apl="true">
+
+							{% if post.media_type == VIDEO %}
+
+							<img src="{{ MEDIA_URL }}{{ post.thumbnail }}">
+
+							<div class="video_icon">
+
+								<span class="icon icon_play"></span>
+
+							</div>
+
+							{% else %}
+
+							<img src="{{ MEDIA_URL }}{{ post.file0 }}">
+
+							{% endif %}
+
+						</a>
+							
+						<div class="post_data">
+							
+							<a class="title bold" href="{% url 'posts:detail' post.cid %}" data-apl="true" title="{{ post.title }}">
+								<span class="text">{{ post.title }}</span>
+
+							</a>
+							
+							<div class="post_meta">
+								
+								<span class="published">{{ post.published|elapsed_time }}</span>
+
+								{% if post.views != None %}
+								<span class="views">{{ post.views }}&nbsp;view{% if post.views != 1 %}s{% endif %}</span>
+								{% endif %}
+							
+							</div>
+						
+						</div>
+
+					</div>
+					
+				</div>
+
+			{% empty %}
+
+				<div class="empty">
+
+					{% if is_own_page %}
+
+						<p>Create your first <a class="bold" data-apl="true" href="{% url 'posts:post' %}">post.</a></p>
+					
+					{% else %}
+					
+						<p>@{{ profile.username }} has no posts.</p>
+					
+					{% endif %}
+				
+				</div>
+
+			{% endfor %}
+
+			</div>
+
+			{% if has_next %}
+
+			<div class="load">
+
+				<a class="load_posts load" href="{{ request.path_info }}?max_id={{ max_id }}">
+					Next Page
+				</a>
+			
+			</div>
+			
+			{% endif %}
+
+		</div>
+
+		{% elif tab == 'followers' %}
+
+		<div id="followers_tab">
+
+			<div class="content">
+
+			{% for follower in content %}
+
+				<div class="item">
+
+					<div class="spacing">
+
+						{% if follower.is_following != None %}
+							
+							<div class="connection_actions">
+
+								<a class="connect unfollow" href="{% url 'users:unfollow' follower.id %}" title="Unfollow">
+									<span class="icon icon_unfollow"></span
+									><span class="text lrg">Unfollow</span>
+								</a>
+
+							</div>
+
+						{% elif user.pk == None or follower.id != user.pk %}
+							
+							<div class="connection_actions">
+
+								<a class="connect follow" href="{% url 'users:follow' follower.id %}" title="Follow">
+									<span class="icon icon_follow"></span
+									><span class="text lrg">Follow</span>
+								</a>
+
+							</div>
+
+						{% endif %}
+
+						<div class="connection_user">
+
+							<a href="{% url 'users:profile' follower.username %}" data-apl="true">
+
+								<img src="{{ follower.thumbnail|get_thumbnail }}">
+
+								<div class="connection_names">
+									<h4>{{ follower.name }}</h4>
+									<span>@{{ follower.username }}</span>
+								</div>
+
+							</a>
+
+						</div>
+
+					</div>
+					
+				</div>
+
+			{% empty %}
+
+				<div class="empty">
+
+					{% if is_own_page %}
+
+						<p>You have no followers.</p>
+					
+					{% else %}
+					
+						<p>@{{ profile.username }} has no followers.</p>
+					
+					{% endif %}
+				
+				</div>
+
+			{% endfor %}
+
+			</div>
+
+			{% if has_next %}
+			<div class="load">
+
+				<a class="load_followers load" href="{{ request.path_info }}?max_id={{ max_id }}">
+					Next Page
+				</a>
+			
+			</div>
+			{% endif %}
+
+		</div>
+
+		{% else %}
+
+		<div id="following_tab">
+
+			<div class="content">
+
+			{% for following in content %}
+
+				<div class="item">
+
+					<div class="spacing">
+
+						{% if is_own_page or following.is_following != None %}
+							
+							<div class="connection_actions">
+
+								<a class="connect unfollow" href="{% url 'users:unfollow' following.id %}" title="Unfollow">
+									<span class="icon icon_unfollow"></span
+									><span class="text">Unfollow</span>
+								</a>
+
+							</div>
+
+						{% elif following.id != user.pk %}
+							
+							<div class="connection_actions">
+
+								<a class="connect follow" href="{% url 'users:follow' following.id %}" title="Follow">
+									<span class="icon icon_follow"></span
+									><span class="text">Follow</span>
+								</a>
+
+							</div>
+
+						{% endif %}
+
+
+						<div class="connection_user">
+
+							<a href="{% url 'users:profile' following.username %}" data-apl="true">
+
+								<img src="{{ following.thumbnail|get_thumbnail }}">
+
+								<div class="connection_names">
+
+									<h4 class="ellipsis">{{ following.name }}</h4>
+									<span class="ellipsis">@{{ following.username }}</span>
+								
+								</div>
+
+							</a>
+
+						</div>
+
+
+					</div>
+					
+				</div>
+
+			{% empty %}
+				
+				<div class="empty">
+					
+					{% if is_own_page %}
+					
+						<p>You are not following anyone.</p>
+					
+					{% else %}
+						
+						<p>@{{ profile.username }} is not following anyone.</p>
+					
+					{% endif %}
+				
+				</div>
+			
+			{% endfor %}
+
+			</div>
+
+			{% if has_next %}
+			<div class="load">
+
+				<a class="load_following load" href="{{ request.path_info }}?max_id={{ max_id }}">
+					Next Page
+				</a>
+
+			</div>
+			{% endif %}
+
+		</div>
+
+		{% endif %}
+
+	</div>
+
+</div>
+
+
+{% if is_own_page %}
+<div id="editor_container" class="hide modal box_border">
+	<div id="editor">
+
+
+		<div id="editor_header">
+		
+			<h2 class="ellipsis">Editor</h2>
+
+			<button id="editor_close" class="icon icon_cross" type="button" data-close-modal="true">
+				<span class="hide">Close editor</span>
+			</button>
+		
+		</div>
+
+
+		<div id="editor_body">
+			
+			<span class="overlay disabled"></span>
+
+			<div id="editor_content">
+
+<!-- 				<div class="clipping_mask" style="width: 600px; height: 450px;">
+
+					<div class="crop" style="top: 30px; bottom: 30px; left: 30px; right: 30px;">
+
+						<span class="loading"></span>
+
+						<img src="https://storage.googleapis.com/imgfave/image_cache/1388048108204472.jpg">
+
+					</div>
+
+				</div> -->
+
+			</div>
+		
+		</div>
+
+
+		<div id="editor_footer">
+			
+			<div class="editor_control_panel">
+
+				<div class="editor_slider_container">
+
+					<div class="editor_slider">
+						<div class="slider_container">
+							<button id="scale_slider" type="button" class="slider">
+								<span class="hide">Scale slider</span>
+							</button>
+						</div>
+
+						<div class="scale_bar slider_bar_container">
+							<span id="scale_slider_bar"></span>
+						</div>
+					</div>
+				</div>
+
+			</div>
+
+			<div class="editor_actions">
+
+				<button id="editor_submit" type="button">
+					Submit
+				</button>
+
+			</div>
+
+		</div>
+
+
+		<div id="editor_menu">
+
+				<button id="toggle_editor_menu_actions" type="button" class="toggle_menu" data-toggle="editor_menu_actions">
+					<span class="icon icon_down_arrow_white"></span>
+					<span class="hide">Editor menu</span>
+				</button>
+
+				<div id="editor_menu_actions" class="hide">
+
+					<button class="editor_delete" type="button">
+						Delete
+					</button>
+
+				</div>
+
+			</div>
+
+
+	</div>
+
+</div>
+{% endif %}
+
+{% endblock content %}
+
+
+{% block js %}
+
+	<script class="js_file" src="{% static 'js/users/utils.js' %}"></script>
+	<script class="js_file" src="{% static 'js/users/profile.js' %}"></script>
+
+{% endblock js %}
+

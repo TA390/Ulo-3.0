@@ -1,0 +1,21 @@
+{% extends base_template %}
+{% load staticfiles i18n %}
+
+{% block title %}Server Error{% endblock title %}
+
+{% block css %}
+	<link class="css_file" href="{% static 'css/500.css' %}" rel="stylesheet" type="text/css">
+{% endblock css %}
+
+{% block content %}
+<div id="error_500">
+
+	<h1>Ooops!!! 500</h1>
+
+	<h3>Looks like something went wrong!</h3>
+
+	<p>We track these errors automatically, but if the problem persists feel free to contact us. In the meantime, try refreshing.</p>
+
+</div>
+{% endblock content %}
+

@@ -1,0 +1,49 @@
+/* -------------------------------------------------------------------------- */
+
+#not_my_account_no_user{
+
+	margin: 20px;
+
+}
+
+#not_my_account_no_user .panel{
+
+	margin: 20px 0;
+
+}
+
+
+#not_my_account_no_user h1{
+
+	font-size: 24px;
+
+}
+
+#not_my_account_no_user h2{
+
+	font-size: 16px;
+
+}
+
+#not_my_account_no_user ul{
+
+	padding: 0 20px;
+	list-style-type: disc;
+
+}
+
+#not_my_account_no_user a{
+
+	color:  #1C82DA;
+	text-decoration: none;
+
+}
+
+#not_my_account_no_user a:hover{
+	
+	text-decoration: underline;
+
+}
+
+/* -------------------------------------------------------------------------- */
+

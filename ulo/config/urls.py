@@ -27,6 +27,8 @@ from django.contrib import admin
 # Thrid party app imports
 
 # Project imports
+from pages.views import HomeView, NavigationView
+from users.views import SignUpView, LoginView, LogoutView
 
 # ----------------------------------------------------------------------------------------
 
@@ -37,8 +39,33 @@ from django.contrib import admin
 
 urlpatterns = [
 
-	# # Landing Page
-	# url(r'^$', HomeAuthView.as_view(), name='home'),
+	# PAGES APP
+
+	url(r'^$', HomeView.as_view(), name='home'),
+
+	# Site navigation when js is disabled.
+	url(r'^navigation/$', NavigationView.as_view(), name='navigation'),
+
+
+	# USERS APP
+
+	url(r'^user/', include('users.urls', namespace='users')),
+
+	url(r'^signup/$', SignUpView.as_view(), name='signup'),
+
+	url(r'^login/(\?redirect_to=(?P<redirect_to>[^<>\'"@]*/))?$', LoginView.as_view(), name='login'),
+	
+	url(r'^logout/$', LogoutView.as_view(), name='logout'),
+
+
+	# ACCOUNTS APP
+	
+	url(r'^accounts/', include('accounts.urls', namespace='accounts')),
+
+
+	# SETTINGS APP
+
+	url(r'^settings/', include('settings.urls', namespace='settings')),
 
 ]
 

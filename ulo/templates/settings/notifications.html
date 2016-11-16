@@ -1,0 +1,96 @@
+{% extends base_template %}
+{% load staticfiles %}
+
+{% block css %}
+    <link class="css_file" href="{% static 'css/settings/setting.css' %}" rel="stylesheet" type="text/css">
+{% endblock css %}
+
+{% block content %}
+<div id="notifications" class="settings">
+    
+    <div id="tabs">
+
+        <a id="account_settings" class="tab" href="{% url 'settings:account' %}">
+          <span class="icon"></span>
+          <span class="text">Account</span>
+        </a>
+
+        <a id="password_settings" class="tab" href="{% url 'settings:password' %}">
+          <span class="icon icon_lock"></span>
+          <span class="text">Password</span>
+        </a>
+
+        <a id="notification_settings" class="tab active" href="{% url 'settings:notifications' %}">
+          <span class="icon"></span>
+          <span class="text">Notifications</span>
+        </a>
+
+    </div><div id="tab_content">
+            
+        <div id="notification_settings_tab">
+
+            <div class="panel">
+                <h1>Notification</h1>
+            </div>
+
+            <form id="notifications_form" class="panel" action="{% url 'settings:notifications' %}" method="post">
+
+                {% csrf_token %}
+
+                {% if notifications_form.non_field_errors %}
+                <div id="notifications_form_errors" class="form_errors">
+                    
+                    {% for error in notifications_form.non_field_errors %}
+                        <p class="validation error">{{ error }}</p>
+                    {% endfor %}
+
+                </div>
+                {% endif %}
+
+                <div id="" class="checkbox">
+                    
+                    <div class="box">
+                        {{ notifications_form.is_active }}
+                    </div>
+                    
+                    <div class="text">
+                    
+                        <label class="bold" for="{{ notifications_form.is_active.id_for_label }}">
+                            {{ notifications_form.is_active.label }}
+                        </label>
+
+                        <p class="help_text">This is some help text</p>
+                    
+                    </div>
+                
+                </div>
+
+                <div id="" class="checkbox">
+                    
+                    <div class="box">
+                        {{ notifications_form.email_confirmed }}
+                    </div>
+                    
+                    <div class="text">
+                    
+                        <label class="bold" for="{{ notifications_form.email_confirmed.id_for_label }}">
+                            {{ notifications_form.email_confirmed.label }}
+                        </label>
+
+                        <p class="help_text">This is some help text</p>
+                    
+                    </div>
+                
+                </div>
+                
+                <div class="submit_container">
+                    <input id="notifications_submit" class="submit_btn" type="submit"  value="Save">
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>
+{% endblock content %}
+

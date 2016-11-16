@@ -1,0 +1,46 @@
+{% extends base_template %}
+{% load staticfiles %}
+
+{% block css %}
+	<link class="css_file" href="{% static 'css/accounts/not_my_account.css' %}" rel="stylesheet" type="text/css">
+{% endblock css %}
+
+{% block content %}
+<div id="not_my_account">
+
+	<h1 class="panel highlight">Not your account?</h1>
+
+	<p class="panel text">
+		Please confirm that you did not sign up for the Ulo account <b>@{{username}}</b> with the email address <b>{{email}}</b>.
+	</p>
+
+	<p class="panel text">
+		To prevent further misuse of your email address, the account (including your email address) will be suspended from Ulo for 30 days. The account will be removed permanently following the suspension and your email address will be made available for use on Ulo. Contact us should you wish to create an account with this email address during the 30 day suspension.
+	</p>
+
+	<form id="not_my_account_form" action="{% url 'accounts:not_my_account' form.token.value %}" method="post">
+		
+		{% csrf_token %}
+
+		{% if form.non_field_errors %}
+			<div id="not_my_account_form_errors" class="form_errors">
+				{% for error in form.non_field_errors %}
+				<p class="validation error">{{ error }}</p>
+				{% endfor %}
+			</div>
+		{% endif %}
+	
+		<input id="not_my_account_submit" type="submit" name="submit" value="This is not my account">
+		<a id="not_my_account_cancel" href="{% url 'home' %}" title="Cancel">Cancel</a>
+	
+	</form>
+
+	
+
+	<p class="text">
+		If this account does belong to you but you would like to deactivate it, visit your <a class="bold highlight" href="{% url 'settings:account' %}" title="Settings">account settings.</a>
+	</p>
+
+</div>
+{% endblock content %}
+

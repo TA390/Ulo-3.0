@@ -1,0 +1,59 @@
+{# base html template for ajax page loads #}
+
+<ul id="nav_ul" class="box_border">
+
+    {% if user.is_authenticated %}
+
+    <li>
+        
+        <a href="{% url 'users:profile' user.username %}" class="ellipsis" data-apl="true" title="Profile">{{ user.get_short_name }}</a>
+
+    </li><li>
+        
+        <a href="#" class="ellipsis" data-apl="true" title="Post">Post</a>
+
+    </li><li>
+        
+        <a href="#" class="ellipsis" data-apl="true" title="Settings">Settings</a>
+
+    </li><li>
+        
+        <a href="{% url 'logout' %}" class="ellipsis" title="Log out">Log&nbsp;out</a>
+
+    </li>
+
+    {% else %}
+
+    <li>
+        
+        <a href="{% url 'signup' %}" class="ellipsis" data-apl="true" title="Sign up">Sign&nbsp;up</a>
+
+    </li><li>
+        
+        <a href="{% url 'login' %}" class="ellipsis" data-apl="true" title="Log in">Log&nbsp;in</a>
+
+    </li>
+
+    {% endif %}
+
+</ul>
+
+
+<!-- Page specific Meta. Each tag must be given the class "meta_tag" -->
+<span id="page_meta">{% block meta %}{% endblock meta %}</span>
+
+<!-- Page specific CSS. Each link must be given the class "css_file" -->
+<span id="page_css">{% block css %}{% endblock css %}</span>
+
+<!-- Page Title -->
+<span id="page_title">{% block title %}Ulo{% endblock title %}</span>
+
+<!-- Main Content -->
+<main role="main" id="main_content" class="container">
+
+	{% block content %}{% endblock content %}
+
+</main>
+
+<!-- Page specific Javascript files. Each script must be given the class "js_file" -->
+<span id="page_js">{% block js %}{% endblock js %}</span>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8">
+		<title>{{ site_name }} Account Reactivation</title>
+		<style type="text/css">
+		</style>
+	</head>
+
+	<body>
+		<h2>Hi {{name}},</h2>
+
+		<p>
+		We received a request to reactivate your account. Everything is now up and running.
+		</p>
+
+		<br/>
+		<br/>
+		<small>
+			If you did not create an {{ site_name }} account or login to your account recently to reactivate it, click <a href="{{protocol}}://{{domain}}{% url 'accounts:not_my_account' token=tokens.0 %}">not my account</a>
+		</small>
+
+		<div>
+			{{token.1}}
+		</div>
+	</body>
+</html>

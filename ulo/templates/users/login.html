@@ -1,0 +1,106 @@
+{% extends base_template %}
+{% load staticfiles i18n %}
+
+
+{% block title %}{{ site_name }} Log in{% endblock title %}
+
+
+{% block css %}
+	<link class="css_file" href="{% static 'css/users/login.css' %}" rel="stylesheet" type="text/css">
+{% endblock css %}
+
+
+{% block content %}
+<div id="login" data-close-pip="true">
+
+	<div class="centre" data-close-pip="true">
+
+		<div class="wrapper">
+
+			<h1 class="thin">Welcome back</h1>
+			
+			<form id="login_form" action="{% url 'login' %}{{ redirect_to }}" method="post">
+				
+				{% csrf_token %}
+
+				{{ form.pip }}
+				
+				{{ form.redirect_to }}
+
+
+				{% if form.non_field_errors %}
+				<div id="login_form_errors" class="form_errors">
+					{% for error in form.non_field_errors %}
+					<p class="validation error">{{ error }}</p>
+					{% endfor %}
+				</div>
+				{% endif %}
+				
+
+				<div id="login_email_container" class="field">
+
+					{% for error in form.email.errors %}
+					<p class="validation error">{{ error }}</p>
+					{% endfor %}
+
+					{{ form.email }}
+
+				</div>
+
+				<div id="login_password_container" class="field">
+
+					{% for error in form.password.errors %}
+					<p class="validation error">{{ error }}</p>
+					{% endfor %}
+
+					<div class="password_field">
+						
+						{{ form.password }}
+
+						<a id="login_forgot" href="{% url 'accounts:password_reset_begin' %}">Forgot?</a>
+
+					</div>
+
+				</div>
+
+				<div class="login_actions cf">
+
+					<div id="login_remember_container">
+					
+						{{ form.remember }}
+					
+						<label for="login_remember">Remember me<label>
+					
+					</div>
+
+					<div id="submit_container">
+					
+						<input id="login_submit" name="submit" type="submit" value="Log in">
+					
+					</div>
+				
+				</div>
+
+			</form>
+
+		
+			<div id="login_footer">
+
+				<p class="text">Don't have an account? <a href="{% url 'signup' %}" class="bold">Sign up</a></p>
+				
+			</div>
+
+		</div>
+
+
+	</div>
+
+</div>
+{% endblock content %}
+
+
+{% block js %}
+	<script class="js_file" src="{% static 'js/helpers/validation.js' %}"></script>
+	<script class="js_file" src="{% static 'js/users/login.js' %}"></script>
+{% endblock js %}
+

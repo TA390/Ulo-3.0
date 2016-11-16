@@ -1,0 +1,270 @@
+
+/* FONT ICONS */
+/* ------------------------------------------------------------------------------------ */
+@font-face {
+    font-family: 'font_icons';
+    src:  url('../../fonts/icons/icomoon.eot?tww54j');
+    src:  url('../../fonts/icons/icomoon.eot?tww54j#iefix') format('embedded-opentype'),
+        url('../../fonts/icons/icomoon.ttf?tww54j') format('truetype'),
+        url('../../fonts/icons/icomoon.woff?tww54j') format('woff'),
+        url('../../fonts/icons/icomoon.svg?tww54j#icomoon') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+
+/* GOTHAM */
+/* ------------------------------------------------------------------------------------ */
+@font-face {
+    font-family: 'gotham_boldregular';
+    src: url('../../fonts/gotham/gotham-bold1-webfont.eot');
+    src: url('../../fonts/gotham/gotham-bold1-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../../fonts/gotham/gotham-bold1-webfont.woff2') format('woff2'),
+         url('../../fonts/gotham/gotham-bold1-webfont.woff') format('woff'),
+         url('../../fonts/gotham/gotham-bold1-webfont.ttf') format('truetype'),
+         url('../../fonts/gotham/gotham-bold1-webfont.svg#gotham_boldregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'gotham_lightregular';
+    src: url('../../fonts/gotham/gotham-light1-webfont.eot');
+    src: url('../../fonts/gotham/gotham-light1-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../../fonts/gotham/gotham-light1-webfont.woff2') format('woff2'),
+         url('../../fonts/gotham/gotham-light1-webfont.woff') format('woff'),
+         url('../../fonts/gotham/gotham-light1-webfont.ttf') format('truetype'),
+         url('../../fonts/gotham/gotham-light1-webfont.svg#gotham_lightregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'gotham_mediumregular';
+    src: url('../../fonts/gotham/gotham-medium1-webfont.eot');
+    src: url('../../fonts/gotham/gotham-medium1-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../../fonts/gotham/gotham-medium1-webfont.woff2') format('woff2'),
+         url('../../fonts/gotham/gotham-medium1-webfont.woff') format('woff'),
+         url('../../fonts/gotham/gotham-medium1-webfont.ttf') format('truetype'),
+         url('../../fonts/gotham/gotham-medium1-webfont.svg#gotham_mediumregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'gotham_thinregular';
+    src: url('../../fonts/gotham/gotham-thin1-webfont.eot');
+    src: url('../../fonts/gotham/gotham-thin1-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../../fonts/gotham/gotham-thin1-webfont.woff2') format('woff2'),
+         url('../../fonts/gotham/gotham-thin1-webfont.woff') format('woff'),
+         url('../../fonts/gotham/gotham-thin1-webfont.ttf') format('truetype'),
+         url('../../fonts/gotham/gotham-thin1-webfont.svg#gotham_thinregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'gotham_extralightregular';
+    src: url('../../fonts/gotham/gotham-xlight1-webfont.eot');
+    src: url('../../fonts/gotham/gotham-xlight1-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../../fonts/gotham/gotham-xlight1-webfont.woff2') format('woff2'),
+         url('../../fonts/gotham/gotham-xlight1-webfont.woff') format('woff'),
+         url('../../fonts/gotham/gotham-xlight1-webfont.ttf') format('truetype'),
+         url('../../fonts/gotham/gotham-xlight1-webfont.svg#gotham_extralightregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/* HELVETICA NEUE */
+/* ------------------------------------------------------------------------------------ */
+@font-face {
+    font-family: 'helveticaneuebold';
+    src: url('../../fonts/helveticaneue/helvetica_neu_bold-webfont.eot');
+    src: url('../../fonts/helveticaneue/helvetica_neu_bold-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../../fonts/helveticaneue/helvetica_neu_bold-webfont.woff2') format('woff2'),
+         url('../../fonts/helveticaneue/helvetica_neu_bold-webfont.woff') format('woff'),
+         url('../../fonts/helveticaneue/helvetica_neu_bold-webfont.ttf') format('truetype'),
+         url('../../fonts/helveticaneue/helvetica_neu_bold-webfont.svg#helveticaneuebold') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'helveticaneuelight';
+    src: url('../../fonts/helveticaneue/helveticaneue_light-webfont.eot');
+    src: url('../../fonts/helveticaneue/helveticaneue_light-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../../fonts/helveticaneue/helveticaneue_light-webfont.woff2') format('woff2'),
+         url('../../fonts/helveticaneue/helveticaneue_light-webfont.woff') format('woff'),
+         url('../../fonts/helveticaneue/helveticaneue_light-webfont.ttf') format('truetype'),
+         url('../../fonts/helveticaneue/helveticaneue_light-webfont.svg#helveticaneuelight') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'helveticaneuemedium';
+    src: url('../../fonts/helveticaneue/helveticaneue_medium-webfont.eot');
+    src: url('../../fonts/helveticaneue/helveticaneue_medium-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../../fonts/helveticaneue/helveticaneue_medium-webfont.woff2') format('woff2'),
+         url('../../fonts/helveticaneue/helveticaneue_medium-webfont.woff') format('woff'),
+         url('../../fonts/helveticaneue/helveticaneue_medium-webfont.ttf') format('truetype'),
+         url('../../fonts/helveticaneue/helveticaneue_medium-webfont.svg#helveticaneuemedium') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'helveticaneuethin';
+    src: url('../../fonts/helveticaneue/helveticaneue_thin-webfont.eot');
+    src: url('../../fonts/helveticaneue/helveticaneue_thin-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../../fonts/helveticaneue/helveticaneue_thin-webfont.woff2') format('woff2'),
+         url('../../fonts/helveticaneue/helveticaneue_thin-webfont.woff') format('woff'),
+         url('../../fonts/helveticaneue/helveticaneue_thin-webfont.ttf') format('truetype'),
+         url('../../fonts/helveticaneue/helveticaneue_thin-webfont.svg#helveticaneuethin') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'helveticaneueregular';
+    src: url('../../fonts/helveticaneue/helveticaneue-webfont.eot');
+    src: url('../../fonts/helveticaneue/helveticaneue-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../../fonts/helveticaneue/helveticaneue-webfont.woff2') format('woff2'),
+         url('../../fonts/helveticaneue/helveticaneue-webfont.woff') format('woff'),
+         url('../../fonts/helveticaneue/helveticaneue-webfont.ttf') format('truetype'),
+         url('../../fonts/helveticaneue/helveticaneue-webfont.svg#helveticaneueregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+
+/* OPEN SANS */
+/* ------------------------------------------------------------------------------------ */
+@font-face {
+    font-family: 'open_sansbold';
+    src: url('../../fonts/opensans/opensans-bold-webfont.eot');
+    src: url('../../fonts/opensans/opensans-bold-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../../fonts/opensans/opensans-bold-webfont.woff2') format('woff2'),
+         url('../../fonts/opensans/opensans-bold-webfont.woff') format('woff'),
+         url('../../fonts/opensans/opensans-bold-webfont.ttf') format('truetype'),
+         url('../../fonts/opensans/opensans-bold-webfont.svg#open_sansbold') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'open_sansextrabold';
+    src: url('../../fonts/opensans/opensans-extrabold-webfont.eot');
+    src: url('../../fonts/opensans/opensans-extrabold-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../../fonts/opensans/opensans-extrabold-webfont.woff2') format('woff2'),
+         url('../../fonts/opensans/opensans-extrabold-webfont.woff') format('woff'),
+         url('../../fonts/opensans/opensans-extrabold-webfont.ttf') format('truetype'),
+         url('../../fonts/opensans/opensans-extrabold-webfont.svg#open_sansextrabold') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'open_sanslight';
+    src: url('../../fonts/opensans/opensans-light-webfont.eot');
+    src: url('../../fonts/opensans/opensans-light-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../../fonts/opensans/opensans-light-webfont.woff2') format('woff2'),
+         url('../../fonts/opensans/opensans-light-webfont.woff') format('woff'),
+         url('../../fonts/opensans/opensans-light-webfont.ttf') format('truetype'),
+         url('../../fonts/opensans/opensans-light-webfont.svg#open_sanslight') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'open_sansregular';
+    src: url('../../fonts/opensans/opensans-regular-webfont.eot');
+    src: url('../../fonts/opensans/opensans-regular-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../../fonts/opensans/opensans-regular-webfont.woff2') format('woff2'),
+         url('../../fonts/opensans/opensans-regular-webfont.woff') format('woff'),
+         url('../../fonts/opensans/opensans-regular-webfont.ttf') format('truetype'),
+         url('../../fonts/opensans/opensans-regular-webfont.svg#open_sansregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'open_sanssemibold';
+    src: url('../../fonts/opensans/opensans-semibold-webfont.eot');
+    src: url('../../fonts/opensans/opensans-semibold-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../../fonts/opensans/opensans-semibold-webfont.woff2') format('woff2'),
+         url('../../fonts/opensans/opensans-semibold-webfont.woff') format('woff'),
+         url('../../fonts/opensans/opensans-semibold-webfont.ttf') format('truetype'),
+         url('../../fonts/opensans/opensans-semibold-webfont.svg#open_sanssemibold') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+
+/* FONT SIZES - TWELVE PIXEL SCALE
+/* --------------------------------------------------------- */
+/*	pixels,		percentages,	ems */
+/*	24px		200%			1.5em */
+/*	18px		150%			1.3em */
+/*	14px		117%			0.875em */
+/*	12px		75%				100% */
+/* Add rule for p tag if using ems to display correctly on IE 6 and 7  */
+/* p {
+	font-size: 0.75em
+}
+*/
+
+h1{
+	font-family: 'open_sansregular', Helvetica, Arial, Verdana, sans-serif;
+	font-size: 32px;
+}
+h2{
+	font-family: 'open_sansregular', Helvetica, Arial, Verdana, sans-serif;
+	font-size: 24px;
+}
+h3{
+	font-family: 'open_sansregular', Helvetica, Arial, Verdana, sans-serif;
+	font-size: 18px;
+}
+h4{
+    font-family: 'open_sansregular', Helvetica, Arial, Verdana, sans-serif;
+    font-size: 16px;
+}
+body{
+	font-family: 'open_sanslight', Helvetica, Arial, Verdana, sans-serif;
+	font-size: 14px;
+}
+a, p, li, input, button, textarea{
+	font-family: 'open_sanslight', Helvetica, Arial, Verdana, sans-serif;
+    font-size: 14px;
+}
+
+/* --------------------------------------------------------- */
+
+
+/* FONT SIZES - SIXTEEN PIXEL SCALE
+/* --------------------------------------------------------- */
+/*	pixels,		percentages,	ems */
+/*	32px		200%			2em */
+/*	24px		150%			1.5em */
+/*	18px		112.5%			1.125em */
+/*	16px		100%			100% */
+/* Add rule for p tag if using ems to display correctly on IE 6 and 7  */
+/* p {
+	font-size: 1em
+}
+*/
+/*
+h1{
+	font-family: 'latoregular', Helvetica, Arial, Verdana, sans-serif;
+	font-size: 32px;
+}
+h2{
+	font-family: 'latoregular', Helvetica, Arial, Verdana, sans-serif;
+	font-size: 24px;
+}
+h3{
+	font-family: 'latoregular', Helvetica, Arial, Verdana, sans-serif;
+	font-size: 18px;
+}
+body{
+	font-family: 'latolight', Helvetica, Arial, Verdana, sans-serif;
+	font-size: 16px;
+}
+p {
+	font-family: 'latolight', Helvetica, Arial, Verdana, sans-serif;
+}
+a, p, input, div{
+	font-family: 'latothin', Helvetica, Arial, Verdana, sans-serif;
+}
+*/
+/* --------------------------------------------------------- */
+

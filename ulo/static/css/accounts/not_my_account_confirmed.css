@@ -1,0 +1,40 @@
+/* -------------------------------------------------------------------------- */
+
+#not_my_account_confirmed{
+
+	margin: 20px;
+
+}
+
+#not_my_account_confirmed > .centre{
+
+	margin: auto;
+	padding: 20px;
+	max-width: 600px;
+	border-radius: 4px;
+	background-color: #F6F6F6;
+
+}
+
+#not_my_account_confirmed h1{
+
+	margin: 0;
+	font-size: 24px;
+
+}
+
+#not_my_account_confirmed h2{
+
+	font-size: 18px;
+	margin: 20px 0 10px 0;
+
+}
+
+#not_my_account_confirmed p{
+
+	margin: 0;
+
+}
+
+/* -------------------------------------------------------------------------- */
+

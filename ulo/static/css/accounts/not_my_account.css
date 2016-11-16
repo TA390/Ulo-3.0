@@ -1,0 +1,95 @@
+/* -------------------------------------------------------------------------- */
+
+#not_my_account{
+
+	margin: 20px;
+
+}
+
+#not_my_account .text{
+
+	margin: 0;
+
+}
+
+#not_my_account .panel,
+#not_my_account_form p.error{
+
+	margin: 20px 0;
+
+}
+
+/* Text */
+#not_my_account h1{
+
+	font-size: 24px;
+
+}
+
+#not_my_account h2{
+
+	font-size: 16px;
+
+}
+
+#not_my_account a{
+
+	text-decoration: none;
+
+}
+
+#not_my_account a.highlight:hover{
+
+	text-decoration: underline;
+
+}
+
+#not_my_account .highlight{
+
+	color: #1C82DA;
+
+}
+
+/* END Text */
+
+/* Form */
+#not_my_account_form p.validation{
+
+	margin: 20px 0;
+	color: #1C82DA;
+
+}
+
+#not_my_account_submit,
+#not_my_account_cancel{
+
+	display: inline-block;
+	vertical-align: top;
+	margin-bottom: 20px;
+	padding: 0 15px;
+	height: 40px;
+	line-height: 40px;
+	border-radius: 4px;
+
+}
+
+#not_my_account_submit{
+
+	margin-right: 20px;
+	cursor: pointer;
+	border: 1px solid #1C82DA;
+	background-color: #1C82DA;
+	color: #FFF;
+
+}
+
+#not_my_account_cancel{
+
+	border: 1px solid #C0C0C0;
+	color: #000;
+	
+}
+/* END Form */
+
+/* -------------------------------------------------------------------------- */
+

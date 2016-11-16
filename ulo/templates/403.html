@@ -1,0 +1,22 @@
+{% extends base_template %}
+{% load staticfiles i18n %}
+
+
+{% block title %}Permission Denied{% endblock title %}
+
+{% block css %}
+	<link class="css_file" href="{% static 'css/403.css' %}" rel="stylesheet" type="text/css">
+{% endblock css %}
+
+{% block content %}
+<div id="error_403">
+
+	<h1>Ooops!!! 403</h1>
+
+	<h3>Looks like something went wrong!</h3>
+
+	<p>We track these errors automatically, but if the problem persists feel free to contact us. In the meantime, try refreshing the page.</p>
+
+</div>
+{% endblock content %}
+

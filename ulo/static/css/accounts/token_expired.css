@@ -1,0 +1,22 @@
+/* -------------------------------------------------------------------------- */
+
+#token_expired{
+
+	margin: 20px;
+	text-align: center;
+
+}
+
+#token_expired h1{
+
+	display: inline-block;
+	vertical-align: top;
+	padding: 20px 25px;
+	background-color: #333;
+	border-radius: 4px;
+	color: #FFF;
+
+}
+
+/* -------------------------------------------------------------------------- */
+
