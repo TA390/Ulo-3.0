@@ -8,7 +8,7 @@ import os, re
 # Core django imports
 from django import forms
 from django.conf import settings
-from django.contrib.auth import authenticate, get_user_model
+from django.contrib.auth import get_user_model
 from django.contrib.auth.password_validation import validate_password
 from django.db import transaction
 from django.utils.crypto import get_random_string
@@ -19,9 +19,9 @@ from django.utils.translation import ugettext_lazy as _
 # Project imports
 from .search import user_search
 from .widgets import ProfileUpdateDOBWidget, SignUpDOBWidget
-from emails.emails import reactivation_email, verify_email
+from emails.emails import verify_email
 from ulo.fields import PasswordField, UloDOBField, UloPIPField
-from ulo.formmixins import CleanUsernameMixin
+from ulo.formmixins import CleanUsernameMixin, DeleteFileMixin, UploadFileMixin
 from ulo.forms import UloForm, UloModelForm
 from ulo.utils import reserved_usernames
 
@@ -261,7 +261,14 @@ class SignUpForm(CleanUsernameMixin, UloModelForm):
 
 		if commit:
 
-			user.save()
+			# Will raise an exception if save() or index_instance() fails.
+
+			with transaction.atomic():
+
+				user.save()
+
+				user_search.index_instance(user)
+
 
 			verify_email(user)
 
@@ -342,6 +349,156 @@ class LoginForm(UloForm):
 
 		# Add a single non field error message.
 		self.add_error(None, msg or _('The email address and password do not match.'))
+
+# ----------------------------------------------------------------------------------------
+
+class ProfileUpdateForm(UloModelForm):
+
+	# DateField that checks the user's age is gte min_age
+	dob = UloDOBField(label=_('Birthday'), min_age=USERS_MIN_AGE, widget=ProfileUpdateDOBWidget)
+
+	
+	class Meta:
+		
+		model = get_user_model()
+		
+		fields = ('location', 'dob', 'blurb', 'gender')
+
+		widgets = {
+
+			'blurb': forms.Textarea()
+
+		}
+
+
+	def __init__(self, *args, **kwargs):
+
+		super(ProfileUpdateForm, self).__init__(*args, **kwargs)
+
+		for i, field in self.fields.items():
+			
+			field.widget.attrs.update({
+
+				'autocomplete': 'off',
+				'class': 'box_border'
+			
+			})
+
+
+	def add_account_update_error(self):
+
+		self.add_error(
+
+			None,
+			_('Sorry, it looks like we failed to update your account. Please try again.')
+
+		)
+
+
+	def save(self, commit=True):
+		"""
+
+		Update user instance.
+
+		"""
+
+		# Will raise an exception if save() or update_instance() fails.
+
+		with transaction.atomic():
+
+			user = super(ProfileUpdateForm, self).save(commit=commit)
+		
+			if commit:
+
+				user_search.update_instance(user)
+
+
+		return user
+
+# ----------------------------------------------------------------------------------------
+
+class ProfileUpdateImageForm(DeleteFileMixin, UploadFileMixin, UloModelForm):
+	"""
+	Display a form the upload/change the user's profile picture.
+	"""
+
+	class Meta:
+
+		model = get_user_model()
+		
+		fields = ('photo', 'thumbnail')
+		
+		widgets = {
+
+			'photo': forms.ClearableFileInput(attrs={
+			
+				'accept': 'image/gif,image/jpeg,image/jpg,image/png',
+				'capture': 'capture',
+				'class': 'file'
+			
+			}),
+			
+		}
+
+		error_messages = {
+
+			'photo': {
+
+				'missing': _('Please upload a photo.')
+
+			}
+
+		}
+
+
+	def __init__(self, *args, instance=None, **kwargs):
+		"""
+		Initialise the mixins.
+		"""
+
+		# UploadFileMixin - file field name.
+		kwargs['ufile'] = 'photo'
+
+		# DeleteFileMixin - files to delete.
+		self.store_paths(instance, 'photo', 'thumbnail')
+
+		super(ProfileUpdateImageForm, self).__init__(*args, instance=instance, **kwargs)
+
+
+	def add_account_photo_error(self):
+
+		self.add_error(
+
+			None,
+			_('Sorry, it looks like we failed to update your photo. Please try again.')
+
+		)
+
+
+	def save(self, commit=True):
+		"""
+
+		Update the user's profile photo.
+		
+		"""
+
+		# Will raise an exception if save() or update_instance() fails.
+
+		with transaction.atomic():
+
+			user = super(ProfileUpdateImageForm, self).save(commit=commit)
+
+			if commit:
+
+				user_search.update_instance( user )
+
+
+		if commit:
+
+			self.delete_files(user)
+
+
+		return user
 
 # ----------------------------------------------------------------------------------------
 

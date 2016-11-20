@@ -117,6 +117,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'emails',
+    'posts',
     'ulo',
     'users'
 

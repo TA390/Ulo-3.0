@@ -7,11 +7,7 @@
 
 function _Connect(){
 
-	if(Ulo.checkDependencies(true, "Session", "Pip")){
-
-		this.jqxhr = null;
-
-	} else{
+	if(Ulo.checkDependencies(true, "Session", "Pip") === false){
 
 		this.register = function(){}
 
@@ -35,16 +31,16 @@ _Connect.prototype = {
 
 	create: function(type, user_id){
 
-		var anchor = makeElement("a", {
+		var anchor = Ulo.create("a", {
 
 			"class": "connect " + type,
 			"href": "/user/" + type + "/" + user_id + "/"
 
 		})
 
-		anchor.appendChild( makeElement("span", {"class": "icon icon_" + type}) );
+		anchor.appendChild( Ulo.create("span", {"class": "icon icon_" + type}) );
 
-		anchor.appendChild( makeElement("span", {
+		anchor.appendChild( Ulo.create("span", {
 
 				"class": "text"
 
@@ -66,129 +62,110 @@ _Connect.prototype = {
 
 		var self = e.data.self;
 
+
 		if(Ulo.Pip.login() !== null){
 
 			Ulo.Pip.open();
 
 		}
 
-		else if(self.jqxhr === null){
+		else if(Ulo.requestAvailable()){
 
-			addClass(e.currentTarget, "disabled");
+			Ulo.acquireRequest();
 
-			self.jqxhr = $.ajax({
-
-					type:"GET",
-					url: this.getAttribute("href"),
-					statusCode: requestCodes
-
-				})
-
-				/* Params: server data, status code, xhr */
-				.done(function(data, sc, xhr){
-
-					/* If the session has changed update the entire page.  */
-					
-					if(Ulo.Session.hasChanged(xhr)){
-
-						Ulo.Pip.updatePage(xhr);
-
-						return true;
-
-					}
-
-					/* If the login form is returned display it. */
-
-					if(data.html){
-
-						Ulo.Pip.displayPage(xhr, "login");
-
-						return true;
-
-					}
+			Ulo.addClass(e.currentTarget, Ulo.cls.disabled);
 
 
-					self.jqxhr = "timeout";
+			setTimeout(function(){
 
-					setTimeout(function(){
+				Ulo.request({
 
-						var follow = hasClass(e.currentTarget, "follow");
+						type:"GET",
+						url: e.currentTarget.getAttribute("href")
 
-						var remove_add = follow ? ["follow", "unfollow"] : ["unfollow", "follow"];
+					})
 
-						e.currentTarget.href = e.currentTarget.href.replace(remove_add[0], remove_add[1]);
+					/* Params: server data, status code, xhr */
+					.done(function(data, sc, xhr){
 
-						removeClass(e.currentTarget, remove_add[0]);
+						/* If the session has changed update the entire page.  */
+						
+						if(Ulo.Session.hasChanged(xhr)){
 
-						addClass(e.currentTarget, remove_add[1]);
-
-
-						var icon = e.currentTarget.querySelector("span.icon");
-
-						if(icon !== null){
-
-							removeClass(icon, "icon_" + remove_add[0]);
-
-							addClass(icon, "icon_" + remove_add[1])
+							Ulo.Pip.updatePage(xhr);
 
 						}
 
+						/* If the login form is returned display it. */
 
-						var text = e.currentTarget.querySelector("span.text");
+						else if(data.html){
 
-						if(text !== null){
-
-							var t = remove_add[1];
-
-							emptyElement(text).appendChild( 
-
-								document.createTextNode(
-
-									t.charAt(0).toUpperCase() + t.slice(1)
-
-								) 
-
-							);
+							Ulo.Pip.displayPage(xhr, "login");
 
 						}
 
-						updateCounters(e.currentTarget, follow);
+						else{
+
+							var follow = Ulo.hasClass(e.currentTarget, "follow");
+
+							var remove_add = follow ? ["follow", "unfollow"] : ["unfollow", "follow"];
+
+							e.currentTarget.href = e.currentTarget.href.replace(remove_add[0], remove_add[1]);
+
+							Ulo.removeClass(e.currentTarget, remove_add[0]);
+
+							Ulo.addClass(e.currentTarget, remove_add[1]);
+
+
+							var icon = e.currentTarget.querySelector("span.icon");
+
+							if(icon !== null){
+
+								Ulo.removeClass(icon, "icon_" + remove_add[0]);
+
+								Ulo.addClass(icon, "icon_" + remove_add[1])
+
+							}
+
+
+							var text = e.currentTarget.querySelector("span.text");
+
+							if(text !== null){
+
+								var t = remove_add[1];
+
+								Ulo.empty(text).appendChild( 
+
+									document.createTextNode(
+
+										t.charAt(0).toUpperCase() + t.slice(1)
+
+									) 
+
+								);
+
+							}
+
+							updateCounters(e.currentTarget, follow);
+
+						}
+
+					})
+
+					/* Params: xhr, status code, error type */
+					.fail(function(xhr, sc, type){
+
 
 						
-						removeClass(e.currentTarget, "disabled");
+					})
 
-						self.jqxhr = null;
+					.always(function(){
 
-					}, 500);
+						Ulo.removeClass(e.currentTarget, Ulo.cls.disabled);
+				
+				});
 
-
-				})
-
-				/* Params: xhr, status code, error type */
-				.fail(function(xhr, sc, type){
-
-					if(Ulo.Session.hasChanged(xhr)){
-
-						/* Suppress the default error message. */
-						xhr.statusCode = function(){}
-
-						messages("Your session has expired. Refresh the page and try again.");
-
-					}
-					
-				})
-
-				.always(function(){
-					
-					if(self.jqxhr !== "timeout"){
-
-						removeClass(e.currentTarget, "disabled");
-
-						self.jqxhr = null;
-
-					}
-			
-			});
+			}, 500);
 
 		}
 
@@ -221,13 +198,13 @@ function updateCounters(context, increment, value){
 
 		if(value >= 0 && value===value){
 
-			emptyElement(counter).appendChild( document.createTextNode(value) );
+			Ulo.empty(counter).appendChild( document.createTextNode(value) );
 
 			counter = context.querySelector("span.abbr_count");
 
 			if(counter !== null){
 
-				emptyElement(counter)
+				Ulo.empty(counter)
 
 					.appendChild( document.createTextNode( abbreviate(value) ) );
 

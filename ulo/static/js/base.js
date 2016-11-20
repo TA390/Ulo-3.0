@@ -115,7 +115,9 @@ window.Ulo = {
 		hide: "hide",
 		show: "show",
 		hidden: "hidden",
-		disabled: "disabled"
+		disabled: "disabled",
+		modal: "modal",
+		modal_open: "modal_open"
 
 	},
 
@@ -134,6 +136,30 @@ window.Ulo = {
 		Temporary class instances removed with each page load.
 	*/
 	Temp: {},
+
+	/* -------------------------------------------------------------------------------- */
+
+	getMediaURL: function(url){
+
+		return "/media/" + url;
+
+	},
+
+	/* -------------------------------------------------------------------------------- */
+	
+	getUserURL: function(id){
+
+		return "/user/" + id;
+
+	},
+
+	/* -------------------------------------------------------------------------------- */
+	
+	getPostURL: function(id){
+
+		return "/post/" + id;
+
+	},
 
 	/* -------------------------------------------------------------------------------- */
 	/*
@@ -195,6 +221,38 @@ window.Ulo = {
 
 		);
 
+	},
+
+	/* -------------------------------------------------------------------------------- */
+	/*
+		Acquire the xhr instance if it is free.
+
+		@param reference: Optional reference assigned to the xhr instance
+	*/
+	acquireRequest: function(reference){
+
+		if(Ulo.requestAvailable(reference)){
+
+			Ulo.xhr = {reference: reference};
+
+		}
+
+	},
+
+	/* -------------------------------------------------------------------------------- */
+	/*
+		Release the xhr instance.
+
+		@param reference: Optional reference assigned to the xhr instance.
+	*/
+	releaseRequest: function(reference){
+
+		if(reference === undefined || Ulo.requestAvailable(reference)){
+
+			Ulo.xhr = undefined;
+
+		}
+
 	}, 
 
 	/* -------------------------------------------------------------------------------- */
@@ -203,10 +261,12 @@ window.Ulo = {
 
 		@param request: Request data object.
 		@param reference: Optional reference assigned to the xhr instance.
+		@param manual_release: Boolean = if true the xhr instance will not be released
+			automatically on completion.
 	*/
-	request: function(request, reference){
+	request: function(request, reference, manual_release){
 
-		if(Ulo.xhr !== undefined){
+		if(Ulo.xhr !== undefined && Ulo.xhr.abort !== undefined){
 
 			Ulo.xhr.abort();
 
@@ -230,7 +290,11 @@ window.Ulo = {
 
 			.always(function(){
 
-				Ulo.xhr = undefined;
+				if(manual_release !== true){
+
+					Ulo.releaseRequest();
+
+				}
 
 		});
 
@@ -931,35 +995,6 @@ window.Ulo = {
 
 	},
 
-	/* -------------------------------------------------------------------------------- */
-	/*
-		Return the transition end event name or null if not supported by the browser. 
-	*/
-	transitionEnd: function(element){
-
-		var transitions = {
-
-			"transition"		: "transitionend",
-			"WebkitTransition"	: "webkitTransitionEnd",
-			"MozTransition"		: "transitionend",
-			"OTransition"		: "oTransitionEnd otransitionend"
-		
-		};
-
-		for(var t in transitions){
-			
-			if(element.style[t] !== undefined){
-				
-				return transitions[t];
-			
-			}
-		
-		}
-
-		return null;
-
-	},
-
 	/* END HELPERS */
 	/* -------------------------------------------------------------------------------- */
 
@@ -977,6 +1012,216 @@ window.Ulo = {
 /* ------------------------------------------------------------------------------------ */
 
 (function () {
+
+
+	/* ANIMATE */
+	/* -------------------------------------------------------------------------------- */
+
+	function Animate(){
+
+		var bar = this.get();
+
+		this.transitionEvent = this.transitionEvent(bar);
+
+
+		if(this.transitionEvent !== null){
+
+			$(bar).on(this.transitionEvent, {self: this}, this.transitionend);
+
+		}
+
+	}
+
+	Animate.prototype = {
+
+		constructor: Animate,
+
+		/* ---------------------------------------------------------------------------- */
+		/*
+			Return the element used to display a loading bar to the user.
+		*/
+		get: function(){
+
+			var header = document.getElementsByTagName("header")[0];
+
+			return header.querySelector("span.loading_bar");
+
+		},
+
+		/* ---------------------------------------------------------------------------- */
+		/*
+			Set the width of the loading bar.
+
+			@param value: Value between 0 and 100.
+		*/
+		set: function(value){
+
+			var bar = this.get();
+
+			if(value === 0 || value === 100 && this.transitionEvent === null){
+
+				Ulo.addClass(bar, Ulo.cls.hide);
+
+				value = 0;
+
+			}
+
+			bar.style.width = value + "%";
+			
+			bar.offsetLeft;
+
+			Ulo.removeClass(bar, Ulo.cls.hide);
+
+		},
+
+		/* ---------------------------------------------------------------------------- */
+		/*
+			Reset the loading bar when the transition ends.
+		*/
+		transitionend: function(e){
+
+			var self = e.data.self,
+
+			bar = self.get();
+
+
+			console.log( bar.style.width );
+
+
+			if(bar.style.width === "100%"){
+
+				self.set(0);
+
+			}
+
+		},
+
+		/* ---------------------------------------------------------------------------- */
+		/*
+			Return the transition end event name or null if not supported by the browser. 
+		*/
+		transitionEvent: function(element){
+
+			var transitions = {
+
+				"transition"		: "transitionend",
+				"WebkitTransition"	: "webkitTransitionEnd",
+				"MozTransition"		: "transitionend",
+				"OTransition"		: "oTransitionEnd otransitionend"
+			
+			};
+
+			for(var t in transitions){
+				
+				if(element.style[t] !== undefined){
+					
+					return transitions[t];
+				
+				}
+			
+			}
+
+			return null;
+
+		},
+
+		/* ---------------------------------------------------------------------------- */
+		/*
+			Upload progress bar.
+		*/
+		upload: function(){
+
+			var xhr = $.ajaxSettings.xhr();
+
+			// Upload progress
+			if(xhr.upload){
+
+				xhr.upload.addEventListener("progress", function(evt){
+
+					if(evt.lengthComputable){
+
+						var percent = Math.ceil((evt.loaded / evt.total) * 100);
+
+						Ulo.Animate.set(percent);
+					
+					}
+
+				}, false);
+
+			}
+
+			return xhr;
+
+		},
+
+		/* ---------------------------------------------------------------------------- */
+		/*
+			Download progress bar.
+		*/
+		download: function(){
+
+			var xhr = $.ajaxSettings.xhr();
+
+			// Download progress
+			xhr.addEventListener("progress", function(evt){
+
+				if(evt.lengthComputable){
+
+					var percent = Math.ceil((evt.loaded / evt.total) * 100);
+
+					Ulo.Animate.set(percent);
+				
+				}
+
+			}, false);
+
+			return xhr;
+
+		},
+
+		/* ---------------------------------------------------------------------------- */
+		/*
+			Upload progress bar.
+		*/
+		_animate: function(element, start, cls){
+
+			(start ? Ulo.addClass : Ulo.removeClass)(element, cls);
+
+		},
+
+		/* ---------------------------------------------------------------------------- */
+		/*
+			Upload progress bar.
+		*/
+		bounce: function(element, start){
+
+			this._animate(element, start, "bounce");
+
+		},
+
+		/* ---------------------------------------------------------------------------- */
+		/*
+			Upload progress bar.
+		*/
+		pulse: function(element, start){
+
+			this._animate(element, start, "pulse");
+
+		},
+
+		/* ---------------------------------------------------------------------------- */
+
+	}
+
+	/* -------------------------------------------------------------------------------- */
+
+	Ulo.newClass(Animate, "Animate");
+
+	/* END ANIMATE */
+	/* -------------------------------------------------------------------------------- */
+
+
+
 
 	/* MESSAGE */
 	/* -------------------------------------------------------------------------------- */
@@ -1083,6 +1328,8 @@ window.Ulo = {
 
 			if(messages){
 
+				console.log(messages, Array.isArray(messages))
+
 				if(Array.isArray(messages) === false){
 
 					messages = [{message: messages}];
@@ -1104,6 +1351,12 @@ window.Ulo = {
 					for(var i in messages){
 
 						var attrs = {};
+
+						if(typeof messages[i] === "string" || messages[i] instanceof String){
+
+							messages[i] = { message: messages[i] };
+
+						}
 
 						if(messages[i].tags){ 
 
@@ -1470,12 +1723,12 @@ window.Ulo = {
 		Ulo.menus(button, "height", false, false, this.filters);
 
 
-		$( this.getForm() ).on("submit", {self: this}, this.submit);
+		$(this.getForm()).on("submit", {self: this}, this.submit);
 
-		$( container.querySelector("button.close") )
+		$(container.querySelector("button.close"))
 			.on(Ulo.evts.click, {self: this}, this.close);
 
-		$( container.querySelector("button.submit") )
+		$(container.querySelector("button.submit"))
 			.on(Ulo.evts.click, {self: this}, this.open);
 
 	}
@@ -1640,57 +1893,6 @@ window.Ulo = {
 	}
 
 	/* END NAV MENU */
-	/* -------------------------------------------------------------------------------- */
-
-
-
-
-	/* SESSION */
-	/* -------------------------------------------------------------------------------- */
-
-	function Session(){
-
-		var main = Ulo.getMain();
-
-		this.token = main.getAttribute("data-token-id") || null;
-
-		this.auth_id = main.getAttribute("data-auth-id") || null;
-
-		main.removeAttribute("data-token-id");
-
-		main.removeAttribute("data-auth-id");
-
-	}
-
-	Session.prototype = {
-
-		constructor: Session,
-
-		/* ---------------------------------------------------------------------------- */
-
-		isOwner: function(id){
-
-			return this.auth_id !== null && this.auth_id == id;
-
-		},
-
-		/* ---------------------------------------------------------------------------- */
-
-		isAuthenticated: function(id){
-
-			if(id === undefined){ 
-
-				id = this.auth_id;
-
-			}
-			
-			return id !== "" && id !== null;
-
-		},
-
-	}
-
-	/* END SESSION */
 	/* -------------------------------------------------------------------------------- */
 
 
@@ -2407,21 +2609,6 @@ window.Ulo = {
 			/* Handle backwards and forwards page navigation. */
 			$(window).on("popstate", this.history);
 
-
-			/* Setup the loading bar animation */
-			var loading = this.getLoadingBar();
-
-			var transitionend = Ulo.transitionEnd(loading);
-
-			loading.has_transitionend = transitionend !== null;
-
-			if(loading.has_transitionend){
-
-				$(loading).on(transitionend, {self: this}, this._resetLoadingBar);
-
-			}
-
-
 			/* Register all anchor elements with the attribute data-apl */
 			this.register();
 
@@ -2497,116 +2684,6 @@ window.Ulo = {
 
 		/* ---------------------------------------------------------------------------- */
 		/*
-			Progress bar.
-		*/
-		progress: function(){
-
-			var xhr = $.ajaxSettings.xhr();
-
-			// Upload progress
-			if(xhr.upload){
-
-				xhr.upload.addEventListener("progress", function(evt){
-
-					if(evt.lengthComputable){
-
-						var percentComplete = evt.loaded / evt.total;
-						
-						//Do something with upload progress
-						console.log("Upload: ", percentComplete);
-					
-					}
-
-				}, false);
-
-			}
-
-			// Download progress
-			xhr.addEventListener("progress", function(evt){
-
-				console.log(evt);
-
-				if(evt.lengthComputable){
-
-					var percent = Math.ceil((evt.loaded / evt.total) * 100);
-						
-					/* Copied from getLoadingBar() */
-
-					var header = document.getElementsByTagName("header")[0];
-
-					header.querySelector("span.page_loading").style.width = percent + "%";
-				
-				}
-
-			}, false);
-
-			return xhr;
-
-		},
-
-		/* ---------------------------------------------------------------------------- */
-		/*
-			Return the element used to display a loading bar to the user.
-		*/
-		getLoadingBar: function(){
-
-			var header = document.getElementsByTagName("header")[0];
-
-			return header.querySelector("span.page_loading");
-
-		},
-
-		/* ---------------------------------------------------------------------------- */
-		/*
-			Reset the loading bar.
-
-			@param display: Boolean - if true display the loading bar after resetting it.
-			@param onlyIfNoTransition: Boolean - if true reset the loading bar only if the
-				browser does not support transitionend.
-		*/
-		resetLoadingBar: function(display, onlyIfNoTransition){
-
-			var loading = this.getLoadingBar();
-
-			if(onlyIfNoTransition !== true || loading.has_transitionend === false){
-
-				Ulo.addClass(loading, Ulo.cls.hide);
-
-				loading.style.width = 0;
-
-				loading.offsetLeft;
-
-				if(display === true){
-
-					Ulo.removeClass(loading, Ulo.cls.hide);
-
-				}
-
-			}
-
-		},
-
-		/* ---------------------------------------------------------------------------- */
-		/*
-			Event handler for resetLoadingBar().
-		*/
-		_resetLoadingBar: function(e){
-
-			var self = e.data.self,
-
-			loading = self.getLoadingBar();
-			
-
-			if(loading.style.width === "100%"){
-
-				self.resetLoadingBar(false);
-
-			}
-
-		},
-
-		/* ---------------------------------------------------------------------------- */
-		/*
 			Event handler for getPage().
 		*/
 		_getPage: function(e){
@@ -2632,7 +2709,7 @@ window.Ulo = {
 			var self = this;
 
 
-			self.resetLoadingBar(true);
+			Ulo.Animate.set(0);
 
 
 			Ulo.request({
@@ -2640,7 +2717,7 @@ window.Ulo = {
 					type: "GET", 
 					url: url,
 					cache: true,
-					xhr: this.progress.bind(this)
+					xhr: Ulo.Animate.download
 				
 				})
 			
@@ -2686,25 +2763,15 @@ window.Ulo = {
 
 						})
 
-						.always(function(){
-
-							self.resetLoadingBar(false, true);
-
-					});
-
 				})
 				
 				.fail(function(xhr){
 
 					/* Render the error page if one was returned. */
 
-					Ulo.Content.change(Ulo.getMain(), xhr, true)
+					Ulo.Content.change(Ulo.getMain(), xhr, true);
 
-						.always(function(){
-
-							self.resetLoadingBar(false);
-
-					});
+					Ulo.Animate.set(0);
 
 					if(fail !== undefined){
 
@@ -2731,6 +2798,527 @@ window.Ulo = {
 	/************************************************************************************/
 
 	/* END PAGE */
+	/* -------------------------------------------------------------------------------- */
+
+
+
+
+		/* SESSION */
+	/* -------------------------------------------------------------------------------- */
+
+	function Session(){
+
+		var main = Ulo.getMain();
+
+		this.token = main.getAttribute("data-token-id") || null;
+
+		this.auth_id = main.getAttribute("data-auth-id") || null;
+
+		main.removeAttribute("data-token-id");
+
+		main.removeAttribute("data-auth-id");
+
+	}
+
+	Session.prototype = {
+
+		constructor: Session,
+
+		/* ---------------------------------------------------------------------------- */
+
+		isOwner: function(id){
+
+			return this.auth_id !== null && this.auth_id == id;
+
+		},
+
+		/* ---------------------------------------------------------------------------- */
+
+		isAuthenticated: function(id){
+
+			if(id === undefined){ 
+
+				id = this.auth_id;
+
+			}
+			
+			return id !== "" && id !== null;
+
+		},
+
+		/* ---------------------------------------------------------------------------- */
+
+		get: function(){
+
+			return {
+
+				token: this.token,
+				auth_id: this.auth_id
+
+			}
+
+		},
+
+		/* ---------------------------------------------------------------------------- */
+		/*
+			@param xhr: XMLHttpRequest.
+		*/
+		set: function(xhr){
+
+			this.token = xhr.getResponseHeader("token-id");
+
+			this.auth_id = xhr.getResponseHeader("auth-id");
+
+		},
+
+		/* ---------------------------------------------------------------------------- */
+		/*
+			@param xhr: XMLHttpRequest.
+		*/
+		update: function(xhr, fragment){
+
+			if(this.hasChanged(xhr)){
+
+				console.log("SESSION CHANGED!");
+
+				Ulo.Session.set(xhr);
+
+				this.setTokens(this.token);
+
+				var nav = Ulo.getFragment(fragment, "nav_ul");
+
+				if(nav !== null){
+
+					Ulo.replace(nav, Ulo.get(nav.id));
+					
+					Ulo.register(nav);
+
+				}
+
+			}
+
+			
+		},
+
+		/* ---------------------------------------------------------------------------- */
+		/*
+			@param xhr: XMLHttpRequest.
+		*/
+		hasChanged: function(xhr){
+
+			return xhr.getResponseHeader("session-changed") !== null
+
+		},
+
+		/* ---------------------------------------------------------------------------- */
+
+		getToken: function(token, context){
+
+			return { name: "csrfmiddlewaretoken", value: this.token };
+			
+		},
+
+		/* ---------------------------------------------------------------------------- */
+
+		setTokens: function(token, context){
+
+			if(token){
+
+				var tokens = $("input[name='csrfmiddlewaretoken']", context);
+
+				for(var i=0; i<tokens.length; ++i){
+
+					tokens[i].value = token;
+
+				}
+
+			}
+			
+		},
+
+		/* ---------------------------------------------------------------------------- */
+		/*
+			@param xhr: XMLHttpRequest.
+		*/
+		hasExpired: function(xhr){
+
+			return xhr.responseJSON !== undefined && xhr.responseJSON.csrf_error === true;
+
+		},
+
+		/* ---------------------------------------------------------------------------- */
+
+	}
+
+	/************************************************************************************/
+
+	Ulo.newClass(Session, "Session");
+
+	/************************************************************************************/
+
+	/* END SESSION */
+	/* -------------------------------------------------------------------------------- */
+
+
+
+
+	/* Pip */
+	/* -------------------------------------------------------------------------------- */
+
+	function Pip(){
+
+		Ulo.checkDependencies("Content");
+
+		this.elements = [];
+
+		this.callbacks = [];
+
+	}
+
+	Pip.prototype = {
+
+		constructor: Pip,
+
+
+		/* ---------------------------------------------------------------------------- */
+
+		isPip: function(context){
+
+			var pip = context.querySelector("input[name='pip']");
+
+			return pip !== null && pip.value == true;
+		
+		},
+
+		/* ---------------------------------------------------------------------------- */
+
+		setPips: function(context){
+
+			var pips = $("input[name='pip']", context);
+
+			for(var i=0; i<pips.length; ++i){
+
+				pips[i].value = true;
+			
+			}
+	
+		},
+
+		/* ---------------------------------------------------------------------------- */
+
+		updatePage: function(xhr, page_id, removeOnClose, callback){
+			
+			if(Ulo.checkDependencies(true, "Page")){
+
+
+				Ulo.Page.preventUnload();
+
+				/* 
+					Refresh the current page before displaying the requested page in the 
+					modal. 
+				*/
+				Ulo.Page.getPage(
+					
+					Ulo.getURL(), 
+					false,
+					this.displayPage.bind(this, xhr, page_id, removeOnClose, callback)
+				
+				);
+			
+			} else{
+
+				Ulo.replacePage();
+
+			}
+
+		},
+
+		/* ---------------------------------------------------------------------------- */
+
+		displayPage: function(xhr, page_id, removeOnClose, callback){
+
+			if(xhr){
+
+				var html = xhr.responseJSON !== undefined && xhr.responseJSON.html;
+
+				if(html !== undefined){
+
+					var self = this,
+					
+					fragment = Ulo.createFragment(html),
+					
+					main = Ulo.getFragment(fragment, Ulo.getMainID());
+
+
+					this.setPips(main);
+
+
+					Ulo.Content._change(this.get(), main, fragment, xhr, false)
+
+						.done(function(){
+
+							self.open( Ulo.get(page_id), removeOnClose, callback );
+
+						})
+						
+						.fail(function(){
+
+							self.close();
+
+							Ulo.remove( Ulo.get(page_id) );
+
+							Ulo.messages("Sorry, we could not load the page you requested.");
+
+						})
+
+						.always(function(){
+
+						
+							
+					});
+
+				}
+
+			}
+
+
+		},
+
+		/* ---------------------------------------------------------------------------- */
+
+		getPage: function(url, page_id, callback){
+
+			var self = this;
+
+			/* Make a request for the page */
+			Ulo.request({
+
+					type:"GET",
+					url: url, 
+					cache:true,
+					codes: {all: "Sorry, we could not load the page you requested."}
+					
+				})
+
+				/* Params: server data, status code, xhr */
+				.done(function(data, sc, xhr){
+
+					if(Ulo.Session.hasChanged(xhr)){
+
+						self.updatePage(xhr, page_id, callback);
+
+					}
+
+					else{
+
+						self.displayPage(xhr, page_id, callback);
+
+					}
+
+				})
+
+				/* Params: xhr, status code, error type */
+				.fail(function(xhr){
+					
+			
+				})
+
+				.always(function(){
+
+
+			});
+
+		},
+
+		/* -------------------------------------------------------------------------------- */
+
+		get: function(create){
+
+			var id = "pip_modal";
+
+			var modal = Ulo.get(id);
+
+			if(create !== false && modal === null){
+
+				modal = Ulo.create("div", {
+
+					"id": id, 
+					"class": "modal " + Ulo.cls.hide,
+
+				});
+
+				Ulo.getMain().appendChild(modal);
+
+			}
+
+			return modal;
+
+		},
+
+		/* -------------------------------------------------------------------------------- */
+
+		login: function(){
+
+			return Ulo.get("login");
+
+		},
+
+		/* -------------------------------------------------------------------------------- */
+
+		open: function(element, removeOnClose, callback){
+
+			var login = this.login();
+
+			var modal = this.get();
+
+			if(login){
+
+				element = login;
+
+				removeOnClose = false;
+
+				var fields = [Ulo.get("login_email"), Ulo.get("login_password")];
+			
+				for(var i=0; i<fields.length; ++i){
+					
+					if(fields[i] !== null){
+						
+						fields[i].value="";
+
+					}
+
+				}
+
+			}
+
+			if(element){
+
+				this.hideNodes(modal);
+
+				if(removeOnClose === true){
+
+					this.elements.push( element );
+
+				}
+
+				modal.appendChild( Ulo.removeClass(element, Ulo.cls.hide) );
+
+			}
+
+			if(Ulo.hasClass(modal, Ulo.cls.hide)){
+
+				Ulo.removeClass(modal, Ulo.cls.hide);
+
+				Ulo.addClass(document.body, Ulo.cls.modal_open);
+
+				$(modal).on(Ulo.evts.click, {self: this}, this.close);
+
+
+			}
+
+
+			/* Run callback at the end. */
+
+			if(callback !== undefined){
+				
+				this.callbacks.push( callback );
+
+				callback( true );
+
+			}
+
+		},
+
+		/* -------------------------------------------------------------------------------- */
+
+		close: function(e){
+
+			var self, modal, close_modal;
+
+			if(e === undefined){
+
+				self = this;
+				modal = self.get();
+				close_modal = true;
+
+			} else{
+
+				self = e.data.self;
+				modal = self.get();
+				close_modal = e.target === modal;
+
+			}
+
+			if(close_modal || e.target.getAttribute("data-close-pip") === "true"){
+
+				for(var i=0; i<self.callbacks.length; ++i){
+
+					self.callbacks[i]( false );
+
+				}
+
+				for(var i=0; i<self.elements.length; ++i){
+
+					Ulo.Content.removeFiles( self.elements[i] );
+
+				}
+
+				self.callbacks.length = self.elements.length = 0;
+
+
+				$(modal).off(Ulo.evts.click, self.close);
+
+				Ulo.removeClass(document.body, Ulo.cls.modal_open);
+
+				Ulo.addClass(modal, Ulo.cls.hide);
+
+				self.hideNodes(modal);				
+
+			}
+
+		},
+
+		/* -------------------------------------------------------------------------------- */
+
+		unload: function(e){
+
+			var modal = this.get(false);
+
+			if(modal !== null){
+
+				$(modal).trigger(Ulo.evts.click);
+
+				while(modal.firstChild !== null){
+
+					Ulo.Content.removeFiles(modal.firstChild);
+
+				}
+
+			}
+
+		},
+
+		/* -------------------------------------------------------------------------------- */
+
+		hideNodes: function(modal){
+
+			for(var i=0; i<modal.childNodes.length; ++i){
+
+				Ulo.addClass(modal.childNodes[i], Ulo.cls.hide);
+
+			}
+
+		}
+
+	}
+
+	/************************************************************************************/
+
+	Ulo.newClass(Pip, "Pip");
+
+	/************************************************************************************/
+
+	/* END Pip */
 	/* -------------------------------------------------------------------------------- */
 
 

@@ -228,7 +228,6 @@ class UserSearchVersion0(SearchMixin):
 					'type': 'completion',
 					'analyzer': 'suggestions_analyser',
 					'search_analyzer': 'suggestions_analyser',
-					'payloads': True
 
 				}
 
@@ -244,21 +243,18 @@ class UserSearchVersion0(SearchMixin):
 
 		document.update({
 
-			'suggestions': {
+			'suggestions': [
 
-				'input': [document['name'], document['username']],
-				
-				'output': str(document['id']),
+				{
+					'input': document['name'],
+					'weight': 4
+				},
+				{
+					'input': document['username'],
+					'weight': 2
+				},
 
-				'payload': { 
-
-					'name': document['name'],
-					'username': document['username'],
-					'thumbnail': document['thumbnail']
-
-				}
-
-			}
+			]
 
 		})
 

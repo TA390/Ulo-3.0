@@ -346,7 +346,9 @@ class IndexAPIMixin(object):
 
 
 		for key in ('routing', 'search_routing', 'index_routing'):
+			
 			if key in kwargs:
+			
 				data['actions']['add'][key] = kwargs[key]
 
 
@@ -354,7 +356,9 @@ class IndexAPIMixin(object):
 			
 			requests.post( 
 
-				self.get_url('_aliases', **kwargs), data=serialiser.dumps(data)
+				self.get_url('_aliases', **kwargs), 
+
+				data=serialiser.dumps(data, encode=False)
 
 			),
 			
@@ -391,7 +395,7 @@ class IndexAPIMixin(object):
 	def reassign_aliases(self, remove_indices, add_indices, aliases, **kwargs):
 		"""
 
-		Remove the alises from remove_indices and assign them to add_indices.
+		Remove the aliases from remove_indices and assign them to add_indices.
 
 		@param remove_indices: Index name or array of index names.
 		@param add_indices: Index name or array of index names.
@@ -400,18 +404,21 @@ class IndexAPIMixin(object):
 		"""
 		
 		for arg in (remove_indices, add_indices, aliases):
+
 			if isinstance(arg, str):
+			
 				arg = [arg]
+
 
 		data = {
 
-			'actions': [{ 
+			'actions': [
 
-				'remove': { 'index': remove_indices, 'alias': aliases },
+				{ 'remove': { 'index': remove_indices, 'alias': aliases } },
 
-				'add': { 'index': add_indices, 'alias': aliases } 
+				{ 'add': { 'index': add_indices, 'alias': aliases } }
 
-			}]
+			]
 
 		}
 
@@ -419,7 +426,9 @@ class IndexAPIMixin(object):
 			
 			requests.post( 
 
-				self.get_url('_aliases', **kwargs), data=serialiser.dumps(data)
+				self.get_url('_aliases', **kwargs), 
+
+				data=serialiser.dumps(data, encode=False)
 
 			),
 			

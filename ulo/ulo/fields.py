@@ -13,7 +13,7 @@ from django.contrib.auth.password_validation import (
 	validate_password, CommonPasswordValidator
 )
 from django.core.exceptions import ValidationError
-from django.forms import BooleanField, CharField, DateField, PasswordInput
+from django.forms import BooleanField, CharField, DateField, FileField, PasswordInput
 from django.utils.translation import ugettext_lazy as _
 
 # Thrid party app imports

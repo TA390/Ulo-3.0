@@ -46,7 +46,7 @@
 
 			var self = this;
 
-			self._beforeAfterSubmit(true);
+			self.loadingAnimation(true);
 
 			setTimeout(function(){
 							
@@ -60,9 +60,9 @@
 
 				);
 				
-				self._beforeAfterSubmit(false);
+				self.loadingAnimation(false);
 
-			}, 500)
+			}, 500);
 
 		}
 

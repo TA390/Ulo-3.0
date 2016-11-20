@@ -146,7 +146,6 @@
 
 		}
 
-
 		/* Set the submit event handler on the form and return the form */
 		return $(Ulo.get(form_id)).on("submit", {self: this}, this.submit);
 
@@ -162,9 +161,15 @@
 		*/
 		setSubmitDisabled: function(disable){
 
-			var toggle = (disable ? Ulo.addClass : Ulo.removeClass)
+			var submit = Ulo.get(this.submit_id);
 
-			toggle(Ulo.get(this.submit_id), Ulo.cls.disabled).disabled = disable;
+			if(submit !== null){
+
+				var toggle = (disable ? Ulo.addClass : Ulo.removeClass);
+
+				toggle(submit, Ulo.cls.disabled).disabled = disable;
+
+			}
 
 		},
 
@@ -172,26 +177,9 @@
 		/*
 			Start/stop animation.
 		*/
-		loadingAnimation: function(loading){
+		loadingAnimation: function(start){
 
-			var toggle = (loading ? Ulo.addClass : Ulo.removeClass);
-
-			toggle(Ulo.get(this.submit_id), "pulse");
-
-		},
-
-		/* ---------------------------------------------------------------------------- */
-		/*
-			Run setSubmitDisabled() and loadingAnimation() either side of a submission.
-
-			@param before: Boolean - true if the function is called before the submission
-				and false if after.
-		*/
-		_beforeAfterSubmit: function(before){
-
-			this.setSubmitDisabled(before);
-
-			this.loadingAnimation(before);
+			Ulo.Animate.pulse(Ulo.get(this.submit_id), start);
 
 		},
 
@@ -300,8 +288,6 @@
 			form = e.currentTarget;
 
 
-			// self.validateForm(form, true) &&
-
 			if(Ulo.requestAvailable() && self.validateForm(form, true)){
 
 				/* 
@@ -312,11 +298,14 @@
 
 					return true;
 
-				} else{
-
-					self._beforeAfterSubmit(true);
-
 				}
+
+
+				Ulo.acquireRequest();
+				
+				
+				self.loadingAnimation(true);
+
 
 				setTimeout(function(){
 
@@ -343,7 +332,7 @@
 
 						.always(function(xhr){
 
-							self._beforeAfterSubmit(false);
+							self.loadingAnimation(false);
 
 							self.always(form, xhr);
 					
@@ -437,7 +426,7 @@
 
 			for(var n in this.validators){
 
-				$("input[name='"+n+"'], select[name='"+n+"']", context)
+				$("input[name='" + n + "'], select[name='" + n + "']", context)
 
 					.on(this.evt, {self: this}, this.validateHandler);
 
@@ -535,7 +524,8 @@
 			
 			container = Ulo.get(id);
 
-			if(container===null){
+
+			if(container === null){
 
 				container = Ulo.create("div", {"id": id, "class": "form_errors"});
 				
@@ -568,22 +558,26 @@
 		*/
 		validate: function(target, verbose, is_evt){
 
-			var is_valid=true, 
+			var is_valid = true, 
 
-			validator=this.validators[target.name];
+			validator = this.validators[target.name];
 
 
-			if(validator!==undefined){
+			if(validator !== undefined){
 
-				if(validator.regexp!==undefined){
+				if(validator.regexp !== undefined){
 
-					verbose && this.removeText(this.getField(target.name));
+					if(verbose){
+
+						this.removeText(this.getField(target.name));
+
+					}
 
 					for(var i=0; i<validator.regexp.length; ++i){
 
-						if( validator.regexp[i].test(target.value)===false ){
+						if(validator.regexp[i].test(target.value) === false){
 
-							is_valid=false;
+							is_valid = false;
 
 							if(verbose){
 
@@ -604,7 +598,7 @@
 
 				}
 
-				if(validator.validator!==undefined){
+				if(validator.validator !== undefined){
 
 					return validator.validator.call(this, target, is_valid, is_evt);
 
@@ -640,7 +634,11 @@
 				/* Remove non field specific form errors */
 				var container = this.getNonField(form);
 				
-				container!==null && this.removeText(container);
+				if(container !== null){
+
+					this.removeText(container);
+
+				}
 
 			}
 
@@ -649,11 +647,11 @@
 
 				for(var j=0; j<form_fields[i].length; ++j){
 
-					if( this.validate(form_fields[i][j], verbose, false)===false ){
+					if(this.validate(form_fields[i][j], verbose, false) === false){
 
 						is_valid = false;
 
-						if(verbose===false){ 
+						if(verbose === false){ 
 
 							return false;
 
@@ -694,7 +692,7 @@
 
 			if(container !== null){
 
-				if( Array.isArray(messages)===false ){
+				if(Array.isArray(messages) === false){
 
 					messages = [messages];
 

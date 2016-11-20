@@ -29,13 +29,8 @@
 		this.setValidator(this.dob[1].name, this.validateDOB);
 		this.setValidator(this.dob[2].name, this.validateDOB);
 
-		/* END Date of birth validation */
 
-
-		/* Username availability check. */
-
-		this.setValidator("username", this.usernameAvailable);
-
+		/* Register validation on all form fields */
 
 		this.register(form);
 
@@ -51,12 +46,11 @@
 
 	/* -------------------------------------------------------------------------------- */
 	/*
-		Return true if the form should be submitted via an ajax request should be made 
-		and false if not.
+		Return true if the form should be submitted via an ajax request else return false.
 	*/
 	SignUp.prototype.ajaxRequest = function(){
 			
-		return true;
+		return false;
 
 	},
 
@@ -77,51 +71,6 @@
 		return Ulo.Temp.Validation.prototype.getField.call(this, name);
 
 	},
-
-	/* -------------------------------------------------------------------------------- */
-	/*
-		Return true if the username field is valid/available and false if not.
-
-		@param target: Form field.
-		@param is_valid: True if the field is valid and false if not.
-		@param is_evt: True if the function has been called inside an event handler and
-			false if not.
-	*/
-	SignUp.prototype.usernameAvailable = function(target, is_valid, is_evt){
-
-		if(is_evt){
-
-			removeClass(target.parentNode, target.availability);
-
-		} else if(is_valid){
-
-			is_valid = target.availability==="available";
-
-			this.addText(this.getField(target.name), "This username has been taken.");
-
-		}
-
-		/* Make a request to check the availability of the username */
-		this.isAvailable(
-
-			target,
-
-			"/user/available/" + target.value + "/",
-			
-			is_valid && is_evt,
-			
-			function(target, available){
-
-				target.availability = available ? "available" : "unavailable";
-				addClass(target.parentNode, target.availability)
-
-			}
-
-		)
-
-		return is_valid;
-
-	}
 
 	/* -------------------------------------------------------------------------------- */
 	/*
@@ -238,7 +187,7 @@
 			Increment the counter to prevent the function from running multiple times when 
 			called from the submit handler.
 		*/
-		if(is_evt===false){
+		if(is_evt === false){
 
 			this.dob_checked = (this.dob_checked+1) % 3;
 
@@ -250,6 +199,7 @@
 
 	/* DOCUMENT READY FUNCTION */
 	/* ------------------------------------------------------------------------------------ */
+	
 	$(function(){
 	
 		try{
@@ -274,7 +224,6 @@
 
 	});
 
-/* ------------------------------------------------------------------------------------ */
+/* ---------------------------------------------------------------------------------------- */
 
 }());
-

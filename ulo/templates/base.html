@@ -120,7 +120,7 @@
                                         <li>
                                             <a href="#">
                                                 <div class="title">
-                                                    Post title 1 kfsghkdfsg kfjlgh dslfkjgh ldfskjgh sdkjlfghskjldfhgkjl ksg lkashfkjlsd fkjlsadhf kladsjfhkjlasdfh
+                                                    Post title 1
                                                 </div>
                                             </a>
                                         </li>
@@ -138,7 +138,7 @@
                                                 <img src="https://x1.xingassets.com/assets/frontend_minified/img/users/nobody_m.original.jpg">
                                                 
                                                 <div class="names">
-                                                    <span class="name ellipsis">Taha Abdallakljghsdkjfjdfkljdsgjdfsklgjs;ldfjg;lkdfshg</span>
+                                                    <span class="name ellipsis">Taha</span>
                                                     <span class="username ellipsis">@tahabdalla</span>
                                                 </div>
                                             </a>
@@ -189,7 +189,7 @@
 
                     <li>
                         
-                        <a href="{% url 'users:profile' user.username %}" class="ellipsis" data-apl="true" title="Profile">{{ user.get_short_name }}dfljkhgkldsjhgkldjhsgklsjhgfkldsjhglkhsd</a>
+                        <a href="{% url 'users:profile' user.username %}" class="ellipsis" data-apl="true" title="Profile">{{ user.get_short_name }}</a>
 
                     </li><li>
                         
@@ -225,7 +225,7 @@
 
         </nav>
 
-        <span class="page_loading"></span>
+        <span class="loading_bar"></span>
 
     </header>
 
@@ -292,7 +292,7 @@
 
         <!-- END email confirmation ================================================== -->
 
-        <main role="main" id="main_content" class="container">
+        <main role="main" id="main_content" class="container" data-token-id="{{ csrf_token }}"{% if user.is_authenticated %} data-auth-id="{{ user.id }}"{% endif %}>
 
             {% block content %}{% endblock content %}
             

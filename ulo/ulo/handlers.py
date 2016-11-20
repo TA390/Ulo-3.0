@@ -184,6 +184,7 @@ class MultiMediaUploadMixin(object):
 
 			# Check that the previous handler returned a file
 			if hasattr(self, 'file') == False:
+
 				return None
 
 
@@ -207,7 +208,7 @@ class MultiMediaUploadMixin(object):
 				self.file.seek(0)
 				
 				# Set file name
-				self.file_name = name+'.jpg'
+				self.file_name = name + '.jpg'
 				
 				# Update the content type
 				self.content_type = 'image/jpeg'
@@ -246,7 +247,7 @@ class MultiMediaUploadMixin(object):
 			add_error(
 			
 				self.request,
-				_('Please upload an image less than %s by %s') %(self.res, self.res)
+				_('Please upload an image less than %s by %s.') %(self.res, self.res)
 			
 			)
 		
@@ -283,9 +284,6 @@ class MediaUploadHandler(BaseMediaUploadMixin, FileUploadHandler):
 		"""
 		"""
 
-		# Run BaseMediaUploadMixin's __init__ function first
-		super(MediaUploadHandler, self).__init__(*args, **kwargs)
-
 		# Max number of bytes per file for each type.
 		# THE VALUES MUST BE GTE THE JAVASCRIPT FILEUPLOAD CLASS.
 		# See class FileUpload - configure().
@@ -295,6 +293,11 @@ class MediaUploadHandler(BaseMediaUploadMixin, FileUploadHandler):
 			'video': kwargs.pop('max_video', 73400320)	# 70MB
 		
 		}
+
+
+		# Run BaseMediaUploadMixin's __init__ function before setting max_content_length
+		super(MediaUploadHandler, self).__init__(*args, **kwargs)
+
 
 		# Max upload size determined by the type and number of files.
 		self.max_content_length = (

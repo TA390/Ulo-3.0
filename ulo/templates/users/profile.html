@@ -1,12 +1,12 @@
 {% extends base_template %}
-{% load staticfiles i18n ulo_humanise ulo_user %}
+{% load staticfiles i18n ulo_humanise %}
 
 
 {% block title %}{{ profile.name }} @{{ profile.username }}{% endblock title %}
 
 {% block css %}
 
-	{% if is_own_page %}
+	{% if is_owner %}
 	<link class="css_file" href="{% static 'css/uploads/upload.css' %}" rel="stylesheet" type="text/css">
 	{% endif %}
 	<link class="css_file" href="{% static 'css/users/profile.css' %}" rel="stylesheet" type="text/css">
@@ -24,9 +24,17 @@
 
 				<div id="profile_picture">
 					
-					<img src="{{ profile.get_picture }}">
+					<div class="animation">
+						
+						<div class="one"></div>
+						<div class="two"></div>
+						<div class="three"></div>
 
-					{% if is_own_page %}
+					</div>
+
+					<img src="{{ MEDIA_URL }}{{ profile.photo }}">
+
+					{% if is_owner %}
 
 					<div id="picture_actions">
 
@@ -56,7 +64,7 @@
 
 					<div class="profile_actions">
 
-					{% if is_own_page %}
+					{% if is_owner %}
 					
 						<a class="edit_profile" data-apl="true" href="{% url 'users:profile_update' %}" title="Edit Profile">
 							<span class="icon icon_edit"></span
@@ -119,6 +127,7 @@
 				</div>
 
 			</div>
+
 
 			<div id="profile_tabs">
 
@@ -203,11 +212,12 @@
 
 				{% endif %}
 
-
 			</div>
 
+			
 		</div>
 	</div>
+
 
 	<div id="tab_content" class="container box_border">
 
@@ -217,15 +227,13 @@
 
 			<div class="content">
 
-			{% for post in content %}
+			{% for post in tab_data %}
 
 				<div class="item">
 
 					<div class="spacing">
 
 						<a class="post_thumbnail" href="{% url 'posts:detail' post.cid %}" data-apl="true">
-
-							{% if post.media_type == VIDEO %}
 
 							<img src="{{ MEDIA_URL }}{{ post.thumbnail }}">
 
@@ -234,12 +242,6 @@
 								<span class="icon icon_play"></span>
 
 							</div>
-
-							{% else %}
-
-							<img src="{{ MEDIA_URL }}{{ post.file0 }}">
-
-							{% endif %}
 
 						</a>
 							
@@ -270,7 +272,7 @@
 
 				<div class="empty">
 
-					{% if is_own_page %}
+					{% if is_owner %}
 
 						<p>Create your first <a class="bold" data-apl="true" href="{% url 'posts:post' %}">post.</a></p>
 					
@@ -306,7 +308,7 @@
 
 			<div class="content">
 
-			{% for follower in content %}
+			{% for follower in tab_data %}
 
 				<div class="item">
 
@@ -340,7 +342,7 @@
 
 							<a href="{% url 'users:profile' follower.username %}" data-apl="true">
 
-								<img src="{{ follower.thumbnail|get_thumbnail }}">
+								<img src="{{ MEDIA_URL }}{{ follower.thumbnail }}">
 
 								<div class="connection_names">
 									<h4>{{ follower.name }}</h4>
@@ -359,7 +361,7 @@
 
 				<div class="empty">
 
-					{% if is_own_page %}
+					{% if is_owner %}
 
 						<p>You have no followers.</p>
 					
@@ -393,13 +395,13 @@
 
 			<div class="content">
 
-			{% for following in content %}
+			{% for following in tab_data %}
 
 				<div class="item">
 
 					<div class="spacing">
 
-						{% if is_own_page or following.is_following != None %}
+						{% if is_owner or following.is_following != None %}
 							
 							<div class="connection_actions">
 
@@ -428,7 +430,7 @@
 
 							<a href="{% url 'users:profile' following.username %}" data-apl="true">
 
-								<img src="{{ following.thumbnail|get_thumbnail }}">
+								<img src="{{ MEDIA_URL }}{{ following.thumbnail }}">
 
 								<div class="connection_names">
 
@@ -450,7 +452,7 @@
 				
 				<div class="empty">
 					
-					{% if is_own_page %}
+					{% if is_owner %}
 					
 						<p>You are not following anyone.</p>
 					
@@ -485,7 +487,7 @@
 </div>
 
 
-{% if is_own_page %}
+{% if is_owner %}
 <div id="editor_container" class="hide modal box_border">
 	<div id="editor">
 
@@ -505,21 +507,7 @@
 			
 			<span class="overlay disabled"></span>
 
-			<div id="editor_content">
-
-<!-- 				<div class="clipping_mask" style="width: 600px; height: 450px;">
-
-					<div class="crop" style="top: 30px; bottom: 30px; left: 30px; right: 30px;">
-
-						<span class="loading"></span>
-
-						<img src="https://storage.googleapis.com/imgfave/image_cache/1388048108204472.jpg">
-
-					</div>
-
-				</div> -->
-
-			</div>
+			<div id="editor_content"></div>
 		
 		</div>
 

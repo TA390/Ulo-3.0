@@ -33,7 +33,8 @@ from users.views import SignUpView, LoginView, LogoutView
 # ----------------------------------------------------------------------------------------
 
 
-
+# TO SERVE MEDIA FILES IN DEVELOPMENT ONLY
+from django.conf.urls.static import static
 
 # ----------------------------------------------------------------------------------------
 
@@ -45,6 +46,11 @@ urlpatterns = [
 
 	# Site navigation when js is disabled.
 	url(r'^navigation/$', NavigationView.as_view(), name='navigation'),
+
+
+	# POSTS APP
+
+	url(r'^post/', include('posts.urls', namespace='posts')),
 
 
 	# USERS APP
@@ -67,7 +73,7 @@ urlpatterns = [
 
 	url(r'^settings/', include('settings.urls', namespace='settings')),
 
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 # ----------------------------------------------------------------------------------------
 

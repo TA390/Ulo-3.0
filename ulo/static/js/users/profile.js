@@ -12,9 +12,9 @@
 	/*
 		Return the user id set on the page container as a data attribute.
 	*/
-	function getUserID(){
+	function getProfileID(){
 
-		return getElement("profile").getAttribute("data-user-id");
+		return Ulo.get("profile").getAttribute("data-user-id");
 
 	}
 
@@ -35,7 +35,7 @@
 		Ulo.checkTempDependencies("Connect");
 
 
-		var tabs_container = getElement("profile_tabs");
+		var tabs_container = Ulo.get("profile_tabs");
 
 		var selected = tabs_container.querySelector("a.selected");
 
@@ -52,8 +52,6 @@
 
 
 			Connect.register();
-
-			this.jqxhr = null;
 
 		}
 
@@ -83,7 +81,7 @@
 		*/
 		getContainer: function(tab){
 
-			return getElement( this.getID(tab) );
+			return Ulo.get( this.getID(tab) );
 
 		},
 
@@ -107,7 +105,7 @@
 		*/
 		getProfileAttr: function(attr){
 
-			return getElement("profile").getAttribute( "data-" + attr) || "";
+			return Ulo.get("profile").getAttribute( "data-" + attr) || "";
 
 		},
 
@@ -127,7 +125,7 @@
 
 			$(load).on(Ulo.evts.click, this._load);
 
-			removeElements(load.parentNode);
+			Ulo.remove(load.parentNode);
 
 		},
 
@@ -149,11 +147,11 @@
 				*/
 				if(create === true){
 
-					anchor = container.appendChild( makeElement("div", {"class": "load"}) );
+					anchor = container.appendChild( Ulo.create("div", {"class": "load"}) );
 
 					anchor = anchor.appendChild(
 
-						makeElement("a", {
+						Ulo.create("a", {
 
 							"class": "load load_" + tab.id, 
 							"href": tab.href
@@ -249,7 +247,7 @@
 
 			var self = e.data.self;
 
-			if(self.jqxhr === null && self.selected !== e.currentTarget){
+			if(Ulo.requestAvailable() && self.selected !== e.currentTarget){
 
 
 				/* Class set on the selected tab */
@@ -262,16 +260,16 @@
 
 				self.setLoadDisabled(container, true);
 
-				addClass(container, Ulo.cls.hide);
+				Ulo.addClass(container, Ulo.cls.hide);
 
-				removeClass(self.selected, cls);
+				Ulo.removeClass(self.selected, cls);
 
 				/* END Deselect the current tab */
 
 
 				/* Select the new tab */
 
-				self.selected = addClass(e.currentTarget, cls);
+				self.selected = Ulo.addClass(e.currentTarget, cls);
 
 				container = self.getContainer(self.selected);
 
@@ -281,16 +279,16 @@
 				*/
 				if(container === null){
 
-					container = makeElement("div", {
+					container = Ulo.create("div", {
 
 						"id": self.getID(self.selected),
 						"class": Ulo.cls.hide
 
 					});
 
-					container.appendChild( makeElement("div", {"class": "content"}) );
+					container.appendChild( Ulo.create("div", {"class": "content"}) );
 
-					getElement("tab_content").appendChild( container );
+					Ulo.get("tab_content").appendChild( container );
 
 
 					self.load(self.selected, true);
@@ -299,14 +297,14 @@
 
 					self.setLoadDisabled(container, false);
 
-					removeClass(container, Ulo.cls.hide);
+					Ulo.removeClass(container, Ulo.cls.hide);
 
 				}
 
 				/* END Select the new tab */
 
 
-				updateURL(self.selected.href, true);
+				Ulo.Page && Ulo.Page.updateHistory(self.selected.href, true);
 
 			}
 
@@ -331,111 +329,108 @@
 			@param anchor: Load more result anchor element (initial === false) OR Tab 
 				anchor element (initial === true).
 
-			@param initial: Boolean - true if this is the first set of the results for the
+			@param initial: Boolean - true if this is the first set of results for the
 				selected tab, else false.
 		*/
 
 		load: function(anchor, initial){
 
-			if(this.jqxhr === null && (initial === true || anchor.disabled !== true)){
+			if(Ulo.requestAvailable() && (initial === true || anchor.disabled !== true)){
 
-				var self = this;
+				var self = this,
 
-				if(initial === false){
+				request = {
 
-					addClass(anchor, "disabled");
+					type: "GET", 
+					url: anchor.href + "?max_id=" + (anchor.max_id || "") + "&profile_id=" + getProfileID()
 
 				}
 
-				var url = anchor.href + "?max_id=" + (anchor.max_id || "") + "&tab=true";
 
-				this.jqxhr = $.ajax({
+				if(initial){
 
-						type: "GET", 
-						url: url, 
-						statusCode: requestCodes
+					Ulo.Animate.set(0);
 
-					})
+					request.xhr = Ulo.Animate.download;
+
+				} else{
+
+					Ulo.Animate.pulse(anchor, true);
+
+				}
+
+
+				Ulo.request(request)
 
 					/* Params: server data, status code, xhr */
 					.done(function(data, sc, xhr){
 
 						if(Ulo.Session.hasChanged(xhr)){
 
-							// messages("Your session has expired. Refresh the page and try again.");
+							Ulo.Pip.updatePage();
 
-							data.html = null;
+						} else{
 
-							Ulo.Pip.updatePage(xhr);
-
-							return true;
-
-						}
+							var container = self.getContainer(self.selected);
 
 
-						var container = self.getContainer(self.selected);
+							if(initial === true){
 
+								if(data.count !== undefined){
 
-						if(initial === true){
+									updateCounters(self.selected, null, data.count);
 
-							if(data.count !== undefined){
+								}
 
-								updateCounters(self.selected, null, data.count);
+								if(data.has_next){
+
+									anchor = self.registerLoad(self.selected, true);
+
+								}
+
+								Ulo.removeClass(container, Ulo.cls.hide);
 
 							}
+
 
 							if(data.has_next){
 
-								anchor = self.registerLoad(self.selected, true);
+								anchor.max_id = data.max_id;
+
+							} else if(initial === false){
+
+								self.unregisterLoad(anchor);
 
 							}
 
-							removeClass(container, Ulo.cls.hide);
+
+							var id = self.selected.id;
+
+							if(data.tab_data && data.tab_data.length > 0){
+
+								self[id](data.tab_data);
+
+							} else if(initial === true){
+
+								self.empty(container);
+
+							}
 
 						}
 
-
-						if(data.has_next){
-
-							anchor.max_id = data.max_id;
-
-						} else if(initial === false){
-
-							self.unregisterLoad(anchor);
-
-						}
-
-
-						var id = self.selected.id;
-
-						if(data.content && data.content.length > 0){
-
-							self[id](data.content);
-
-						} else if(initial === true){
-
-							self.empty(container);
-
-						}
-
-					})
-
-					/* Params: xhr, status code, error type */
-					.fail(function(xhr){
-						
-
-					
 					})
 					
 					.always(function(){
-					
-						self.jqxhr = null;
 
-						if(initial === false){
+						if(initial){
 
-							removeClass(anchor, "disabled");
+							Ulo.Animate.set(100);
 
-						}
+						} else{
+
+							Ulo.Animate.pulse(anchor, false);
+
+						}	
 				
 				});
 
@@ -455,9 +450,9 @@
 
 			content = this.getContent(this.selected),
 
-			is_owner = Ulo.Session.isOwner( getUserID() ),
+			is_owner = Ulo.Session.isOwner(getProfileID()),
 
-			username = getElement("profile_information").querySelector("span.username"),
+			username = Ulo.get("profile_information", "span.username"),
 			
 			name = (username.textContent || username.innerHTML);
 			
@@ -468,9 +463,9 @@
 
 					if(is_owner){
 
-						p = makeElement("p", {}, "Create your first ");
+						p = Ulo.create("p", {}, "Create your first ");
 
-						p.appendChild( makeElement("a", {
+						p.appendChild( Ulo.create("a", {
 
 								"href": "/post/", 
 								"class": "bold",
@@ -478,7 +473,7 @@
 
 							}, "post.") );
 
-						registerLinks(p);
+						Ulo.register(p);
 
 					} else{
 
@@ -507,9 +502,9 @@
 
 			}
 
-			content.appendChild( makeElement("div", {"class": "empty"}) )
+			content.appendChild( Ulo.create("div", {"class": "empty"}) )
 
-				.appendChild( p || makeElement("p", {}, text) );
+				.appendChild( p || Ulo.create("p", {}, text) );
 
 		},
 
@@ -525,22 +520,20 @@
 
 			for(var i in posts){
 
-				is_video = posts[i].media_type === Ulo.media.VIDEO;
+				post = Ulo.create("div", {"class": "item"});
 
-				post = makeElement("div", {"class": "item"});
-
-				element = post.appendChild( makeElement("div", {"class": "spacing"}) );
+				element = post.appendChild( Ulo.create("div", {"class": "spacing"}) );
 
 
 				/* */
 
 				anchor = element.appendChild(
 
-					makeElement("a", {
+					Ulo.create("a", {
 
+						"href": Ulo.getPostURL(posts[i].cid),
 						"class": "post_thumbnail",
-						"href": "/post/" + posts[i].cid,
-						"data-apl": "true",
+						"data-apl": "true"
 
 					})
 
@@ -548,41 +541,37 @@
 
 				anchor.appendChild(
 
-					makeElement("img", { 
+					Ulo.create("img", { 
 
-						"src": Ulo.MEDIA_URL + posts[i][ is_video ? "thumbnail": "file0"] 
+						"src": Ulo.getMediaURL(posts[i].thumbnail)
 
 					})
 
 				);
 
 
-				if(is_video){
+				anchor.appendChild(
 
-					anchor.appendChild(
+						Ulo.create("div", {"class": "video_icon"})
 
-							makeElement("div", {"class": "video_icon"})
+					)
 
-						)
+					.appendChild(
 
-						.appendChild(
+						Ulo.create("span", {"class": "icon icon_play"})
 
-							makeElement("span", {"class": "icon icon_play"})
-
-					);
-
-				}
+				);
 
 
 				/* */
-				element = element.appendChild( makeElement("div", {"class": "post_data"}) );
+				element = element.appendChild( Ulo.create("div", {"class": "post_data"}) );
 
 				element.appendChild(
 
-						makeElement("a", {
+						Ulo.create("a", {
 
 							"class": "title bold",
-							"href": "/post/" + posts[i].cid,
+							"href": Ulo.getPostURL(posts[i].cid),
 							"data-apl": "true",
 							"title": posts[i].title
 
@@ -592,18 +581,18 @@
 
 					.appendChild(
 
-						makeElement("span", { "class": "text" }, posts[i].title)
+						Ulo.create("span", { "class": "text" }, posts[i].title)
 
 					);
 
 
 				/* */
 
-				element = element.appendChild( makeElement("div", { "class": "post_meta" }) );
+				element = element.appendChild( Ulo.create("div", { "class": "post_meta" }) );
 
 				element.appendChild(
 
-					makeElement("span", { "class": "published" }, elapsedTime(now, posts[i].published))
+					Ulo.create("span", { "class": "published" }, elapsedTime(now, posts[i].published))
 
 				);
 
@@ -611,14 +600,14 @@
 
 					element.appendChild(
 
-						makeElement("span", { "class": "views" }, posts[i].views + " views")
+						Ulo.create("span", { "class": "views" }, posts[i].views + " views")
 
 					);
 
 				}
 
 
-				registerLinks( post );
+				Ulo.register( post );
 
 				content.appendChild( post );
 
@@ -669,9 +658,9 @@
 
 			for(var i in connections){
 
-				connection = makeElement("div", {"class": "item"});
+				connection = Ulo.create("div", {"class": "item"});
 
-				element = connection.appendChild( makeElement("div", {"class": "spacing"}) );
+				element = connection.appendChild( Ulo.create("div", {"class": "spacing"}) );
 
 
 				/* Render a connection link if the user is not the logged in user */
@@ -682,12 +671,11 @@
 
 					element.appendChild(
 
-							makeElement("div", {"class": "connection_actions"})
+							Ulo.create("div", {"class": "connection_actions"})
 
 						)
 
 						.appendChild(
-
 
 							Connect.create(type, connections[i].id)
 
@@ -702,22 +690,22 @@
 
 				element = element.appendChild(
 
-						makeElement("div", {"class": "connection_user"})
+						Ulo.create("div", {"class": "connection_user"})
 
 					)
 
 					.appendChild(
 
-						makeElement("a", {
+						Ulo.create("a", {
 
-							"href": "/user/" + connections[i].username, 
+							"href": Ulo.getUserURL(connections[i].username), 
 							"data-apl": "true"
 
 						})
 
 					);
 
-				registerLinks(element.parentNode);
+				Ulo.register(element.parentNode);
 
 				/* END User profile link */
 
@@ -726,9 +714,9 @@
 
 				element.appendChild(
 
-					makeElement("img", { 
+					Ulo.create("img", { 
 
-						"src": Ulo.MEDIA_URL + (connections[i].thumbnail || 'default/profile_thumb.jpg')
+						"src": Ulo.getMediaURL(connections[i].thumbnail)
 
 					})
 
@@ -741,19 +729,19 @@
 
 				element = element.appendChild(
 
-					makeElement("div", { "class": "connection_names" })
+					Ulo.create("div", { "class": "connection_names" })
 
 				);
 
 				element.appendChild(
 
-					makeElement("h4", {}, connections[i].name)
+					Ulo.create("h4", {}, connections[i].name)
 
 				);
 
 				element.appendChild(
 
-					makeElement("span", {}, "@" + connections[i].username )
+					Ulo.create("span", {}, "@" + connections[i].username )
 
 				);
 
@@ -768,15 +756,14 @@
 
 	}
 
+	/* -------------------------------------------------------------------------------- */
+
 
 
 
 	/* -------------------------------------------------------------------------------- */
 
 	function Picture(){
-
-		this.jqxhr = null;
-
 
 		var menu = this.getMenu();
 
@@ -787,9 +774,7 @@
 
 		if(menu !== null){
 
-			/* TO DO: ADD Ulo.cls.hide TO DELETE IF IT IS THE DEFAULT URL */
-
-			var button = makeElement("button", {
+			var button = Ulo.create("button", {
 
 				"id": "toggle_picture_actions",
 				"data-toggle": menu.id,
@@ -797,23 +782,22 @@
 
 			});
 
-
 			this.getContainer().appendChild( button )
 
 				.appendChild(
 
-					makeElement("span", {"class": "icon icon_camera_white"})
+					Ulo.create("span", {"class": "icon icon_camera_white"})
 
-				)
+			);
+
+			$(button).on(Ulo.evts.click, {self: this}, this.loadScript);
 
 
 			if(/default\/profile.jpg$/.test(this.getImage().src)){
 
-				addClass( this.getDelete(), Ulo.cls.hide );
+				Ulo.addClass(this.getDelete(), Ulo.cls.hide);
 
 			}
-
-			$(button).on(Ulo.evts.click, {self: this}, this.loadScript);
 
 		}
 
@@ -829,7 +813,7 @@
 		*/
 		getContainer: function(){
 
-			return getElement("profile_picture");
+			return Ulo.get("profile_picture");
 
 		},
 
@@ -839,7 +823,7 @@
 		*/
 		getMenu: function(){
 
-			return getElement("picture_actions");
+			return Ulo.get("picture_actions");
 
 		},
 
@@ -864,24 +848,52 @@
 		},
 
 		/* ---------------------------------------------------------------------------- */
+
+		animation: function(start){
+
+			var element = this.getContainer().querySelector("div.animation");
+
+			Ulo.Animate.bounce(element, start);
+
+		},
+
+		/* ---------------------------------------------------------------------------- */
 		/*
 			Set the src value of the picture and toggle the display of the delete picture
 			button depending on the value of src.
 
 			@param src: Image url.
+			@param show_delete: Boolean - if true show the delete button else hide it.
 		*/
-		setSrc: function(src){
+		setSrc: function(src, show_delete){
 
 			var delete_button = this.getDelete();
 
-			(src ? removeClass : addClass)(delete_button, Ulo.cls.hide)
+			(show_delete ? Ulo.removeClass : Ulo.addClass)(delete_button, Ulo.cls.hide)
 
-			this.getImage().src = src || Ulo.MEDIA_URL + 'default/profile.jpg'
+			this.getImage().src = src;
 
 		},
 
+		/* ---------------------------------------------------------------------------- */
+		/*
+			Render the error messages.
 
+			@param xhr: XMLHttpRequest.
+		*/
+		error_messages: function(xhr){
 
+			if(xhr.responseJSON !== undefined && xhr.responseJSON.errors !== undefined){
+
+				for(var i in xhr.responseJSON.errors){
+
+					Ulo.messages(xhr.responseJSON.errors[i], true);
+
+				}
+
+			}
+
+		},
 
 		/* ---------------------------------------------------------------------------- */
 		/*
@@ -889,74 +901,74 @@
 		*/
 		loadScript: function(e){
 
-			var self = e.data.self;
+			if(Ulo.requestAvailable()){
+
+				Ulo.acquireRequest();
+
+				var self = e.data.self;
+
+				self.animation(true);
 
 
-			if(self.jqxhr === null){
+				setTimeout(function(){
 
-				self.jqxhr = true;
+					var script = Ulo.create("script", {"class": "js_file"});
 
-
-				var script = document.createElement("script");
-
-				script.className = "js_file";
-
-				/* Modern browsers only */
-				script.async = false;
+					/* Modern browsers only */
+					script.async = false;
 
 
-				script.onload = function(){
+					script.onload = function(){
 
-					self.jqxhr = null;
+						Ulo.releaseRequest();
 
-					$(e.currentTarget).off(Ulo.evts.click, self.loadScript);
+						self.animation(false);
 
-					/*
-						Create an instance of the File upload class and set event
-						handlers on the menu button.
-					*/
-					if(window.FileUpload){
-
-						var menu = self.getMenu();
-
-						self.FileUpload = new FileUpload(
-
-							menu, self.changePicture.bind(self), {}
-
-						);
-
-						$(menu.querySelector("button.delete_picture"))
-							.on(Ulo.evts.click, {self: self}, self.deletePicture);
+						$(e.currentTarget).off(Ulo.evts.click, self.loadScript);
 
 
-						menus(e.currentTarget, "height");
+						/*
+							Create an instance of the File upload class and set event
+							handlers on the menu button.
+						*/
+						if(window.FileUpload){
 
-						$(e.currentTarget).trigger(Ulo.evts.click);
+							var menu = self.getMenu();
+
+							self.FileUpload = new FileUpload(menu, self.changePicture.bind(self), {});
+
+							$(self.getDelete()).on(Ulo.evts.click, {self: self}, self.deletePicture);
+
+
+							Ulo.menus(e.currentTarget, "height");
+
+							$(e.currentTarget).trigger(Ulo.evts.click);
+
+						}
 
 					}
 
-				}
+					script.onerror = function(){
 
-				script.onerror = function(){
+						Ulo.releaseRequest();
 
-					self.jqxhr = null;
+						self.animation(false);
 
-					messages("Sorry, we could not load the image editor. Please try again.");
+						Ulo.messages("Sorry, we could not load the image editor. Please try again.");
 
-				}
+					}
 
 
-				script.src = "/static/js/uploads/upload.js/";
+					script.src = "/static/js/uploads/upload.js/";
 
-				/* Do not use append - Old IE bug */
-				document.body.insertBefore(script, document.body.lastChild);
+					/* Do not use append - Old IE bug */
+					document.body.insertBefore(script, document.body.lastChild);
+
+				}, 500);
 
 			}
 
 		},
-
-
-
 
 		/* ---------------------------------------------------------------------------- */
 		/*
@@ -966,7 +978,7 @@
 
 			var canvas = this.FileUpload.Editor.getCanvas(false, 320, 320);
 
-			var user_id = getUserID();
+			var user_id = getProfileID();
 
 			this.FileUpload.close();
 
@@ -981,7 +993,7 @@
 
 			else if(canvas.failed){
 
-				messages(
+				Ulo.messages(
 
 					"Sorry, we could not upload your profile picture. Please try again.",
 					true
@@ -990,37 +1002,39 @@
 
 			}
 
-			else if(this.jqxhr === null && Ulo.Session.isOwner(user_id)){
+			else if(Ulo.requestAvailable() && Ulo.Session.isOwner(user_id)){
 
 				var self = this;
+
+				Ulo.acquireRequest();
+
+				self.animation(true);
+
 
 				canvas.toBlob(function(blob){
 
 					var data = new FormData();
 
-					var token = Ulo.Session.get()[Ulo.Session.TOKEN_NAME];
-					
-					data.append(Ulo.Session.CSRF_TOKEN_NAME, token);
-					
-					data.append("picture", blob);
+					data.append("photo", blob);
 
+					var token = Ulo.Session.getToken();
+					
+					data.append(token.name, token.value);
+					
 
-					self.jqxhr = $.ajax({
+					Ulo.request({
 
 							type: "POST", 
 							url: "/user/" + user_id + "/image/update/",
 							data: data,
 							cache: false,
 							processData: false,
-							contentType: false,
-							statusCode: requestCodes
+							contentType: false
 
 						})
 
 						/* Params: server data, status code, xhr */
 						.done(function(data, sc, xhr){
-
-							console.log(data);
 
 							/* If the login form is returned display it. */
 
@@ -1032,7 +1046,7 @@
 
 							else{
 
-								self.setSrc(data.image_src);
+								self.setSrc(data.image_src, true);
 
 							}
 
@@ -1041,17 +1055,13 @@
 						/* Params: xhr, status code, error type */
 						.fail(function(xhr){
 							
-							if(xhr.status == 400){
-
-								xhrErrorMessage(xhr);
-
-							}
+							self.error_messages(xhr);
 						
 						})
 						
 						.always(function(){
 							
-							self.jqxhr = null;
+							self.animation(false);
 						
 					});
 
@@ -1067,9 +1077,10 @@
 		*/
 		deletePicture: function(e){
 
-			var self = e.data.self;
+			var self = e.data.self,
 
-			var user_id = getUserID();
+			user_id = getProfileID();
+
 
 			/* If login is required display the form */
 
@@ -1079,24 +1090,31 @@
 
 			}
 
-			else if(self.jqxhr === null && Ulo.Session.isOwner(user_id) && 
-				hasClass(self.getDelete(), Ulo.cls.hide)===false){
+			else if(
 
-				var token = Ulo.Session.get()[Ulo.Session.TOKEN_NAME];
+					Ulo.requestAvailable() && 
 
-				self.jqxhr = $.ajax({
+					Ulo.Session.isOwner(user_id) &&
+
+					Ulo.hasClass(self.getDelete(), Ulo.cls.hide) === false
+
+				){
+
+				self.animation(true);
+
+				var token = Ulo.Session.getToken();
+
+
+				Ulo.request({
 
 						type: "POST", 
 						url: "/user/" + user_id + "/image/delete/",
-						data: Ulo.Session.CSRF_TOKEN_NAME + "=" + token,
-						statusCode: requestCodes
+						data: token.name + "=" + token.value
 
 					})
 
 					/* Params: server data, status code, xhr */
 					.done(function(data, sc, xhr){
-
-						console.log(data);
 
 						/* If the login form is returned display it. */
 
@@ -1108,7 +1126,7 @@
 
 						else{
 
-							self.setSrc(data.image_src);
+							self.setSrc(data.image_src, false);
 
 						}
 
@@ -1117,23 +1135,19 @@
 					/* Params: xhr, status code, error type */
 					.fail(function(xhr){
 
-						if(xhr.status == 400){
-
-							xhrErrorMessage(xhr);
-
-						}
+						self.error_messages(xhr);
 
 					})
 					
 					.always(function(){
 					
-						self.jqxhr = null
+						self.animation(false);
 
 				});
 
 			}
-		},
 
+		},
 
 	}
 

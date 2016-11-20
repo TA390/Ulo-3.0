@@ -19,11 +19,6 @@ from django.utils.translation import ugettext_lazy as _
 
 # ----------------------------------------------------------------------------------------
 
-
-
-
-# ----------------------------------------------------------------------------------------
-
 class UloModel(models.Model):
 
 	# ------------------------------------------------------------------------------------
@@ -43,13 +38,6 @@ class UloModel(models.Model):
 		max_length=20,
 
 	)
-
-	# ------------------------------------------------------------------------------------
-
-	@transaction.atomic
-	def save(self, *args, **kwargs):
-
-		return super(UloModel, self).save(*args, **kwargs)
 
 	# ------------------------------------------------------------------------------------
 
@@ -86,13 +74,6 @@ class UloUserModel(AbstractBaseUser):
 
 	# ------------------------------------------------------------------------------------
 
-	@transaction.atomic
-	def save(self, *args, **kwargs):
-
-		return super(UloUserModel, self).save(*args, **kwargs)
-
-	# ------------------------------------------------------------------------------------
-
 	class Meta:
 
 		abstract = True
@@ -104,12 +85,13 @@ class UloUserModel(AbstractBaseUser):
 
 # ----------------------------------------------------------------------------------------
 
-@receiver(post_save)
-def models_post_save(sender, instance, created, **kwargs):
+def set_str_id(sender, instance, created, **kwargs):
 	
-	if created == True and issubclass(sender, (UloModel, UloUserModel)):
+	if created == True:
 
 		instance.str_id = str(instance.id)
+
+		instance.save()
 
 # ----------------------------------------------------------------------------------------
 

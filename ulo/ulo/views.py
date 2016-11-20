@@ -8,8 +8,9 @@ from __future__ import unicode_literals
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.files.uploadhandler import UploadFileException
+from django.core.urlresolvers import reverse
 from django.http import HttpResponseForbidden, JsonResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.cache import cache_control
@@ -136,6 +137,15 @@ class UloUploadMixin(object):
 		return kwargs
 
 
+	def handle_exception(self, request, *args, **kwargs):
+
+		if request.is_ajax():
+			
+			return JsonResponse({'messages': get_messages_json(request)}, status=403)
+
+		return redirect( reverse('users:profile', args=(request.user.username,)) )
+
+
 	def post(self, request, *args, **kwargs):
 		
 		msg = None
@@ -157,9 +167,6 @@ class UloUploadMixin(object):
 
 		except UploadFileException as e:
 
-			# Debug
-			#print(e)
-
 			# Do not display UploadFileException error messages to the user.
 			pass
 
@@ -173,7 +180,7 @@ class UloUploadMixin(object):
 
 		)
 		
-		return self.get(request, *args, **kwargs)
+		return self.handle_exception(request, *args, **kwargs)
 
 # ----------------------------------------------------------------------------------------
 

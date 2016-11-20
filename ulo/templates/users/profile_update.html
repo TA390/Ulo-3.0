@@ -13,14 +13,14 @@
 
 		<h1 class="thin">Edit Profile</h1>
 		
-		<a class="back bold" href="{% url 'users:profile' user.username %}" title="Back to profile">Back to profile</a>
+		<a href="{% url 'users:profile' user.username %}" class="back bold" data-apl="true" title="Back to profile">Back to profile</a>
 		
 
 		<div class="user_names">
 
 			<div class="edit_names">
 				
-				<a class="bold" href="{% url 'settings:account' %}" title="Edit name and username">edit</a>
+				<a href="{% url 'settings:account' %}" class="bold" data-apl="true" title="Edit name and username">edit</a>
 			
 			</div>
 				

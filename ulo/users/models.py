@@ -8,7 +8,7 @@ from __future__ import unicode_literals
 from django.contrib.auth import get_user_model
 from django.contrib.auth.backends import ModelBackend
 from django.contrib.auth.hashers import check_password
-from django.contrib.auth.models import BaseUserManager, PermissionsMixin
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.core import validators
 from django.core.urlresolvers import reverse
 from django.db import models
@@ -28,7 +28,7 @@ from .utils import (
 	NO_BLOCK
 
 )
-from ulo.models import UloModel, UloUserModel
+from ulo.models import UloModel, UloUserModel, set_str_id
 
 # ----------------------------------------------------------------------------------------
 
@@ -398,14 +398,14 @@ class User(UloUserModel, PermissionsMixin):
 	# DB RELATIONSHIPS
 	# ------------------------------------------------------------------------------------
 
-	# connections = models.ManyToManyField(
+	connections = models.ManyToManyField(
 	
-	# 	'self', 
-	# 	symmetrical=False,
-	# 	through='Connection',
-	# 	through_fields=('from_user', 'to_user')
+		'self', 
+		symmetrical=False,
+		through='Connection',
+		through_fields=('from_user', 'to_user')
 	
-	# )
+	)
 
 	### User has a one-to-many relationship with Post.
 	### User has a one-to-many relationship with PostVote.
@@ -525,36 +525,34 @@ class User(UloUserModel, PermissionsMixin):
 
 # ----------------------------------------------------------------------------------------
 
-# @receiver(post_save, sender=User)
-# def user_post_save(sender, instance, created, **kwargs):
-	
-# 	if created == True:
-
-# 		user_search.index_instance( instance )
+post_save.connect(set_str_id, sender=User)
 
 # ----------------------------------------------------------------------------------------
 
-# class Connection(UloModel):
+class Connection(UloModel):
 	
-# 	# on_delete will become a required argument in Django 2.0. Older versions default 
-# 	# to CASCADE. https://docs.djangoproject.com/en/1.9/ref/models/fields/#arguments
+	# on_delete will become a required argument in Django 2.0. Older versions default 
+	# to CASCADE. https://docs.djangoproject.com/en/1.9/ref/models/fields/#arguments
 	
-# 	from_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='from_user')
+	from_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='from_user')
 	
-# 	to_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='to_user')
+	to_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='to_user')
 	
-# 	#mirrored = models.BooleanField( _('we follow each other.'), default=False, )
+	#mirrored = models.BooleanField( _('we follow each other.'), default=False, )
 
-# 	class Meta:
+	class Meta:
 	
-# 		unique_together = ('from_user', 'to_user')
+		unique_together = ('from_user', 'to_user')
 
 
-# 	def __str__(self):
+	def __str__(self):
 
-# 		return 'from: '+self.from_user.username+', to: '+self.to_user.username
+		return 'from: '+self.from_user.username+', to: '+self.to_user.username
 
 # ----------------------------------------------------------------------------------------
 
+post_save.connect(set_str_id, sender=Connection)
+
+# ----------------------------------------------------------------------------------------
 
 

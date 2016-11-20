@@ -45,7 +45,8 @@ html{
 
 }
 
-#signup_form input:focus{
+#signup_form input:focus,
+#signup_form select:focus{
 
 	border-color: #333;
 	background-color: #FFF
@@ -151,7 +152,8 @@ html{
 
 }
 
-#signup_form #signup_submit{
+#signup_form #signup_submit,
+#signup_form #signup_submit:focus{
 
 	display: inline-block;
 	vertical-align: top;
