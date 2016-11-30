@@ -1,0 +1,126 @@
+{% extends base_template %}
+{% load staticfiles i18n %}
+
+
+{% block title %}{{ site_name }}{% endblock title %}
+
+
+{% block css %}
+	<link class="css_file" href="{% static 'css/comments/comment_report.css' %}" rel="stylesheet" type="text/css">
+{% endblock css %}
+
+
+{% block content %}
+<div id="comment_report">
+
+	<div class="centre" data-close-pip="true">
+
+		<div class="wrapper{% if request.is_ajax == False %} fill{% endif %}">
+
+			<div class="header">
+
+				{% if request.is_ajax %}
+
+				<span class="back icon icon_cross" data-close-pip="true"></span>
+
+				{% else %}
+
+				<a class="back" href="{% url 'comments:comment_actions' form.comment_id %}" title="Back to comment actions">
+										
+					<span class="icon icon_left_arrow"></span>
+
+					<span class="hide">Back to comment actions</span>
+				
+				</a>
+
+				{% endif %}
+				
+				<h1 class="thin ellipsis">Report this comment</h1>
+			
+			</div>
+
+
+			{% if request.is_ajax == False %}
+
+			<div class="summary">
+
+				<div class="thumbnail">
+
+					<img src="{{ form.comment.user.thumbnail.url }}">
+	
+				</div>
+
+				<div class="text">
+
+					<span class="names bold ellipsis">
+
+						{{ form.comment.user.name }}&nbsp;@{{ form.comment.user.username }}
+
+					</span>
+
+					<p class="comment">{{ form.comment.comment }}</p>
+					
+				</div>
+
+			</div>
+
+			{% endif %}
+
+
+			<form id="comment_report_form" action="{% url 'comments:comment_report' form.comment_id %}"  method="post">
+				
+				{% csrf_token %}
+				
+				{{ form.pip }}
+
+
+				{% if form.non_field_errors %}
+				<div id="comment_report_form_errors" class="form_errors">
+
+					{% for error in form.non_field_errors %}
+					<p class="validation error">{{ error }}</p>
+					{% endfor %}
+
+				</div>
+				{% endif %}
+
+
+				<div class="field">
+
+					<p class="help_text bold">{{ form.issue.help_text }}</p>
+
+					<div id="comment_issue_container">
+
+						{% for error in form.issue.errors %}
+							<p class="validation error">{{ error }}</p>
+						{% endfor %}
+
+						{{ form.issue }}
+					
+					</div>
+
+				</div>
+
+
+				<div class="submit_container">
+
+					<input id="comment_report_submit" name="submit" type="submit" value="Report">
+
+				</div>
+
+
+			</form>
+
+		</div>
+
+	</div>
+
+
+</div>
+{% endblock content %}
+
+
+{% block js %}
+	<script class="js_file" src="{% static 'js/comments/comment_report.js' %}"></script>
+{% endblock js %}
+

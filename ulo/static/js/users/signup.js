@@ -1,5 +1,12 @@
-/* Sign Up Form javascript file */
-/* Dependencies: jQuery, base.js */
+/* 
+
+	Sign up form javascript file
+
+	Dependencies: JQuery, Base.js
+
+*/
+
+
 
 
 /* ------------------------------------------------------------------------------------ */

@@ -266,8 +266,6 @@ class BaseProfileView(UloView):
 	def __init__(self, *args, **kwargs):
 		"""
 		Create a direct connection to the database to perform raw SQL queries.
-		
-		See subclass implementations of get_tab_content().
 		"""
 
 		# Number or results to return per page.
@@ -464,7 +462,7 @@ class ProfileView(BaseProfileView):
 			)
 
 
-		# Run the query starting from the offset context['max_id']
+		# Run the query starting from the offset max_id
 		else:
 
 			self.cursor.execute(
@@ -554,7 +552,7 @@ class ProfileFollowersView(BaseProfileView):
 					''', [profile_id, self.limit, self.request.user.pk]
 				)
 
-			# Run the query starting from the offset context['max_id']
+			# Run the query starting from the offset max_id
 			else:
 
 				self.cursor.execute(
@@ -622,7 +620,7 @@ class ProfileFollowersView(BaseProfileView):
 					''', [profile_id, self.limit]
 				)
 
-			# Run the query starting from the offset context['max_id']
+			# Run the query starting from the offset max_id
 			else:
 				
 				self.cursor.execute(
@@ -696,7 +694,7 @@ class ProfileFollowingView(BaseProfileView):
 					''', [profile_id, self.limit]
 				)
 
-			# Run the query starting from the offset context['max_id']
+			# Run the query starting from the offset max_id
 			else:
 				
 				self.cursor.execute(
@@ -763,7 +761,7 @@ class ProfileFollowingView(BaseProfileView):
 					''', [profile_id, self.limit, self.request.user.pk]
 				)
 			
-			# Run the query starting from the offset context['max_id']
+			# Run the query starting from the offset max_id
 			else:
 				
 				self.cursor.execute(

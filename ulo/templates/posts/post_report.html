@@ -1,0 +1,128 @@
+{% extends base_template %}
+{% load staticfiles i18n %}
+
+
+{% block title %}Report{% endblock title %}
+
+
+{% block css %}
+	<link class="css_file" href="{% static 'css/posts/post_report.css' %}" rel="stylesheet" type="text/css">
+{% endblock css %}
+
+
+{% block content %}
+<div id="post_report">
+
+	<div class="centre" data-close-pip="true">
+
+		<div class="wrapper{% if request.is_ajax == False %} fill{% endif %}">
+
+			<div class="header">
+
+				{% if request.is_ajax %}
+
+				<span class="back icon icon_cross" data-close-pip="true"></span>
+
+				{% else %}
+
+				<a class="back" href="{% url 'posts:actions' form.post_id %}" title="Back to post actions">
+										
+					<span class="icon icon_left_arrow"></span>
+
+					<span class="hide">Back to post actions</span>
+				
+				</a>
+
+				{% endif %}
+				
+				<h1 class="thin ellipsis">Report this post</h1>
+			
+			</div>
+
+
+			{% if request.is_ajax == False %}
+
+			<div class="summary">
+
+				<img src="{{ form.post.thumbnail.url }}">
+				
+				<h2 class="thin">{{ form.post.title }}</h2>
+
+			</div>
+
+			{% endif %}
+
+
+			<form id="post_report_form" action="{% url 'posts:report' form.post_id %}"  method="post">
+				
+				{% csrf_token %}
+				
+				{{ form.pip }}
+
+
+				{% if form.non_field_errors %}
+				<div id="post_report_form_errors" class="form_errors">
+
+					{% for error in form.non_field_errors %}
+					<p class="validation error">{{ error }}</p>
+					{% endfor %}
+
+				</div>
+				{% endif %}
+
+
+				<div class="field">
+
+					<p class="help_text bold">{{ form.issue.help_text }}</p>
+
+					<div id="issue_container">
+
+						{% for error in form.issue.errors %}
+							<p class="validation error">{{ error }}</p>
+						{% endfor %}
+
+						{{ form.issue }}
+					
+					</div>
+
+				</div>
+				
+
+				<div class="field">
+
+					<p class="help_text bold">{{ form.information.help_text }}</p>
+
+					<div id="information_container">
+
+						{% for error in form.information.errors %}
+							<p class="validation error">{{ error }}</p>
+						{% endfor %}
+
+						<div class="text_field">{{ form.information }}</div>
+					
+					</div>
+
+				</div>
+
+
+				<div class="submit_container">
+
+					<input id="post_report_submit" name="submit" type="submit" value="Report">
+				
+				</div>
+
+
+			</form>
+
+		</div>
+
+	</div>
+
+</div>
+{% endblock content %}
+
+
+{% block js %}
+	<script class="js_file" src="{% static 'js/posts/post_report.js' %}"></script>
+{% endblock js %}
+

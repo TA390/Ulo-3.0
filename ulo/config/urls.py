@@ -64,6 +64,11 @@ urlpatterns = [
 	url(r'^logout/$', LogoutView.as_view(), name='logout'),
 
 
+	# COMMENTS APP
+
+	url(r'^comment/', include('comments.urls', namespace='comments')),
+
+
 	# ACCOUNTS APP
 	
 	url(r'^accounts/', include('accounts.urls', namespace='accounts')),

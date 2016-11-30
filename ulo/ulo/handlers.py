@@ -290,7 +290,7 @@ class MediaUploadHandler(BaseMediaUploadMixin, FileUploadHandler):
 		self.max_size = {
 
 			'image': kwargs.pop('max_image', 10485760),	# 10MB
-			'video': kwargs.pop('max_video', 73400320)	# 70MB
+			'video': kwargs.pop('max_video', 104857600)	# 100MB
 		
 		}
 

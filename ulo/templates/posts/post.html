@@ -1,0 +1,394 @@
+{% extends base_template %}
+{% load staticfiles i18n %}
+
+
+{% block title %}Post{% endblock title %}
+
+
+{% block css %}
+	<link class="css_file" href="{% static 'css/uploads/upload.css' %}" rel="stylesheet" type="text/css">
+	<link class="css_file" href="{% static 'css/posts/post.css' %}" rel="stylesheet" type="text/css">
+{% endblock css %}
+
+
+{% block content %}
+<div id="post">
+
+	<div class="centre">
+
+		<form id="post_form" action="{% url 'posts:post' %}" method="post" enctype="multipart/form-data">
+
+			{% csrf_token %}
+
+			{% if form.non_field_errors %}
+			<div id="post_form_errors" class="form_errors">
+				{% for error in form.non_field_errors %}
+				<p class="validation error">{{ error }}</p>
+				{% endfor %}
+			</div>
+			{% endif %}
+
+			<div id="file_container" class="field">
+
+				{% for error in form.file.errors %}
+					<p class="validation error">{{ error }}</p>
+				{% endfor %}
+
+				<div class="file_input">
+					
+					<span class="icon icon_video"></span>
+					<p>Select your video</p>
+					{{ form.file }}
+
+				</div>
+
+			</div>
+
+
+			<div id="form_fields" class="">
+
+				<div id="title_container" class="field">
+
+					{% for error in form.title.errors %}
+						<p class="validation error">{{ error }}</p>
+					{% endfor %}
+
+					{{ form.title }}
+
+				</div>
+
+
+				<div id="option0_container" class="field">
+
+					<div class="menu">
+						
+						{{ option0.icons }}
+					
+					</div>
+
+					{% for error in option0.errors %}
+						<p class="validation error">{{ error }}</p>
+					{% endfor %}
+
+					<div id="toggle_option0" class="button table box_border" data-toggle="option0">
+						
+						<div class="cell option">
+
+							<span class="selected font_icon icon_love"></span>
+
+						</div>
+
+						<div class="cell content">
+
+							<span class="text ellipsis">Love</span>
+
+						</div>
+						
+						<div class="cell arrow" data-toggle="option0">
+							
+							<span class="icon icon_down_arrow"></span>
+
+						</div>
+					
+					</div>
+
+					<div class="menu">
+
+						{{ option0 }}
+
+					</div>
+
+				</div>
+
+
+				<div id="option1_container" class="hide field">
+
+					<div class="menu">
+
+						{{ option1.icons }}
+
+					</div>
+
+					{% for error in option1.errors %}
+						<p class="validation error">{{ error }}</p>
+					{% endfor %}
+
+					<div id="toggle_option1" class="button table box_border" type="button" data-toggle="option1">
+
+						<div class="cell option">
+
+							<span class="selected font_icon icon_like"></span>
+
+						</div>
+
+						<div class="cell content">
+
+							<span class="text ellipsis">Like</span>
+
+						</div>
+						
+						<div class="cell arrow" data-toggle="option1">
+							
+							<span class="icon icon_down_arrow"></span>
+
+						</div>
+
+					
+					</div>
+
+					<div class="menu">
+
+						{{ option1 }}
+
+					</div>
+
+				</div>
+
+
+				<div class="cf field">
+
+					<button id="add_option" class="cf" type="button" data-id="option1">
+						+ Add option
+					</button>
+					
+
+					<button id="toggle_settings" type="button">
+						Settings
+					</button>
+
+				</div>
+
+
+				<div id="settings" class="hide">
+				
+					<div class="field">
+
+						{{ form.description.label_tag}}
+
+						<div id="description_container">
+
+							{% for error in form.description.errors %}
+								<p class="validation error">{{ error }}</p>
+							{% endfor %}
+
+							{{ form.description }}
+
+						</div>
+						
+					</div>
+
+					<div class="field">
+
+						{{ form.category.label_tag}}
+
+						<div id="category_container">
+
+							{% for error in form.category.errors %}
+								<p class="validation error">{{ error }}</p>
+							{% endfor %}
+
+							<button id="toggle_category" class="table box_border" type="button" data-toggle="category">
+
+								<div class="cell content">
+
+									<span class="text ellipsis">---------</span>
+
+								</div>
+								
+								<div class="cell arrow">
+									
+									<span class="icon icon_down_arrow"></span>
+
+								</div>
+
+							</button>
+
+							<div class="menu">
+
+								{{ form.category }}
+
+							</div>
+
+						</div>
+
+					</div>
+
+					<div class="field">
+						
+						{{ form.comment_settings.label_tag}}
+
+						<div id="comment_settings_container">
+
+							{% for error in form.comment_settings.errors %}
+								<p class="validation error">{{ error }}</p>
+							{% endfor %}
+
+							<button id="toggle_comment_settings" class="table box_border" type="button" data-toggle="comment_settings">
+
+								<div class="cell content">
+
+									<span class="text ellipsis">Enabled</span>
+
+								</div>
+								
+								<div class="cell arrow">
+									
+									<span class="icon icon_down_arrow"></span>
+
+								</div>
+
+							</button>
+
+							<div class="menu">
+
+								{{ form.comment_settings }}
+
+							</div>
+
+						</div>
+
+					</div>
+
+				</div>
+
+				<div id="post_submit_container" class="field">
+				
+					<input id="post_submit" class="box_border" name="submit" type="submit" value="Post">
+				
+				</div>
+
+			</div>
+
+		</form>
+
+	</div>
+
+
+	<div id="editor_container" class="hide modal box_border">
+		<div id="editor">
+
+
+			<div id="editor_header">
+			
+				<h2 class="ellipsis">Editor</h2>
+
+				<button id="editor_close" type="button" data-close-modal="true">
+					<span class="icon icon_cross"></span>
+					<span class="hide">Close editor</span>
+				</button>
+			
+			</div>
+
+
+			<div id="editor_body">
+				
+				<span class="overlay disabled"></span>
+
+				<div id="editor_content">
+
+					<div class="clipping_mask" style="width: 600px; height: 450px;">
+
+						<div class="crop" style="top: 30px; bottom: 30px; left: 30px; right: 30px;">
+
+							<span class="loading"></span>
+
+							<img src="https://storage.googleapis.com/imgfave/image_cache/1388048108204472.jpg">
+
+						</div>
+
+					</div>
+
+				</div>
+			
+			</div>
+
+
+			<div id="editor_footer">
+				
+				<div class="editor_control_panel">
+
+					<div id="video_thumbnail" class="editor_slider_container">
+						<div class="editor_slider">
+
+							<div class="slider_container">
+								<button id="thumbnail_slider" type="button" class="slider">
+									<span class="hide">Thumbnail slider</span>
+									<span class="splitter"></span>
+								</button>
+							</div>
+
+							<div class="thumbnail_bar slider_bar_container">
+								<span id="thumbnail_slider_bar"></span>
+							</div>
+
+							<div class="thumbnail_input">
+								<input id="thumbnail_time" class="box_border bold" type="text" value="0:00">
+							</div>
+
+						</div>
+					</div>
+
+					<div class="editor_slider_container">
+
+						<div class="editor_slider">
+							<div class="slider_container">
+								<button id="scale_slider" type="button" class="slider">
+									<span class="hide">Scale slider</span>
+								</button>
+							</div>
+
+							<div class="scale_bar slider_bar_container">
+								<span id="scale_slider_bar"></span>
+							</div>
+						</div>
+					</div>
+
+				</div>
+
+				<div class="editor_actions">
+
+					<button id="editor_submit" type="button">
+						Save
+					</button><div id="editor_input" class="file_input">
+						
+						<span class="icon icon_video"></span>
+						{{ form.editor_file }}
+
+					</div>
+
+				</div>
+
+			</div>
+
+
+			<div id="editor_menu">
+
+				<button id="toggle_editor_menu_actions" type="button" class="toggle_menu" data-toggle="editor_menu_actions">
+					<span class="icon icon_down_arrow"></span>
+					<span class="hide">Editor menu</span>
+				</button>
+
+				<div id="editor_menu_actions" class="hide">
+
+					<button class="editor_delete" type="button">
+						Delete
+					</button>
+
+				</div>
+
+			</div>
+
+
+		</div>
+
+	</div>
+
+</div>
+{% endblock content %}
+
+
+{% block js %}
+	<script class="js_file" src="{% static 'js/uploads/upload.js' %}"></script>
+	<script class="js_file" src="{% static 'js/posts/post.js' %}"></script>
+{% endblock js %}
+

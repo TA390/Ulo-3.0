@@ -1,0 +1,71 @@
+{% extends base_template %}
+{% load staticfiles i18n %}
+
+
+{% block title %}{{ site_name }}{% endblock title %}
+
+
+{% block css %}
+	<link class="css_file" href="{% static 'css/comments/comment_actions.css' %}" rel="stylesheet" type="text/css">
+{% endblock css %}
+
+
+{% block content %}
+<div id="comment_actions">
+
+	<div class="header">
+			
+		<a class="back" href="{{ back_url }}">
+				
+			<span class="icon icon_left_arrow"></span>
+			<span class="hide">Back to post</span>
+
+		</a>
+		
+		<h1 class="thin ellipsis">Comment actions</h1>
+
+	</div>
+
+
+	<div class="summary">
+		
+		<img src="{{ comment.user.thumbnail.url }}">
+
+		<p class="comment">{{ comment.comment }}</p>
+		
+	</div>
+	
+
+	<ul class="actions_menu">
+
+		{% if is_owner %}
+		
+		<li>
+			
+			<form action="{% url 'comments:comment_delete' comment.pk %}" method="post">
+				
+				{% csrf_token %}
+				
+				<button class="action" type="submit">Delete</button>
+			
+			</form>
+		
+		</li>
+		
+		{% else %}
+		
+		<li>
+
+			<a class="action" href="{% url 'comments:comment_report' comment.pk %}" title="Report">Report</a>
+
+		</li>
+		
+		{% endif %}
+
+		
+	</ul>
+
+
+</div>
+{% endblock content %}
+

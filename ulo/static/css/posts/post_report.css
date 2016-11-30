@@ -1,0 +1,180 @@
+/* -------------------------------------------------------------------------- */
+
+#post_report{
+
+	display: table;
+	table-layout: fixed;
+	margin: auto;
+	width: 100%;
+	height: 100%;
+	max-width: 600px;
+	text-align: left;
+	
+}
+
+#post_report.hide{
+
+	display: none;
+
+}
+
+#post_report > .centre{
+
+	display: table-cell;
+	vertical-align: middle;
+
+}
+
+#post_report div.wrapper{
+
+	margin: 10px;
+	padding: 20px;
+	border-radius: 4px;
+	background-color: #FFF;
+
+}
+
+#post_report div.fill{
+
+	background-color: #DDD;
+
+}
+
+/* -------------------------------------------------------------------------- */
+
+#post_report div.header{
+
+	margin-bottom: 40px;
+	overflow: hidden;
+
+}
+
+#post_report h1{
+
+	display: block;
+	margin: 0;
+	font-size: 20px;
+	overflow: hidden;
+
+}
+
+#post_report .back{
+
+	display: block;
+	float: right;
+	cursor: pointer;
+
+}
+
+/* -------------------------------------------------------------------------- */
+
+#post_report div.summary{
+
+	margin: 40px 0;
+	overflow: hidden;
+
+}
+
+#post_report img{
+
+	display: inline-block;
+	vertical-align: middle;
+	width: 80px;
+	height: auto;
+	margin-right: 10px;
+
+}
+
+#post_report h2{
+
+	display: inline-block;
+	vertical-align: middle;
+	margin: 10px 0;
+	max-width: 100%;
+	font-size: 18px;
+	word-wrap: break-word;
+
+}
+
+/* -------------------------------------------------------------------------- */
+
+#post_report p.help_text{
+
+	margin: 10px 0;
+	font-size: 16px;
+
+}
+
+#post_report p.validation{
+
+	margin: 10px 0;
+	color: #1C82DA;
+
+}
+
+#post_report_form_errors{
+
+	margin: 40px 0;
+
+}
+
+#post_report div.field{
+
+	margin: 20px 0;
+
+}
+
+#post_report ul input,
+#post_report label{
+
+	margin: 5px 0;
+	cursor: pointer;
+
+}
+
+#post_report ul input{
+
+	margin-right: 5px;
+	width: 14px;
+	height: 14px;
+
+}
+
+#post_report textarea{
+
+	display: block;
+	resize: vertical;
+	width: 100%!important;
+	max-width: 100%!important;
+	min-width: 100%!important;
+
+	padding: 15px;
+	height: 80px;
+	border: none;
+	border-radius: 4px;
+	background-color: #F6F6F6;
+
+}
+
+/* -------------------------------------------------------------------------- */
+
+#post_report div.submit_container{
+
+	text-align: center;
+
+}
+
+#post_report_submit{
+
+	padding: 10px 15px;
+	border: none;
+	border-radius: 4px;
+	background-color: #333;
+	color: #FFF;
+
+}
+
+/* -------------------------------------------------------------------------- */
+
+
+

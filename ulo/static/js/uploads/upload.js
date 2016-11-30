@@ -1,5 +1,9 @@
-/* File Upload javascript file */
-/* Dependencies: JQuery, Base.js */
+/*
+	File upload javascript file
+	
+	Dependencies: JQuery, Base.js
+
+*/
 
 
 "use strict";
@@ -24,6 +28,8 @@ Number.isFinite = Number.isFinite || function(value){
 }
 
 /* ------------------------------------------------------------------------------------ */
+
+
 
 
 /* ------------------------------------------------------------------------------------ */
@@ -310,7 +316,7 @@ Draggable.prototype = {
 		/* Raw event data with scroll offsets applied */
 		else if(e.originalEvent.clientX !== undefined){
 		
-			var scroll = this.getScrollOffsets();
+			var scroll = getScrollOffsets();
 
 			return { 
 
@@ -581,8 +587,6 @@ ScaleElement.prototype.scale_all = function(){
 
 	for(var i=0; i<this.elements.length; ++i){
 
-		console.log( this.elements[i].scale );
-
 		this.scale(parseFloat(this.elements[i].scale) || 0, this.elements[i]);
 
 	}
@@ -728,9 +732,9 @@ VideoThumbnail.prototype.constructor = VideoThumbnail;
 */
 VideoThumbnail.prototype.register = function(){
 
-	var evt = isEventSupported("input") ? "input" : "change";
+	var evt = Ulo.isEventSupported("input") ? "input" : "change";
 
-	$( this.getTime() ).on(evt, {self: this}, this.setTime);
+	$(this.getTime()).on(evt, {self: this}, this.setTime);
 
 	Draggable.prototype.register.apply(this, arguments);
 
@@ -742,9 +746,9 @@ VideoThumbnail.prototype.register = function(){
 */
 VideoThumbnail.prototype.unregister = function(){
 
-	var evt = isEventSupported("input") ? "input" : "change";
+	var evt = Ulo.isEventSupported("input") ? "input" : "change";
 
-	$( this.getTime() ).off(evt, this.setTime);
+	$(this.getTime()).off(evt, this.setTime);
 
 	Draggable.prototype.unregister.apply(this, arguments);
 
@@ -952,7 +956,7 @@ function ImageEditor(aspect_ratio){
 		Round the editor window dimension to the lowest common multiple of the aspect
 		ratio.
 	*/
-	this.ratio.round_to = this.lcm(this.ratio.width, this.ratio.height);
+	this.ratio.round_to = 2; // this.lcm(this.ratio.width, this.ratio.height);
 
 
 	$(Ulo.get("toggle_editor_menu_actions")).on(Ulo.evts.click, {self: this}, this.showMenu);
@@ -974,7 +978,9 @@ ImageEditor.prototype = {
 	constructor: ImageEditor,
 
 	/* -------------------------------------------------------------------------------- */
-
+	/*
+		Register "handler" on the close button.
+	*/
 	registerClose: function(handler){
 
 		$(this.getClose()).on(Ulo.evts.click, {self: this}, handler);
@@ -982,7 +988,9 @@ ImageEditor.prototype = {
 	},
 
 	/* -------------------------------------------------------------------------------- */
-
+	/*
+		Register "handler" on the submit button.
+	*/
 	registerSubmit: function(handler){
 
 		$(this.getSubmit()).on(Ulo.evts.click, {self: this}, handler);
@@ -990,7 +998,9 @@ ImageEditor.prototype = {
 	},
 
 	/* -------------------------------------------------------------------------------- */
-
+	/*
+		Register "handler" on the delete button.
+	*/
 	registerDelete: function(handler){
 
 		$(this.getDelete()).on(Ulo.evts.click, {self: this}, handler);
@@ -998,7 +1008,9 @@ ImageEditor.prototype = {
 	},
 
 	/* -------------------------------------------------------------------------------- */
-
+	/*
+		Register this._select on the element.
+	*/
 	registerSelect: function(element){
 
 		$(element).on("mousedown touchstart pointerdown", {self: this}, this._select);
@@ -1006,7 +1018,9 @@ ImageEditor.prototype = {
 	},
 
 	/* -------------------------------------------------------------------------------- */
-
+	/*
+		Unregister element from this._select.
+	*/
 	unregisterSelect: function(element){
 
 		$(element).off(Ulo.evts.click, this._select);
@@ -1014,7 +1028,9 @@ ImageEditor.prototype = {
 	},
 
 	/* -------------------------------------------------------------------------------- */
-	
+	/*
+		Return the editor window.
+	*/
 	getEditor: function(){
 
 		return Ulo.get("editor_container");
@@ -1022,7 +1038,9 @@ ImageEditor.prototype = {
 	},
 
 	/* -------------------------------------------------------------------------------- */
-
+	/*
+		Return the content container.
+	*/
 	getContent: function(){
 
 		return Ulo.get("editor_content");
@@ -1030,7 +1048,9 @@ ImageEditor.prototype = {
 	},
 
 	/* -------------------------------------------------------------------------------- */
-
+	/*
+		Return the delete file button.
+	*/
 	getDelete: function(){
 
 		return this.getMenuContainer().querySelector("button.editor_delete");
@@ -1038,7 +1058,9 @@ ImageEditor.prototype = {
 	},
 
 	/* -------------------------------------------------------------------------------- */
-
+	/*
+		Return the close editor button.
+	*/
 	getClose: function(){
 
 		return Ulo.get("editor_close");
@@ -1046,7 +1068,9 @@ ImageEditor.prototype = {
 	},
 
 	/* -------------------------------------------------------------------------------- */
-
+	/*
+		Return the submit button.
+	*/
 	getSubmit: function(){
 
 		return Ulo.get("editor_submit");
@@ -1055,7 +1079,7 @@ ImageEditor.prototype = {
 
 	/* -------------------------------------------------------------------------------- */
 	/*
-		Return the element's outer most container. See open() for element creation.
+		Return the element's outer most container. See open() for element structure.
 	*/
 	getContainer: function(element){
 
@@ -1065,7 +1089,7 @@ ImageEditor.prototype = {
 
 	/* -------------------------------------------------------------------------------- */
 	/*
-		Return the element within the container. See open() for element creation.
+		Return the element within the container. See open() for element structure.
 	*/
 	getElement: function(container){
 
@@ -1090,6 +1114,7 @@ ImageEditor.prototype = {
 	show: function(){
 
 		Ulo.removeClass(this.getEditor(), Ulo.cls.hide);
+	
 		Ulo.addClass(document.body, Ulo.cls.modal_open);
 
 	},
@@ -1101,6 +1126,7 @@ ImageEditor.prototype = {
 	hide: function(){
 
 		Ulo.addClass(this.getEditor(), Ulo.cls.hide);
+		
 		Ulo.removeClass(document.body, Ulo.cls.modal_open);
 
 	},
@@ -1113,7 +1139,13 @@ ImageEditor.prototype = {
 	*/
 	setSubmitDisabled: function(disable){
 
-		(disable ? Ulo.addClass : Ulo.removeClass)(this.getSubmit(), "disabled").disabled = disable;
+		var submit = this.getSubmit();
+
+		if(submit !== null){
+
+			(disable ? Ulo.addClass : Ulo.removeClass)(submit, Ulo.cls.disabled).disabled = disable;
+
+		}
 
 	},
 
@@ -1131,7 +1163,7 @@ ImageEditor.prototype = {
 
 			var disable = count >= this.max_count;
 
-			(disable ? Ulo.addClass : Ulo.removeClass)(input, "disabled");
+			(disable ? Ulo.addClass : Ulo.removeClass)(input, Ulo.cls.disabled);
 		
 			input.querySelector("input").disabled = disable;
 
@@ -1151,7 +1183,7 @@ ImageEditor.prototype = {
 
 			/* Get the canvas or video element */
 
-			if(this.getElement( masks[i] ).complete !== true){
+			if(this.getElement(masks[i]).complete !== true){
 
 				return false;
 
@@ -1204,7 +1236,9 @@ ImageEditor.prototype = {
 	},
 
 	/* -------------------------------------------------------------------------------- */
-
+	/*
+		Swap the aspect ratio values.
+	*/
 	swapRatios: function(){
 
 		var tmp = this.ratio.width;
@@ -1216,7 +1250,9 @@ ImageEditor.prototype = {
 	},
 
 	/* -------------------------------------------------------------------------------- */
-
+	/*
+		Set the editor window to its default orientation.
+	*/
 	resetOrientation: function(){
 
 		if(this.isPortrait()){
@@ -1230,7 +1266,9 @@ ImageEditor.prototype = {
 	},
 
 	/* -------------------------------------------------------------------------------- */
-
+	/*
+		Rotate the editor window.
+	*/
 	rotateEditor: function(e){
 
 		var self = e.data.self;
@@ -1241,7 +1279,7 @@ ImageEditor.prototype = {
 
 		self.swapRatios();
 
-		self.update( self.getContent() );
+		self.update(self.getContent());
 
 	},
 
@@ -1278,7 +1316,7 @@ ImageEditor.prototype = {
 
 		if(this.isComplete()){
 
-			this.setSubmitDisabled( false );
+			this.setSubmitDisabled(false);
 
 		}
 
@@ -1303,7 +1341,7 @@ ImageEditor.prototype = {
 		if(dst.parentNode !== null){
 
 			/* Remove the loading animation */
-			Ulo.remove( dst.parentNode.querySelector(".loading") );
+			Ulo.remove(dst.parentNode.querySelector(".loading"));
 
 		}
 
@@ -1338,7 +1376,7 @@ ImageEditor.prototype = {
 
 		}
 
-		Ulo.messages("Sorry, we encountered a problem while trying to edit your image.");
+		Ulo.messages("Sorry, we encountered a problem while trying to edit your file.");
 
 	},
 
@@ -1364,6 +1402,7 @@ ImageEditor.prototype = {
 			canvas = document.createElement("canvas");
 
 			canvas.width = element.naturalWidth || element.width;
+			
 			canvas.height = element.naturalHeight || element.height;
 
 			canvas.getContext("2d").drawImage(element, 0, 0);
@@ -1480,7 +1519,7 @@ ImageEditor.prototype = {
 
 		var w, h, resolution, isImage = element.nodeName!=="VIDEO";
 
-		if( isImage ){
+		if(isImage){
 
 			/* Define the min and max dimensions for an image/canvas */
 
@@ -1550,9 +1589,8 @@ ImageEditor.prototype = {
 
 			"Please upload " + text + (key==="min" ? " greater" : " less") + 
 			" than " + resolution[key].width + " x " + 
-			resolution[key].height + " pixels.",
-			true
-				
+			resolution[key].height + " pixels."
+			
 		);
 
 		return false;
@@ -1570,9 +1608,9 @@ ImageEditor.prototype = {
 
 		try{
 
-			if( this.isValid(element) ){
+			if(this.isValid(element)){
 
-				 /* Update max_count */
+				 /* Set the max number of files that can be uploaded for this file type */
 
 				this.max_count = max_count;
 
@@ -1583,7 +1621,7 @@ ImageEditor.prototype = {
 					If video show the thumbnail slider button and set the element as 
 					complete in the same way that toCanvas() does for images.
 				*/
-				if( element.nodeName === "VIDEO" ){
+				if(element.nodeName === "VIDEO"){
 
 					Ulo.removeClass(video_thumbnail, Ulo.cls.hide);
 
@@ -1593,7 +1631,7 @@ ImageEditor.prototype = {
 
 				/*
 					Else hide the thumbnail slider button and convert the image to a 
-					canvas. toCanvas() also scales the image if necessary.
+					canvas. toCanvas() also will scale the image if necessary.
 				*/
 				else{
 
@@ -1624,9 +1662,7 @@ ImageEditor.prototype = {
 					the constructors below so that they can read the editor dimensions.
 				*/
 
-				var container = this.getEditor();
-
-				if(Ulo.hasClass(container, Ulo.cls.hide)){
+				if(Ulo.hasClass(this.getEditor(), Ulo.cls.hide)){
 
 					this.show();
 
@@ -1643,6 +1679,8 @@ ImageEditor.prototype = {
 				}
 
 
+				/* Update the editor */
+
 				this.update(content);
 
 
@@ -1656,13 +1694,13 @@ ImageEditor.prototype = {
 				}
 
 				/*
-					Else disabled the submit button and display a loading animation.
+					Else disable the submit button and display a loading animation.
 				*/
 				else{
 
 					this.setSubmitDisabled(true);
 
-					crop.appendChild( Ulo.create("span", {"class": "loading"}) );
+					crop.appendChild(Ulo.create("span", {"class": "loading"}));
 
 				}
 
@@ -1670,13 +1708,11 @@ ImageEditor.prototype = {
 					If the number of elements now in the editor is gte to this.max_count
 					disable the input[type=file] element.
 				*/
-				this.setInputDisabled( this.count() );
+				this.setInputDisabled(this.count());
 
 			}
 
 		} catch(e){
-
-			console.log('EDITOR FAILED TO OPEN FILE: ', e);
 
 			this.triggerClose();
 
@@ -1718,21 +1754,21 @@ ImageEditor.prototype = {
 
 	/* -------------------------------------------------------------------------------- */
 	/*
-		Trigger all event handlers registered to the close button.
-	*/
-	triggerClose: function(){
-
-		$(this.getClose()).trigger(Ulo.evts.click);
-
-	},
-
-	/* -------------------------------------------------------------------------------- */
-	/*
 		Event handler for close().
 	*/
 	_close: function(e){
 
 		var self = e.data.self.close();
+
+	},
+
+	/* -------------------------------------------------------------------------------- */
+	/*
+		Trigger all event handlers registered to the close button.
+	*/
+	triggerClose: function(){
+
+		$(this.getClose()).trigger(Ulo.evts.click);
 
 	},
 
@@ -1826,7 +1862,7 @@ ImageEditor.prototype = {
 	*/
 	update: function(content){
 
-		/* Crop area border size - must match the value in the css files */
+		/* Crop area border - MUST MATCH THE VALUE IN THE CSS FILE */
 		var trim = 30;
 
 		/* Calculate the width to open the editor content window to. */
@@ -1999,7 +2035,7 @@ ImageEditor.prototype = {
 
 		/* Remove the element from the editor */
 
-		Ulo.remove( container );
+		Ulo.remove(container);
 
 
 		/* Disable the submit button if the editor is empty */
@@ -2014,7 +2050,7 @@ ImageEditor.prototype = {
 
 		/* Enable the input[type=file] element if count < this.max_count */
 
-		this.setInputDisabled( count );
+		this.setInputDisabled(count);
 
 	},
 
@@ -2032,9 +2068,9 @@ ImageEditor.prototype = {
 				Terminate all workers. This function is called by close() so there may be 
 				scale operations still in progress.
 			*/
-			this.removeAllWorkers( this.getElement(containers[i]) );
+			this.removeAllWorkers(this.getElement(containers[i]));
 
-			this.deleteElement( containers[i] );
+			this.deleteElement(containers[i]);
 
 		}
 
@@ -2070,6 +2106,7 @@ ImageEditor.prototype = {
 
 
 			var content = self.getContent(),
+			
 			select;
 
 			/*
@@ -2118,8 +2155,7 @@ ImageEditor.prototype = {
 	/*
 		Move the file actions menu into the container.
 
-		@param container: Optional element to append the menu to. Defaults to 
-			this.getEditor().
+		@param container: Optional element to append the menu to. Defaults to this.getEditor().
 	*/
 	moveMenu: function(container){
 
@@ -2127,7 +2163,7 @@ ImageEditor.prototype = {
 
 		this.hideMenu(menu, false);
 
-		( container || this.getEditor() ).appendChild( menu );
+		(container || this.getEditor()).appendChild(menu);
 
 	},
 	/* -------------------------------------------------------------------------------- */
@@ -2140,7 +2176,7 @@ ImageEditor.prototype = {
 
 		/* Get the menu that this button toggles */
 
-		var menu = Ulo.get( e.currentTarget.getAttribute("data-toggle") );
+		var menu = Ulo.get(e.currentTarget.getAttribute("data-toggle"));
 
 
 		/* If the menu is hidden then show it */
@@ -2151,7 +2187,7 @@ ImageEditor.prototype = {
 			
 			var icon  = e.currentTarget.querySelector("span.icon");
 
-			Ulo.addClass(Ulo.removeClass(icon, "icon_down_arrow_white"), "icon_up_arrow_white");
+			Ulo.addClass(Ulo.removeClass(icon, "icon_down_arrow"), "icon_up_arrow");
 
 			$(document).on(Ulo.evts.click, {self: self, ignore: true}, self._hideMenu);
 
@@ -2177,7 +2213,7 @@ ImageEditor.prototype = {
 
 			/* Get the menu that this button toggles */
 
-			menu = Ulo.get( button.getAttribute("data-toggle") );
+			menu = Ulo.get(button.getAttribute("data-toggle"));
 
 
 			if(button !== null && menu !== null && Ulo.hasClass(menu, Ulo.cls.hide) === false){
@@ -2186,7 +2222,7 @@ ImageEditor.prototype = {
 
 				var icon  = button.querySelector("span.icon");
 
-				Ulo.addClass(Ulo.removeClass(icon, "icon_up_arrow_white"), "icon_down_arrow_white");
+				Ulo.addClass(Ulo.removeClass(icon, "icon_up_arrow"), "icon_down_arrow");
 
 				$(document).off(Ulo.evts.click, this._hideMenu);
 
@@ -2217,7 +2253,7 @@ ImageEditor.prototype = {
 	/*
 		Make target the current selection.
 
-		@param target: canvas or video element.
+		@param target: Canvas or video element.
 	*/
 	select: function(target){
 
@@ -2578,156 +2614,6 @@ ImageEditor.prototype = {
 
 	/* -------------------------------------------------------------------------------- */
 	/*
-		Scale the canvas in place and return true if the scale has completed and false
-		if it is still in progress on the worker thread.
-
-		NOTE: putImageData() DOES NOT WORK CONSISTENTLY - USE drawImage() IF SCALE STARTS
-		RETURNING BLANK IMAGES.
-
-		@param canvas: Source image canvas.
-		@param scale: Scale value (float).
-		@param mw: Minimum scale width.
-		@param mh: Minimum scale height.
-		@param scaleCallback: Scale function - this.bilinear() or this.bicubic().
-		@param workerCallback: Called once the worker has completed.
-		@param errorCallback: Called if the worker throws an exception. See createWorker().
-	*/
-	// scaleInOne: function(canvas, scale, mw, mh, scaleCallback, workerCallback, errorCallback){
-
-	// 	try{
-
-	// 		/*
-	// 			Get the original image data - if the canvas is too large the browser may 
-	// 			throw an exception.
-	// 		*/
-	// 		var src = canvas.getContext("2d").getImageData(0,0,canvas.width,canvas.height);
-
-	// 		/*
-	// 			Create an ImageData instance to the scaled dimensions.
-	// 		*/
-	// 		var dst = canvas.getContext("2d").createImageData(
-
-	// 			Math.max(Math.round(canvas.width*scale), mw),
-	// 			Math.max(Math.round(canvas.height*scale), mh)
-			
-	// 		);
-
-	// 		/*
-	// 			If dst is null the canvas dimensions are too large.
-	// 		*/
-	// 		if(dst===null){ 
-			
-	// 			throw new Error(); 
-			
-	// 		}
-
-	// 	} catch(e){
-
-	// 		throw new Error(
-
-	// 			"The browser you are using does not support editing of large images."
-
-	// 		);
-		
-	// 	}
-
-
-	// 	/*
-	// 		Run scaleCallback in a web worker if given a callback function.
-	// 	*/
-	// 	if(workerCallback!==undefined && window.Worker){
-
-	// 		try{
-
-	// 			var worker = this.createWorker(scaleCallback, canvas, errorCallback);
-
-	// 			var self = this;
-
-
-	// 			/*
-	// 				Add onmessage handler to fill the original canvas with the scaled 
-	// 				image data and run the workerCallback function.
-	// 			*/
-	// 			worker.onmessage = function(e){
-
-	// 				worker.terminate();
-
-	// 				/*
-	// 					If dst was transfered then its buffer will have been neutered so
-	// 					reassign it an empty ImageData object.
-	// 				*/
-	// 				if(dst.data.buffer.byteLength === 0){
-					
-	// 					dst = canvas.getContext("2d").createImageData(dst.width,dst.height);
-					
-	// 				}
-
-	// 				/* Set the array buffer on the scaled ImageData object. */
-	// 				dst.data.set(new Uint8Array(e.data));
-					
-	// 				/* Set the original canvas dimensions to the scaled dimensions. */
-	// 				canvas.width=dst.width; canvas.height=dst.height;
-					
-	// 				/* Add the data to the original canvas. */
-	// 				canvas.getContext("2d").putImageData(dst, 0, 0);
-					
-	// 				dst = null;
-
-	// 				workerCallback.call(self, canvas);
-					
-	// 			}
-
-
-	// 			/* Set the scaleCallback parameter values. See args above. */
-	// 			var data = [
-				
-	// 				src.data.buffer, src.width, src.height,  
-	// 				dst.data.buffer, dst.width, dst.height, 
-	// 				scale, true
-				
-	// 			];
-
-	// 			/*
-	// 				Send the data to the worker - src and dst are sent as transferable 
-	// 				objects. 
-	// 			*/
-	// 			worker.postMessage(data, [data[0], data[3]]);
-
-	// 			return false;
-
-	// 		} catch(e){
-
-	// 			if(worker){
-				
-	// 				worker.terminate();
-				
-	// 			}
-
-	// 			/* Continue and attempt to perform the scale on the main thread. */
-
-	// 		}
-
-	// 	}
-
-
-	// 	/* Perform the scale on the main thread. */
-	// 	scaleCallback(src.data, src.width, src.height, dst.data, dst.width, dst.height, scale, false);
-		
-	// 	/* 
-	// 		Set canvas to the scaled dimensions and add the scaled image data to the 
-	// 		original canvas.
-	// 	*/
-	// 	canvas.width=dst.width; canvas.height=dst.height;
-		
-	// 	canvas.getContext("2d").putImageData(dst, 0, 0);
-		
-	// 	dst = null;
-
-	// 	return true;
-	
-	// },
-
-	/*
 		Scale the source canvas (src) into the destination canvas (dst) in one go.
 
 		NOTE: putImageData() DOES NOT WORK CONSISTENTLY - USE drawImage() WHEN POSSIBLE.
@@ -2876,7 +2762,6 @@ ImageEditor.prototype = {
 	
 	},
 
-	/* -------------------------------------------------------------------------------- */
 	/* -------------------------------------------------------------------------------- */
 	/*
 		Return an array of {x,y} indices used to calculate the x and y offset for each 
@@ -3162,7 +3047,7 @@ ImageEditor.prototype = {
 			Perform the scale on the main thread.
 		*/
 
-		while( (data=this.getData(i, src, dst, dx, dy, dw, dh, size, sizeScaled)) !== null ){
+		while((data=this.getData(i, src, dst, dx, dy, dw, dh, size, sizeScaled)) !== null){
 
 			data.args.push(scale, false);
 			
@@ -3297,7 +3182,7 @@ ImageEditor.prototype = {
 		Return a single canvas cropped and scaled to the current state of the editor. 
 		The canvas will set a property 'pending' which indicates the number of canvases
 		that are still being processed. The canvas is ready when pending === 0. The
-		canvase will also set a property failed to true if the process fails.
+		canvas will also set a property failed to true if the process fails.
 		
 		@param sync: Boolean - If true attempt to scale the canvases on the worker thread.
 		@param min: Multiple used to determine the min width and height of the final canvas
@@ -3312,12 +3197,19 @@ ImageEditor.prototype = {
 			/* FINAL CANVAS */
 
 			var canvas = document.createElement("canvas"),
+			
 			masks = this.getContent().childNodes,
+			
 			canvases = [], 
+			
 			w = 0, 
+			
 			h = 0,
+			
 			gcm,
+			
 			canvas;
+
 
 			for(var i=0, tmp; i<masks.length; ++i){
 
@@ -3604,36 +3496,35 @@ ImageEditor.prototype = {
 /*
 	Manage file uploads to the ImageEditor.
 
-	@param context: Register all input[type=file] elements found within this element.
+	@param context: Register all input[type=file] elements found within "context".
 	@param submit: Callback function executed when the file is submitted from ImageEditor.
-	@param constraints: Optional setting object. See configure().
+	@param constraints: Optional settings object. See configure().
 	@param aspect_ratio: Optional aspect ratio for ImageEditor. Defaults to 1:1.
 	@param capture: Optional boolean - If true enable media capture.
 
 */
 function FileUpload(context, submit, constraints, aspect_ratio, capture){
 
-	if( this.isAPISupported() ){
-
+	if(this.isAPISupported()){
 
 		this.polyfillers();
+
+		this.resetValues();
 
 		this.configure(constraints);
 
 
-		this.resetValues();
-
-		/* Input elements container - Set before calling register() or unregister() */
+		/* Set before calling register() or unregister() */
 		this.context = context;	
 
-		/* Register all input[type=file] element within the context */
+		/* Register all input[type=file] element within "context" */
 		this.register();
 
 
 		/* Initialise the ImageEditor class */
 		this.Editor = new ImageEditor(aspect_ratio);
-		this.Editor.registerClose( this.close.bind(this) );
-		this.Editor.registerSubmit( submit );
+		this.Editor.registerClose(this.close.bind(this));
+		this.Editor.registerSubmit(submit);
 
 
 		if(capture === true){
@@ -3658,7 +3549,7 @@ function FileUpload(context, submit, constraints, aspect_ratio, capture){
 	
 	} else{
 
-		Ulo.Ulo.messages("We do not support your browser \
+		messages("We do not support your browser \
 			for file uploads. Upgrade to the latest version to continue.");
 
 	}
@@ -3671,7 +3562,7 @@ FileUpload.prototype = {
 	
 	/* -------------------------------------------------------------------------------- */
 	/*
-		Register all input[type=file] element within the context.
+		Register all input[type=file] elements within this.context.
 	*/
 	register: function(){
 
@@ -3681,7 +3572,7 @@ FileUpload.prototype = {
 
 	/* -------------------------------------------------------------------------------- */
 	/*
-		Unregister all input[type=file] element within the context.
+		Unregister all input[type=file] elements within this.context.
 	*/
 	unregister: function(){
 
@@ -3690,13 +3581,13 @@ FileUpload.prototype = {
 	},
 
 	/* -------------------------------------------------------------------------------- */
-
+	/*
+		Reset the class values that track the uploaded files.
+	*/
 	resetValues: function(){
 
-		/* Number of files waiting to be loaded into ImageEditor. */
 		this.pending = 0;
 
-		/* Current file type ("image" or "video") */
 		this.file_type = null;
 
 	},
@@ -3710,14 +3601,15 @@ FileUpload.prototype = {
 			{
 				image: { 
 
-					count: N (where N is max number of files), 
-					size: N (where N is the max size in bytes)
+					count: Max number of files, 
+					size: Max size in bytes
 
 				},
 
 				video: {
 
-					Same as above.
+					count: Max number of files, 
+					size: Max size in bytes
 
 				},
 
@@ -3745,7 +3637,7 @@ FileUpload.prototype = {
 				See class MediaUploadHandler - __init__() 
 			*/
 			"image": image.size || 10485760,
-			"video": video.size || 73400320
+			"video": video.size || 104857600
 
 		};
 
@@ -3801,13 +3693,10 @@ FileUpload.prototype = {
 
 	},
 
-
-
-
 	/* -------------------------------------------------------------------------------- */
 	/*
 		Return the name of the file type ("image" or "video") if the uploaded file is
-		a supported type. Else return null.
+		a supported type, else return null.
 
 		@param file: File instance.
 	*/
@@ -3837,19 +3726,19 @@ FileUpload.prototype = {
 
 		@param file: File instance or Canvas element (canvases must be given a size 
 			property before being passed to the function. See closeCapture()).
-		@param type: file type ("image", "video" or null).
+		@param type: File type ("image", "video" or null).
 	*/
 	isValid: function(file, type){
 
-		var is_valid = false;
+		var is_valid = false,
 
-		var count = this.Editor.count();
+		count = this.Editor.count();
 
 		/*
 			If there are no files then assign this.file_type to the type of the current 
 			file.
 		*/
-		if( this.pending===0 && count===0 ){
+		if(this.pending === 0 && count === 0){
 
 			this.file_type = type;
 
@@ -3859,13 +3748,13 @@ FileUpload.prototype = {
 			If the file type is valid ("image" or "video") and the file type is the same 
 			as the files currently loaded or loading then proceed to validate the file.
 		*/
-		if( type !== null && type === this.file_type ){
+		if(type !== null && type === this.file_type){
 
 			/*
 				If the current file count exceeds the maximum for this file type, display 
 				a message to the user.
 			*/
-			if( (this.max_files[type] - this.pending - count) <= 0 ){
+			if((this.max_files[type] - this.pending - count) <= 0){
 
 				var max = this.max_files[type];
 
@@ -3882,7 +3771,7 @@ FileUpload.prototype = {
 				If the file size exceeds the maximum size for this file type, display a 
 				message to the user.
 			*/
-			else if( file.size > this.max_size[type] ){
+			else if(file.size > this.max_size[type]){
 
 				var name = type==="image" ? "an image" : "a video";
 
@@ -3924,11 +3813,11 @@ FileUpload.prototype = {
 
 				/* Returns "image", "video" or null */
 
-				type = self.getFileType( this.files[i] );
+				type = self.getFileType(this.files[i]);
 
 
 
-				if( self.isValid( this.files[i], type ) ){
+				if(self.isValid(this.files[i], type)){
 
 					/* Build an array of arguments for the upload handlers */
 
@@ -3940,7 +3829,8 @@ FileUpload.prototype = {
 
 						["video", "loadeddata"];
 
-					args.push( this.files[i] );
+
+					args.push(this.files[i]);
 
 
 					/* Blob URL */
@@ -3982,6 +3872,7 @@ FileUpload.prototype = {
 
 		}
 
+		/* Clear the input field so that another file can be uploaded. */
 		this.value = null;
 
 	},
@@ -4000,7 +3891,7 @@ FileUpload.prototype = {
 	*/
 	ObjectURL: function(tag, evt, file){
 
-		var element = document.createElement( tag );
+		var element = document.createElement(tag);
 
 		element.file = file;
 
@@ -4036,9 +3927,6 @@ FileUpload.prototype = {
 		++this.pending;
 
 	},
-
-
-
 
 	/* -------------------------------------------------------------------------------- */
 	/*
@@ -4134,7 +4022,7 @@ FileUpload.prototype = {
 
 		$(e.target).off();
 
-		var element = document.createElement( e.data.tag );
+		var element = document.createElement(e.data.tag);
 
 		element.file = e.data.file;
 
@@ -4166,9 +4054,6 @@ FileUpload.prototype = {
 	
 	},
 
-
-
-
 	/* -------------------------------------------------------------------------------- */
 	/*
 		Capture open() callback function.
@@ -4198,7 +4083,7 @@ FileUpload.prototype = {
 				.getImageData(0, 0, canvas.width, canvas.height).data.length;
 
 
-			if( this.isValid(canvas, "image") ){
+			if(this.isValid(canvas, "image")){
 
 				this.Editor.open(canvas, this.max_files[this.file_type]);
 
@@ -4209,7 +4094,7 @@ FileUpload.prototype = {
 		}
 
 
-		/* Always display the editor if it contains elements */
+		/* Always display the editor again if it contains elements */
 
 		if(this.Editor.count() !== 0){
 
@@ -4218,10 +4103,6 @@ FileUpload.prototype = {
 		}
 
 	},
-
-
-
-
 
 	/* -------------------------------------------------------------------------------- */
 	/*
@@ -4252,6 +4133,7 @@ FileUpload.prototype = {
 		} else{
 		
 			return (bytes / gb).toFixed(precision) + " GB";
+		
 		}
 
 	},
@@ -4366,9 +4248,12 @@ MediaCapture.prototype = {
 	register: function(){
 
 		$(Ulo.removeClass(this.getPhoto(), "disabled"))
+
 			.on(Ulo.evts.click, {self: this}, this.photo);
 		
+
 		$(Ulo.removeClass(this.getSave(), "disabled"))
+		
 			.on(Ulo.evts.click, {self: this}, this.save);
 
 	},
@@ -4379,17 +4264,17 @@ MediaCapture.prototype = {
 	*/
 	unregister: function(){
 
-		$(Ulo.addClass(this.getPhoto(), "disabled"))
-			.off(Ulo.evts.click, this.photo);
+		$(Ulo.addClass(this.getPhoto(), "disabled")).off(Ulo.evts.click, this.photo);
 
-		$(Ulo.addClass(this.getSave(), "disabled"))
-			.off(Ulo.evts.click, this.save);
+		$(Ulo.addClass(this.getSave(), "disabled")).off(Ulo.evts.click, this.save);
 
 	},
 	
 	/* -------------------------------------------------------------------------------- */
 	/*
-		Register an event handler on all open media capture buttons.
+		Register an event handler on all media capture buttons.
+
+		@param handler: Event handler.
 	*/
 	registerOpen: function(handler){
 
@@ -4399,9 +4284,11 @@ MediaCapture.prototype = {
 
 	/* -------------------------------------------------------------------------------- */
 	/*
-		Register a function that is called each time the capture window is close. The
+		Register a function that is called each time the capture window is closed. The
 		function is passed the canvas element containing the photo taken by the user or 
 		undefined.
+
+		@param callback: Function.
 	*/
 	registerCloseHandler: function(callback){
 
@@ -4478,6 +4365,7 @@ MediaCapture.prototype = {
 	show: function(){
 
 		Ulo.removeClass(this.getContainer(), Ulo.cls.hide);
+		
 		Ulo.addClass(document.body, "capture_"+Ulo.cls.modal_open);
 
 	},
@@ -4489,6 +4377,7 @@ MediaCapture.prototype = {
 	hide: function(){
 
 		Ulo.addClass(this.getContainer(), Ulo.cls.hide);
+		
 		Ulo.removeClass(document.body, "capture_"+Ulo.cls.modal_open);
 
 	},
@@ -4534,9 +4423,6 @@ MediaCapture.prototype = {
 
 	},
 
-
-
-
 	/* -------------------------------------------------------------------------------- */
 	/*
 		Open the capture window.
@@ -4557,6 +4443,7 @@ MediaCapture.prototype = {
 			})
 				
 			/* Success callback */
+
 			.then( function(s){
 
 				self.stream = s;
@@ -4572,6 +4459,7 @@ MediaCapture.prototype = {
 			})
 			
 			/* Error callback - Do not use .catch with IE8 */
+
 			["catch"](function(e){
 
 				if(e.name === "SecurityError"){
@@ -4755,9 +4643,10 @@ MediaCapture.prototype = {
 	*/
 	save: function(e){
 
-		var self = e.data.self;
+		var self = e.data.self,
 
-		var canvas = undefined;
+		canvas = undefined;
+
 
 		if(self.video && self.video.paused){
 
@@ -4774,9 +4663,6 @@ MediaCapture.prototype = {
 		self.close(canvas);
 
 	},
-
-
-
 
 	/* -------------------------------------------------------------------------------- */
 

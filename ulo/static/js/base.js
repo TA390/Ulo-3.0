@@ -114,6 +114,7 @@ window.Ulo = {
 
 		hide: "hide",
 		show: "show",
+		open: "open",
 		hidden: "hidden",
 		disabled: "disabled",
 		modal: "modal",
@@ -149,7 +150,7 @@ window.Ulo = {
 	
 	getUserURL: function(id){
 
-		return "/user/" + id;
+		return "/user/" + id + "/";
 
 	},
 
@@ -157,7 +158,7 @@ window.Ulo = {
 	
 	getPostURL: function(id){
 
-		return "/post/" + id;
+		return "/post/" + id + "/";
 
 	},
 
@@ -638,7 +639,7 @@ window.Ulo = {
 
 		@param str: String.
 	*/
-	capitaliseLetter: function(str){
+	capitalise: function(str){
 
 		return str.charAt(0).toUpperCase() + str.slice(1);
 
@@ -729,6 +730,46 @@ window.Ulo = {
 		}
 
 		return element;
+
+	},
+
+	/* -------------------------------------------------------------------------------- */
+	/*
+		Remove the class that matches the regular expression "regexp" and add "cls" to 
+		"element".
+
+		@param element: Javascript element.
+		@param regex: Regular expression.
+		@param cls: Class name.
+	*/
+	replaceClass: function(element, regexp, cls){
+
+		try{
+
+			element.className = element.className.replace(regexp, "");
+
+			Ulo.addClass(element, cls);
+		
+		} catch(e){
+
+			debug(e);
+
+		}
+
+		return element;
+
+	},
+
+	/* -------------------------------------------------------------------------------- */
+	/*
+		Remove the current icon class and add the icon "name" to the element.
+
+		@param element: Javascript element.
+		@param name: Icon name (excluding the prefix "icon_").
+	*/
+	replaceIcon: function(element, name){
+
+		return Ulo.replaceClass(element, /icon_[\w]+/, "icon_" + name);
 
 	},
 
@@ -1009,6 +1050,372 @@ window.Ulo = {
 
 
 
+/* DRAGGABLE */
+/* ------------------------------------------------------------------------------------ */
+/*
+	Base class to create draggable elements.
+
+	@param id: Draggable element ID (this.element).
+	@param settings: Optional settings to add or override existing settings (this.settings).
+	@param target: Optional element stored in the class. 
+*/
+function Draggable(id, settings, target){
+	
+	try{
+		
+		/* Events */
+		this.start_events = "mousedown touchstart pointerdown";
+		this.move_events = "mousemove touchmove pointermove";
+		this.end_events = "mouseup touchend pointerup";
+
+		/* Client X and Y positions set when a start event is triggered. */
+		this.start = { X: 0, Y: 0 };
+
+		/*
+			Optional target element - If null the class will not set move or end handler
+			in the start event.
+		*/
+		this.target = target;
+
+		/* Relative or absolute positioned html element */
+		this.element = document.getElementById(id);
+
+		/* Fefault settings */
+		this.settings = {
+			
+			/* Css box boundaries */
+			top: 0, right: 0, bottom: 0, left: 0,
+			
+			/* Directions of movement */
+			horizontal: true, vertical: true,
+
+			/* Start position offsets */
+			offset: { X: 0, Y: 0 }
+		
+		}
+		
+		for(var key in settings){
+		
+			/* Override or add variables to the settings object */
+			this.settings[key] = settings[key];
+		
+		}
+
+	} catch(e){
+
+		debug(e);
+	
+	}
+
+}
+
+Draggable.prototype = {
+	
+	constructor: Draggable,
+
+	/* -------------------------------------------------------------------------------- */
+	/*
+		Register start events on the element.
+	*/
+	register: function(element){
+	
+		$(element || this.element).off(this.start_events, this.startHandler)
+			.on(this.start_events, {self: this}, this.startHandler);
+
+	},
+
+	/* -------------------------------------------------------------------------------- */
+	/*
+		Unregister start events on the element.
+	*/
+	unregister: function(element){
+		
+		$(element || this.element).off(this.start_events, this.startHandler);
+
+	},
+
+	/* -------------------------------------------------------------------------------- */
+
+
+	/* EVENT HANDLERS */
+	/* -------------------------------------------------------------------------------- */
+	/*
+		Set the starting postions (X and Y) and register the move and end events.
+	*/
+	startHandler: function(e){
+		
+		try{
+
+			var self = e.data.self;
+			
+			if(self.element !== null && self.target !== null){
+
+
+				/* Move the element to start position */
+
+				self.start = self.getOffset(e.currentTarget);
+				self.moveHandler.call(this, e);
+
+
+				/* Set the start position for move events */
+
+				self.start = self.getPosition(e);
+				self.start.X -= e.currentTarget.offsetLeft;
+				self.start.Y -= e.currentTarget.offsetTop;
+
+
+				/* Add move and end events to the document */
+
+				$(document).on(self.move_events, {self: self}, self.moveHandler);
+				$(document).on(self.end_events, {self: self}, self.endHandler);
+
+
+				/* Event handled */
+
+				e.stopPropagation();
+				e.preventDefault();
+
+			}
+
+		}catch(e){
+	
+			debug(e);
+	
+		}
+	
+	},
+
+	/* -------------------------------------------------------------------------------- */
+	/*
+		Set the new left and top position of the element. See calcPosition.
+	*/
+	moveHandler: function(e){
+		
+		try{
+		
+			var self = e.data.self,
+
+			pos = self.getPosition(e);
+
+
+			/* If horizontal movements are enabled set the left postition */
+			if(self.settings.horizontal){
+			
+				self.calcPosition(pos.X-self.start.X, "left", "right");
+			
+			}
+
+			/* If vertical movements are enabled set the top postition */
+			if(self.settings.vertical){
+				
+				self.calcPosition(pos.Y-self.start.Y, "top", "bottom");
+			
+			}
+
+			/* Event handled */
+			e.stopPropagation();
+			e.preventDefault();
+
+		}catch(e){
+		
+			debug(e);
+		
+		}
+	
+	},
+
+	/* -------------------------------------------------------------------------------- */
+	/*
+		Remove the move and end events from the document.
+	*/
+	endHandler: function(e){
+	
+		try{
+			
+			var self = e.data.self;
+			
+			/* Remove move and end events */
+			$(document).off(self.move_events, self.moveHandler);
+			$(document).off(self.end_events, self.endHandler);
+	
+			/* Event handled */
+			e.stopPropagation();
+			e.preventDefault();	
+			
+		}catch(e){
+	
+			debug(e);
+	
+		}
+	
+	},
+
+	/* END EVENT HANDLERS */
+	/* -------------------------------------------------------------------------------- */
+
+
+	/* ELEMENT POSITIONING */
+	/* -------------------------------------------------------------------------------- */
+	/*
+		Set the new position of the element constraining it to its bounding box 
+		positions defined by the settings object.
+	
+		@param e: Event object.
+		@param pos: X or Y position of the event. 
+		@param p1: First bounding position ("left" or "top").
+		@param p2: Second bounding position ("right" or "bottom").
+	*/
+	calcPosition: function(pos, p1, p2){
+
+		if(pos < this.settings[p1]){ 
+		
+			pos = this.settings[p1]; 
+		
+		} else if(pos > this.settings[p2]){ 
+		
+			pos = this.settings[p2]; 
+		
+		}
+
+		this.element.style[p1] = pos + "px";
+
+	},
+
+	/* END ELEMENT POSITIONING */
+	/* -------------------------------------------------------------------------------- */
+
+
+	/* HELPER FUNCTIONS */
+	/* -------------------------------------------------------------------------------- */
+	/*
+		Return the pixel value (pix) as a percentage.
+		
+		@param pixels: Pixel length.
+		@param length: Full length of the element to which pix is a section of.
+	*/
+	pixelToPercent: function(pixels, length){
+	
+		return 100*pixels / length;
+	
+	},
+
+	/* -------------------------------------------------------------------------------- */
+	/*
+
+	*/
+	getOffset: function(target){
+
+		var offset = this.settings.offset,
+
+		bounding = target.parentNode.getBoundingClientRect();
+		
+		return {
+
+			X: target.clientWidth * 0.5 + bounding.left - offset.X,
+			Y: target.clientHeight * 0.5 + bounding.top - offset.Y,
+
+		}
+
+	},
+
+	/* -------------------------------------------------------------------------------- */
+	/*
+		Return the on screen position of the current event or throw an exception.
+		
+		@params: e: Event. 
+		@param coord: The client coordinate (must be a capitalised string "X" or "Y") 
+	*/
+	getPosition: function(e){
+		
+		var pos;
+		
+		/* JQuery's normalised pageX/Y */
+		if(e.pageX !== undefined){
+		
+			return { X: e.pageX, Y: e.pageY };
+	
+		} 
+
+		/* Raw event data with scroll offsets applied */
+		else if(e.originalEvent.clientX !== undefined){
+		
+			var scroll = getScrollOffsets();
+
+			return { 
+
+				X: e.originalEvent.clientX + scroll, 
+				Y: e.originalEvent.clientY + scroll
+
+			}
+		
+		}
+
+		/* Touch events */
+		else if(e.originalEvent.touches !== undefined){
+		
+			return { 
+
+				X: e.originalEvent.touches[0].pageX, 
+				Y: e.originalEvent.touches[0].pageY
+
+			} 
+		
+		}
+
+		// /* Pointer events: UNTESTED!!! */
+		// else if(e.originalEvent.currentPoint){
+			
+		// 	return e.originalEvent.currentPoint[coord.toLowerCase()];
+		
+		// }
+		
+		throw new Error("Start position not found.");
+	
+	},
+
+	/* -------------------------------------------------------------------------------- */
+	/* 
+		Return the scroll X and Y offset positions.
+		Javascript The Definitive Guide (6th Edition) pg: 391
+	*/
+	getScrollOffsets: function(){
+	
+		/* All browsers except IE8 and before */
+		if(window.pageXOffset !== null){
+	
+			return {X: window.pageXOffset, Y: window.pageYOffset};
+	
+		}
+	
+		/* For IE or any browser in standard mode */
+		var d = window.document;
+	
+		if(d.compatMode === "CSS1Compat"){
+	
+			return { X: d.documentElement.scrollLeft, Y: d.documentElement.scrollTop };
+	
+		}
+	
+		/* For browsers in Quirks mode */
+		return { X: d.body.scrollLeft, Y: d.body.scrollTop };
+	
+	}
+
+	/* END HELPER FUNCTIONS */
+	/* -------------------------------------------------------------------------------- */
+
+};
+
+/* END DRAGGABLE */
+/* ------------------------------------------------------------------------------------ */
+
+
+
+
+
+
+
+
 /* ------------------------------------------------------------------------------------ */
 
 (function () {
@@ -1085,9 +1492,6 @@ window.Ulo = {
 			bar = self.get();
 
 
-			console.log( bar.style.width );
-
-
 			if(bar.style.width === "100%"){
 
 				self.set(0);
@@ -1136,11 +1540,11 @@ window.Ulo = {
 			// Upload progress
 			if(xhr.upload){
 
-				xhr.upload.addEventListener("progress", function(evt){
+				xhr.upload.addEventListener("progress", function(e){
 
-					if(evt.lengthComputable){
+					if(e.lengthComputable){
 
-						var percent = Math.ceil((evt.loaded / evt.total) * 100);
+						var percent = Math.ceil((e.loaded / e.total) * 100);
 
 						Ulo.Animate.set(percent);
 					
@@ -1163,11 +1567,11 @@ window.Ulo = {
 			var xhr = $.ajaxSettings.xhr();
 
 			// Download progress
-			xhr.addEventListener("progress", function(evt){
+			xhr.addEventListener("progress", function(e){
 
-				if(evt.lengthComputable){
+				if(e.lengthComputable){
 
-					var percent = Math.ceil((evt.loaded / evt.total) * 100);
+					var percent = Math.ceil((e.loaded / e.total) * 100);
 
 					Ulo.Animate.set(percent);
 				
@@ -1327,8 +1731,6 @@ window.Ulo = {
 		add: function(messages, keep, time){
 
 			if(messages){
-
-				console.log(messages, Array.isArray(messages))
 
 				if(Array.isArray(messages) === false){
 
@@ -1562,17 +1964,17 @@ window.Ulo = {
 			}
 
 
-			var element = Ulo.get( e.currentTarget.getAttribute("data-toggle") );
+			var element = Ulo.get(e.currentTarget.getAttribute("data-toggle"));
 
 
-			if( element !== null ){
+			if(element !== null){
 
 
 				var self = e.data.self,
 
 				dimension = e.data.dimension,
 
-				cap_dimension = Ulo.capitaliseLetter(dimension),
+				cap_dimension = Ulo.capitalise(dimension),
 
 				value = element[ "client" + cap_dimension ];
 
@@ -1755,7 +2157,7 @@ window.Ulo = {
 
 				if(selected === target){
 
-					icon_name = "down_arrow_white";
+					icon_name = "down_arrow";
 
 				} else{
 
@@ -1769,15 +2171,14 @@ window.Ulo = {
 
 			} else if(selected === null){
 				
-				icon_name = (isClosed ? "down" : "up") + "_arrow_white";
+				icon_name = (isClosed ? "down" : "up") + "_arrow";
 
 			}
 
+
 			if(icon_name !== null){
 
-				var icon = button.querySelector("span.icon");
-
-				icon.className = "icon icon_" + icon_name;
+				Ulo.replaceIcon(button.querySelector("span.icon"), icon_name);
 
 			}
 
@@ -2912,9 +3313,23 @@ window.Ulo = {
 
 		/* ---------------------------------------------------------------------------- */
 
-		getToken: function(token, context){
+		getToken: function(context){
 
-			return { name: "csrfmiddlewaretoken", value: this.token };
+			var name = "csrfmiddlewaretoken",
+
+			value = (
+
+				context ? 
+
+				context.querySelector("input[name='" + name + "']").value
+
+				:
+
+				this.token
+
+			)
+
+			return { name: name, value: value };
 			
 		},
 
@@ -3167,9 +3582,10 @@ window.Ulo = {
 
 		open: function(element, removeOnClose, callback){
 
-			var login = this.login();
+			var login = this.login(),
 
-			var modal = this.get();
+			modal = this.get();
+
 
 			if(login){
 
@@ -3191,19 +3607,21 @@ window.Ulo = {
 
 			}
 
+
 			if(element){
 
 				this.hideNodes(modal);
 
 				if(removeOnClose === true){
 
-					this.elements.push( element );
+					this.elements.push(element);
 
 				}
 
-				modal.appendChild( Ulo.removeClass(element, Ulo.cls.hide) );
+				modal.appendChild(Ulo.removeClass(element, Ulo.cls.hide));
 
 			}
+
 
 			if(Ulo.hasClass(modal, Ulo.cls.hide)){
 
@@ -3221,9 +3639,9 @@ window.Ulo = {
 
 			if(callback !== undefined){
 				
-				this.callbacks.push( callback );
+				this.callbacks.push(callback);
 
-				callback( true );
+				callback(true);
 
 			}
 

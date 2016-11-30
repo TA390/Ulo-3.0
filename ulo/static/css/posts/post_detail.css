@@ -1,0 +1,1176 @@
+/* -------------------------------------------------------------------------- */
+
+html{
+
+	background-color: #E6E6E6;
+
+}
+
+#main_content{
+
+	max-width: 1180px;
+
+}
+
+#post_detail{
+
+	padding: 10px;
+
+}
+
+.post_panel{
+
+	padding: 20px;
+
+}
+
+/* -------------------------------------------------------------------------- */
+
+
+
+
+/* MEDIA */
+/* -------------------------------------------------------------------------- */
+
+/* Fullscreen mode */
+
+video::-webkit-media-controls-enclosure{
+	
+	display:none !important;
+
+}
+
+div.media_container:-webkit-full-screen{
+
+	width: 100%;
+ 	height: 100%;
+
+}
+
+body.fullscreen div.video_actions,
+body.fullscreen div.video_error{
+
+	z-index: 2147483647;
+
+}
+
+/* END Fullscreen mode */
+
+/* ---------------------------------- */
+
+
+div.media_container{
+
+	position: relative;
+	background-color: #000;
+
+}
+
+/* ---------------------------------- */
+
+div.video_error{
+
+	z-index: 50;
+	position: absolute;
+	top: 0; left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: #333;
+	background-color: rgba(51, 51, 51, 0.6);
+	text-align: center;
+	color: #FFF;
+
+}
+
+div.video_error .table{
+
+	display: table;
+	width: 100%;
+	height: 100%;
+
+}
+
+div.video_error .cell{
+
+	display: table-cell;
+	vertical-align: middle;
+	padding: 20px;
+
+}
+
+div.video_error .centre{
+
+	display: block;
+	margin: 10px auto;
+	background-color: transparent;
+
+}
+
+/* ---------------------------------- */
+
+div.video_player video{
+
+	display: block;
+	margin: auto;
+	width: 100%;
+
+}
+
+/* ---------------------------------- */
+
+div.video_actions{
+
+	position: absolute;
+	left: 0; right: 0; bottom: 0;
+
+	background-color: #000;
+	background-color: rgba(0, 0, 0, 0.4);
+
+	background: -webkit-linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.7));
+	background: -o-linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.7));
+	background: -moz-linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.7));
+	background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.7));
+
+	transition: opacity 0.4s ease;
+
+}
+
+/* ---------------------------------- */
+
+div.video_thumbnail{
+
+	z-index: 30;
+	position: absolute;
+	bottom: 90px; left: 0;
+	width: 160px;
+	background-color: #333;
+	box-shadow: 0 0 2px 1px rgba(51, 51, 51, 0.6);
+
+}
+
+div.video_thumbnail img{
+
+	display: block;
+	width: 100%;
+
+}
+
+div.track_range span.track_thumbnail{
+
+	z-index: 10;
+	margin-left: -5px;
+	width: 10px;
+	background-color: #1C82DA;
+
+}
+
+/* ---------------------------------- */
+
+div.video_track{
+
+	margin-bottom: 10px;
+	padding-top: 10px;
+
+}
+
+div.video_track:hover,
+div.track_controls div.video_track{
+
+	margin: 0;
+
+}
+
+div.video_track:hover div.track,
+div.track_controls div.track{
+
+	height: 22px;
+
+}
+
+div.video_track:hover div.track_bar,
+div.track_controls div.track_bar{
+
+	margin: 0 20px;
+
+}
+
+div.video_track:hover div.track_range,
+div.track_controls div.track_range{
+
+	height: 4px;
+
+}
+
+div.video_track:hover button.track_slider,
+div.track_controls button.track_slider{
+
+	display: block;
+	top: 1px;
+
+}
+
+div.video_track:hover div.fragment,
+div.track_controls div.fragment{
+
+	height: 24px;
+}
+
+div.video_track:hover div.track_fragment,
+div.track_controls div.track_fragment{
+
+	margin: 0 20px;
+
+}
+
+div.video_track:hover span.pin,
+div.track_controls span.pin{
+
+	height: 23px;
+
+}
+/* ---------------------------------- */
+
+div.fragment,
+div.fragment.hide{
+
+	height: 0;
+	transition: height 0.2s ease;
+	overflow: hidden;
+
+}
+
+div.track_fragment{
+
+	z-index: 5;
+	position: relative;
+	margin: 0;
+	padding-top: 2px;
+	transition: margin 0.2s ease;
+	height: 16px;
+
+}
+
+div.track_fragment button{
+
+	position: relative;
+	float: left;
+	margin-left: -7px;
+	width: 14px;
+	height: 14px;
+	border-radius: 100%;
+	background-color: #FFF;
+	box-shadow: 0 0 2px 1px rgba(51, 51, 51, 0.6);
+	cursor: move;
+
+}
+
+div.track_fragment button.track_start{
+
+	z-index: 2;
+
+}
+
+div.track_fragment button.track_end{
+
+	position: absolute;
+	left: 100%;
+
+}
+
+span.pin{
+
+	position: relative;
+	display: block;
+	margin: 0 auto;
+	width: 2px;
+	top: 14px;
+	height: 0px;
+	transition: height 0.2s ease;
+	background-color: #FFF;
+
+}
+
+/* ---------------------------------- */
+
+div.track{
+
+	margin: 0;
+	height: 2px;
+	overflow: hidden;
+
+}
+
+div.track_bar{
+
+	position: relative;
+	height: 100%;
+	transition: margin 0.2s ease;
+
+}
+
+div.track_range,
+div.track_range span{
+
+	position: absolute;
+	top: 0; left: 0; right: 0; bottom: 0;
+	margin: auto;
+	height: 2px;
+	background-color: #FFF;
+	background-color: rgba(255, 255, 255, 0.6);
+
+}
+
+div.track_range span{
+
+	margin: 0;
+	width: 0%;
+	height: 100%;
+
+}
+
+div.track_range span.track_buffer{
+
+	z-index: 2;
+	background-color: #E6E6E6;
+	background-color: rgba(230, 230, 230, 0.8);
+
+}
+
+div.track_range span.track_progress{
+
+	z-index: 9;
+	background-color: #9219DD;
+
+}
+
+div.track_range span.track_start,
+div.track_range span.track_end{
+
+	z-index: 10;
+	background-color: rgba(0, 0, 0, 0.6);
+
+}
+
+div.track_range span.track_end{
+
+	left: auto;
+
+}
+
+button.track_slider{
+
+	z-index: 11;
+	display: none;
+	position: relative;
+	top: -9px;
+	margin-left: -10px;
+	width: 20px;
+	height: 20px;
+	border-radius: 100%;
+	background-color: #9219DD;
+
+}
+
+/* ---------------------------------- */
+
+div.video_controls{
+
+	padding: 0px 10px 10px 10px;
+	text-align: center;
+
+}
+
+div.video_controls .left{
+
+	float: left;
+
+}
+
+div.video_time{
+
+	display: inline-block;
+	vertical-align: middle;
+	line-height: 26px;
+	color: #FFF;
+
+}
+
+div.video_controls .right{
+
+	float: right;
+
+}
+
+div.video_controls button,
+div.volume_container{
+
+	display: block;
+	z-index: 20;
+	float: left;
+	margin: auto 5px;
+	background-color: transparent;
+
+}
+
+/* ---------------------------------- */
+
+div.volume_container{
+
+	position: relative;
+
+}
+
+div.volume_bar{
+	
+	display: none;
+	z-index: 2;
+	position: absolute;
+	left: 0; bottom: 0;
+	padding-bottom: 50px;
+	width: 100%;
+
+}
+
+div.volume_container:hover div.volume_bar,
+div.volume_controls div.volume_bar,
+div.volume_bar:hover{
+
+	display: block;
+
+}
+
+div.volume_range{
+	
+	padding: 13px 0;
+	width: 100%;
+	height: 74px;
+	border-radius: 13px;
+	background-color: #FFF;
+	background-color: rgba(255, 255, 255, 0.5);
+
+}
+
+div.volume_level{
+	
+	position: relative;
+	margin: auto;
+	width: 4px;
+	height: 74px;
+	background-color: #E6E6E6;
+	background-color: rgba(230, 230, 230, 0.5);
+
+}
+
+span.volume_value{
+
+	position: absolute;
+	left: 0; bottom: 0;
+	width: 100%;
+	height: 0%;
+	background-color: #9219DD;
+
+}
+
+div.video_controls button.volume_slider{
+	
+	position: absolute;
+	left: 0; bottom: 0%;
+	margin: -6px -4px;
+	width: 12px;
+	height: 12px;
+	border-radius: 100%;
+	background-color: #9219DD;
+	box-shadow: 0 0 2px 1px rgba(51, 51, 51, 0.6);
+
+}
+
+div.video_controls button.volume{
+
+	z-index: 3;
+	position: relative;
+	margin: 0;
+
+}
+
+/* END MEDIA */
+/* -------------------------------------------------------------------------- */
+
+
+
+
+/* POST DATA */
+/* -------------------------------------------------------------------------- */
+
+div.post_data{
+
+	position: relative;
+	background-color: #FFF;
+
+}
+
+div.post_data .table{
+
+	display: table;
+	table-layout: fixed;
+	width: 100%;
+
+}
+
+div.post_data .cell{
+
+	display: table-cell;
+	vertical-align: top;
+
+}
+
+/* ---------------------------------- */
+
+div.side_panel{
+
+	display: none;
+	width: 300px;
+	float: right;
+
+}
+
+span.panel_divider{
+
+	display: block;
+	position: absolute;
+	top: 0; right: 300px; bottom: 0;
+	width: 1px;
+	background-color: #E6E6E6;
+
+}
+
+@media all and (min-width: 860px){
+
+	#post_detail div.main_panel_container{
+
+		width: 100%;
+		float: left;
+		margin-right: -300px;
+
+	}
+
+	#post_detail div.main_panel{
+
+		margin-right: 300px;
+
+	}
+
+	#post_detail div.side_panel{
+
+		display: block;	
+
+	}
+
+}
+
+/* END POST DATA */
+/* -------------------------------------------------------------------------- */
+
+
+
+
+/* TITLE AND DESCRIPTION */
+/* -------------------------------------------------------------------------- */
+
+h1.post_title{
+
+	margin: 0;
+	font-size: 18px;
+	word-wrap: break-word;
+
+}
+
+/* ---------------------------------- */
+
+#toggle_post_description{
+
+	width: 36px;
+
+}
+
+#toggle_post_description button{
+
+	display: block;
+	float: right;
+	background-color: transparent;
+
+}
+
+#toggle_post_description span.icon{
+
+	transition: background-position 0.4s ease;
+
+}
+
+/* ---------------------------------- */
+
+#post_description{
+
+	color: #666;
+	height: 0;
+	transition: height 0.4s ease;
+	overflow: hidden;
+
+}
+
+#post_description.open{
+
+	height: 100%;
+
+}
+
+#post_description .description{
+
+	margin: 10px 0;
+
+}
+
+/* END TITLE AND DESCRIPTION */
+/* -------------------------------------------------------------------------- */
+
+
+
+
+/* POST VOTE */
+/* -------------------------------------------------------------------------- */
+
+div.vote{
+
+	display: inline-block;
+	vertical-align: middle;
+	max-width: 50%;
+
+}
+
+/* ---------------------------------- */
+
+button.vote{
+
+	float: left;
+	width: 34px;
+	height: 34px;
+	background-color: red;
+
+}
+
+button.vote span{
+
+	margin: 4px;
+	transform: scale(1.2);
+
+}
+
+/* ---------------------------------- */
+
+div.vote_data{
+
+	margin-left: 40px;
+	margin-right: 10px;
+	max-width: 100%;
+
+}
+
+div.vote_data span{
+
+	display: block;
+
+}
+
+div.vote_data span.vote_text{
+
+	font-size: 14px;
+	line-height: 20px;
+
+}
+
+div.vote_data span.vote_count{
+
+	font-size: 11px;
+	line-height: 11px;
+
+}
+
+/* ---------------------------------- */
+
+form.post_vote_form{
+
+	margin-right: 20px;
+
+}
+
+div.post_actions{
+
+	position: relative;
+
+}
+
+div.post_actions a.toggle_actions_menu{
+
+	position: absolute;
+	top: 20px; right: 20px;
+	height: 34px;
+
+}
+
+/* POST VOTE */
+/* -------------------------------------------------------------------------- */
+
+
+
+
+/* PUBLISHED AND VIEWS */
+/* -------------------------------------------------------------------------- */
+
+div.post_meta{
+
+	font-size: 14px;
+
+}
+
+div.post_meta span{
+
+	display: block;
+
+}
+
+div.post_meta span.published{
+
+	float: left;
+	padding-right: 20px;
+
+}
+
+div.post_meta span.views{
+
+	overflow: hidden;
+	text-align: right;
+
+}
+
+/* END PUBLISHED AND VIEWS */
+/* -------------------------------------------------------------------------- */
+
+
+
+
+/* USER */
+/* -------------------------------------------------------------------------- */
+
+div.user_actions{
+
+	position: relative;
+	float: right;
+
+}
+
+a.connect{
+
+	display: block;
+	margin: 9px 0 9px 10px;
+	height: 32px;
+	line-height: 32px;
+	overflow: hidden;
+	border-radius: 4px;
+	border: 1px solid #666;
+	background-color: #FFF;
+
+/*	box-shadow: 0 0 4px 1px rgba(200, 200, 200, 1);*/
+
+}
+
+a.connect.unfollow{
+
+	background-color: #1C82DA;
+
+}
+
+a.connect.unfollow,
+a.connect.unfollow span.abbr_count{
+
+	border-color: #1C82DA;
+
+}
+
+a.connect span{
+
+	float: left;
+	color: #666;
+
+}
+
+a.connect span.abbr_count{
+
+	padding: 0 10px;
+	font-size: 12px;
+	border-right: 1.5px solid #666;
+	background-color: #FFF;
+
+}
+
+a.connect span.icon{
+
+	margin: 3px 10px;
+
+}
+
+a.connect span.full_count{
+
+	display: none;
+
+}
+
+/* ---------------------------------- */
+
+div.user_profile{
+
+	overflow: hidden;
+
+}
+
+a.profile{
+
+	display: inline-block;
+	vertical-align: top;
+	max-width: 100%;
+
+}
+
+img.user_thumbnail{
+
+	display: block;
+	float: left;
+	width: 50px;
+	height: 50px;
+	border-radius: 4px;
+
+}
+
+div.user_names{
+
+	margin: 3px 0 3px 60px;
+
+}
+
+div.user_names .name{
+
+	margin: 0;
+	font-size: 16px;
+	line-height: 24px;
+
+}
+
+div.user_names .username{
+
+	display: block;
+	line-height: 20px;
+	color: #666;
+
+}
+
+/* END USER */
+/* -------------------------------------------------------------------------- */
+
+
+
+
+/* COMMENT FORM */
+/* -------------------------------------------------------------------------- */
+
+span.comments_count{
+
+	display: block;
+	margin-bottom: 5px;
+
+}
+
+#comment_form p.validation{
+
+	margin: 0 0 10px 0;
+	color: #1C82DA;
+
+}
+
+#comment{
+
+	width: 100%;
+	padding: 10px 15px;
+	outline: none;
+	border: none;
+	border-radius: 4px;
+	border: 1px solid #F6F6F6;
+	background-color: #F6F6F6;
+
+}
+
+#comment:focus{
+
+	border-color: #666;
+	background-color: #FFF
+
+}
+
+#load_comments{
+
+	display: block;
+	margin: 20px auto auto auto;
+	background-color: transparent;
+	color: #A9A9A9;
+
+}
+
+#load_comments:hover{
+
+	color: #333;
+
+}
+
+/* END COMMENT FORM */
+/* -------------------------------------------------------------------------- */
+
+
+
+
+/* COMMENTS */
+/* -------------------------------------------------------------------------- */
+
+#comments_container p{
+
+	margin: 20px 0 0 0;
+
+}
+
+div.comment_container{
+
+	margin-top: 20px;
+
+}
+
+div.comment_container img.user_thumbnail{
+
+	width: 40px;
+	height: 40px;
+
+}
+
+div.comment_container div.user_names{
+
+	margin: 0 0 0 50px;
+
+}
+
+div.comment_container .name{
+
+	font-size: 14px;
+	line-height: 20px;
+	color: #9219DD;
+
+}
+
+div.comment_text{
+
+	margin: 10px 0 0 50px;
+	word-wrap: break-word;
+	overflow: hidden;
+
+}
+
+#comment_menu.actions_menu{
+
+	bottom: 40px; 
+	right: 0;
+
+}
+
+/* END COMMENTS */
+/* -------------------------------------------------------------------------- */
+
+
+
+
+/* ADVERTS */
+/* -------------------------------------------------------------------------- */
+
+
+div.advertisements{
+
+	margin: 20px 0;
+	padding: 0 20px;
+
+}
+
+div.advertisements img{
+
+	display: block;
+	width: 100%;
+
+}
+
+/* END ADVERTS */
+/* -------------------------------------------------------------------------- */
+
+
+
+
+/* ACTIONS MENU */
+/* -------------------------------------------------------------------------- */
+
+a.toggle_actions_menu{
+
+	display: block;
+	width: 20px;
+	overflow: hidden;
+
+}
+
+a.toggle_actions_menu span.icon{
+
+	float: right;
+	width: 10px;
+	margin: 4px auto;
+
+}
+
+div.actions_menu{
+
+	height: 0;
+	position: absolute;
+	bottom: 60px; right: 20px;
+	overflow: hidden;
+
+}
+
+div.actions_menu.open{
+
+	height: auto;
+
+}
+
+div.actions_menu ul{
+
+	border: 1px solid #333;
+	background-color: #FFF;
+	border-radius: 4px;	
+	overflow: hidden;
+	
+
+}
+
+div.actions_menu li{
+
+	display: block;
+	width: 100%;
+	border-bottom: 1px solid #333;
+
+}
+
+div.actions_menu li:last-child{
+
+	border-bottom: none;
+
+}
+
+div.actions_menu span.owner{
+
+	display: none;
+
+}
+
+div.owner span.owner{
+
+	display: block;
+
+}
+
+div.owner span.user{
+
+	display: none;
+
+}
+
+div.actions_menu button{
+
+	display: block;
+	width: 100%;
+	height: 32px;
+	line-height: 32px;
+	padding: 0 15px;
+	background-color: #FFF;
+
+}
+
+/* END ACTIONS MENU */
+/* -------------------------------------------------------------------------- */
+
+
+
+
+/* DELETE POST DIALOG BOX */
+/* -------------------------------------------------------------------------- */
+
+div.delete_dialog{
+
+	display: table;
+	width: 100%;
+	height: 100%;
+
+}
+
+div.delete_dialog.hide{
+
+	display: none;
+
+}
+
+div.delete_dialog .centre{
+
+	display: table-cell;
+	vertical-align: middle;
+
+}
+
+div.delete_dialog .content{
+
+	display: inline-block;
+	vertical-align: middle;
+	margin: 20px;
+	padding: 20px;
+	border-radius: 4px;
+	background-color: #FFF;
+
+}
+
+div.delete_dialog h3{
+
+	margin: 0;
+
+}
+
+div.delete_dialog button{
+
+	display: inline-block;
+	vertical-align: middle;
+	margin: 20px 5px 0 5px;
+	padding: 10px 15px;
+	border: 1px solid #333;
+	border-radius: 2px;
+	background-color: #FFF;
+
+}
+
+div.delete_dialog button.delete_post{
+
+	border-color: #9219DD;
+	background-color: #9219DD;
+	color: #FFF;
+
+}
+
+/* END DELETE POST DIALOG BOX */
+/* -------------------------------------------------------------------------- */
+
+
+

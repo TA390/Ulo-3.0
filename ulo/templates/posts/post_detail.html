@@ -1,0 +1,474 @@
+{% extends base_template %}
+{% load staticfiles i18n ulo_humanise %}
+
+
+{% block title %}{{ post.title }}{% endblock title %}
+
+
+{% block css %}
+	<link class="css_file" href="{% static 'css/posts/post_detail.css' %}" rel="stylesheet" type="text/css">
+{% endblock css %}
+
+
+{% block content %}
+<div id="post_detail">
+
+	<div class="post">
+
+
+		<div class="post_media">
+	
+			<div class="media_container">
+
+				<div class="video_player">
+
+					<video preload="metadata" data-autoplay="true">
+						
+						<source src="{{ MEDIA_URL }}{{ post.file }}" type="video/mp4">
+						Your browser does not support video playback.
+							
+					</video>
+
+				</div>
+
+
+				<div class="video_actions cloak">
+
+
+					<div class="video_track">
+
+						<div class="fragment hide">
+
+							<div class="track_fragment">
+
+								<button class="track_start" data-selector="track_start" type="button">
+										
+									<span class="pin"></span>
+
+								</button>
+
+								<button class="track_end" data-selector="track_end" type="button">
+									
+									<span class="pin"></span>
+
+								</button>
+
+							</div>
+
+						</div>
+
+						<div class="track">
+
+							<div class="track_bar">
+
+								<div class="track_range">
+								
+									<span class="track_buffer"></span>
+									<span class="track_progress"></span>
+									<span class="track_start"></span>
+									<span class="track_end"></span>
+									<span class="track_thumbnail" data-src="{{ post.thumbnail }}" style="left: {% widthratio post.thumbnail_time post.duration 100 %}%"></span>
+							
+								</div>
+
+								<button class="track_slider" type="button"></button>
+
+							</div>
+
+						</div>
+
+					</div>
+
+					<div class="video_controls cf">
+
+						<div class="left">
+
+							<button class="play" type="button">
+								
+								<span class="play icon icon_play_white"></span>
+
+							</button>
+
+							<button class="loop" type="button" title="Loop">
+								
+								<span class="loop icon icon_loop"></span>
+
+							</button>
+
+						</div>
+
+						<div class="video_time">
+
+							<span class="current_time">0:00</span>&nbsp;/&nbsp;
+							<span class="duration">0:00</span>
+
+						</div>
+
+						<div class="right">
+
+							<div class="volume_container">
+								
+								<div class="volume_bar">
+
+									<div class="volume_range">
+
+										<div class="volume_level">
+											
+											<span class="volume_value"></span>
+
+											<button class="volume_slider" type="button"></button>
+
+										</div>
+										
+
+									</div>
+
+								</div>
+
+								<button class="volume" type="button">
+									
+									<span class="volume icon icon_volume_white"></span>
+
+								</button>
+
+							</div>
+
+							<button class="fullscreen" type="button">
+								
+								<span class="icon icon_expand_white"></span>
+
+							</button>
+
+						</div>
+
+					</div>
+
+				</div>
+
+			</div>
+
+		</div>
+		<!-- END .post_media -->
+
+
+		<div class="post_data cf">
+
+			<div class="main_panel_container">
+
+				<div class="main_panel">
+						
+					<div class="post_panel">
+
+						<div class="table">
+
+							<div class="cell">
+
+								<h1 class="post_title thin">{{ post.title }}</h1>
+
+							</div>
+
+							{% if post.description != '' %}
+							<div id="toggle_post_description" class="cell">
+
+								<button type="button" data-toggle="post_description" title="Description" data-touch="local">
+
+									<span class="icon icon_down_arrow"></span>
+									<span class="hide">Description</span>
+
+								</button>
+
+							</div>
+							{% endif %}
+
+						</div>
+
+						{% if post.description != '' or post.category != None %}
+						
+						<div id="post_description">
+
+							{% if post.description != '' %}
+							<p class="description">{{ post.description }}</p>
+							{% endif %}
+
+							{% if post.category != None %}
+							<span class="category">{{ post.category }}<span>
+							{% endif %}
+
+						</div>
+
+						{% endif %}
+
+					</div>
+
+
+
+
+					<div class="post_actions post_panel">
+
+						<form class="post_vote_form" action="{% url 'posts:vote' post.id %}" method="get">
+				
+						{% for option in post.options %}<div class="vote">
+
+							{% if option.vote_id == None %}
+
+								<button class="vote" name="vote" value="{{ option.option_id }}" data-count="{{ option.count }}" type="submit" title="{{ option.text }}">
+
+									<span {% if option.icon == '' %}class="vote" style="background-color:{{ option.colour }}"{% else %}class="font_icon {{ option.icon }}"{% endif %}></span>
+
+								</button>
+							
+							{% else %}
+							
+								<input name="voted" type="hidden" value="{{ option.vote_id }}">
+
+								<button class="vote" name="vote" value="{{ option.option_id }}" data-count="{{ option.count }}" type="submit" title="{{ option.text }}">
+
+									<span {% if option.icon == '' %}class="selected" style="background-color:{{ option.colour }}"{% else %}class="selected font_icon {{ option.icon }}"{% endif %}></span>
+
+								</button>
+							
+							{% endif %}
+
+							<div class="vote_data">
+
+								<span class="vote_text ellipsis">{{ option.text }}</span>
+								<span class="vote_count full_count ellipsis">1,000,00{{ option.count }}</span>
+
+							</div>
+
+							</div>{% endfor %}
+				
+						</form>
+
+						<a class="toggle_actions_menu" href="{% url 'posts:actions' post.id %}" title="Post actions" data-toggle="post_menu" data-id="{{ post.id }}"{% if is_owner %} data-is-owner="true"{% endif %}>
+
+							<span class="icon icon_menu"></span>
+							<span class="hide">Post actions</span>
+						
+						</a>
+
+					</div>
+
+
+
+					<div class="post_meta post_panel">
+				
+						<span class="published">{{ post.published|short_date }}</span>
+
+						<span class="views ellipsis">{{ post.views }}&nbsp;view{% if post.views != 1 %}s{% endif %}</span>
+					
+					</div>
+
+
+
+
+					<div class="post_user post_panel">
+	
+						{% if is_owner == False %}
+
+						<div class="user_actions">	
+						
+							{% if post.is_following == None %}
+						
+							<a class="connect follow" href="{% url 'users:follow' post.user_id %}" title="Follow">
+
+								<span class="full_count">{{ post.followers_count }}</span>
+								<span class="abbr_count bold">{{ post.followers_count|abbreviate }}</span>
+								<span class="icon icon_follow"></span>
+								
+							</a>
+						
+							{% else %}
+						
+							<a class="connect unfollow" href="{% url 'users:unfollow' post.user_id %}" title="Unfollow">
+
+								<span class="full_count">{{ post.followers_count }}</span>
+								<span class="abbr_count bold">{{ post.followers_count|abbreviate }}</span>
+								<span class="icon icon_unfollow"></span>
+							
+							</a>
+						
+							{% endif %}
+							
+						</div>
+						{% endif %}
+					
+						<div class="user_profile">
+
+							<a href="{% url 'users:profile' post.username %}" class="profile" data-apl="true" title="{{ post.name }}">
+						
+								<img class="user_thumbnail" src="{{ MEDIA_URL }}{{ post.user_thumbnail }}">
+
+								<div class="user_names">
+									
+									<h2 class="name thin ellipsis">{{ post.name }}</h2>
+									<span class="username ellipsis">@{{ post.username }}</span>
+									
+								</div>
+
+							</a>
+
+						</div>
+
+					
+					</div>
+
+
+
+					{% if comments_disabled == False %}
+
+					<div class="post_panel">
+						
+						<span class="comments_count">
+							{{ post.comments_count }}&nbsp;comment{% if post.comments_count != 1 %}s{% endif %}
+						</span>
+
+						<form id="comment_form" action="{% url 'posts:comment' post.id %}" method="post">
+
+							{% csrf_token %}
+
+							{{ form.comment }}
+						
+						</form>
+
+						<div id="comments_container">
+
+							<noscript>
+								<p class="javascript_disabled">
+									Enable javascript to load comments for this post.
+								</p>
+							</noscript>
+
+						</div>
+
+						{% if post.comments_count != 0 %}
+						<button id="load_comments" data-action="{% url 'posts:comment_load' post.id %}" type="button">
+							Load comments
+						</button>
+						{% endif %}
+
+					</div>
+
+					{% else %}
+
+					<div id="comments_container" class="post_panel">
+
+						<p class="comments_disabled">Comments have been disabled for this post.</p>
+
+					</div>
+
+					{% endif %}
+
+
+
+				</div>
+
+			</div>
+
+
+			<div class="side_panel">
+
+				<span class="panel_divider"></span>
+
+				<div class="advertisements">
+
+					<img src="https://s1.2mdn.net/viewad/4157372/UK_MakeIt_300x250.jpg">
+				
+				</div>
+
+			</div>
+
+
+		</div>
+		<!-- END .post_data -->
+
+
+	</div>
+	<!-- END .post -->
+
+
+
+	{% if timeline == False %}
+
+		<!-- POST ACTIONS MENU -->
+		<div id="post_menu" class="actions_menu">
+			
+			<ul>
+
+				<span class="user">
+			
+					<li class="action">
+					
+						<button class="report_post" type="button">Report</button>
+					
+					</li>
+
+				</span>
+
+				<span class="owner">
+			
+					<li class="action">
+					
+						<button class="edit_post" type="button">Edit</button>
+					
+					</li>
+
+					<li class="action">
+					
+						<button class="delete_post" type="button"{% if is_owner %} data-page="detail"{% endif %}>Delete</button>
+					
+					</li>
+
+				</span>
+			
+			</ul>
+		
+		</div>
+		<!-- END POST ACTIONS MENU -->
+
+
+		{% if post.comment_settings != comments_disabled %}
+
+		<!-- COMMENT ACTIONS MENU -->
+		<div id="comment_menu" class="actions_menu">
+		
+			<ul>
+
+				<span class="user">
+				
+					<li class="action">
+					
+						<button class="report_comment" type="button">Report</button>
+					
+					</li>
+				
+				</span>
+
+				<span class="owner">
+				
+					<li class="action">
+					
+						<button class="delete_comment" type="button">Delete</button>
+					
+					</li>
+				
+				</span>
+
+			</ul>
+		
+		</div>
+		<!-- END COMMENT ACTIONS MENU -->
+		
+		{% endif %}
+
+
+	{% endif %}
+
+</div>
+{% endblock content %}
+
+{% block js %}
+	<script class="js_file" src="{% static 'js/users/utils.js' %}"></script>
+	<script class="js_file" src="{% static 'js/posts/post_detail.js' %}"></script>
+{% endblock js %}
+

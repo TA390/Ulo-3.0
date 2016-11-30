@@ -1,0 +1,70 @@
+{% extends base_template %}
+{% load staticfiles i18n %}
+
+
+{% block title %}{{ site_name }}{% endblock title %}
+
+
+{% block css %}
+	<link class="css_file" href="{% static 'css/posts/post_actions.css' %}" rel="stylesheet" type="text/css">
+{% endblock css %}
+
+
+{% block content %}
+<div id="post_actions">
+
+	<div class="header">
+			
+		<a class="back" href="{{ back_url }}">
+				
+			<span class="icon icon_left_arrow"></span>
+			<span class="hide">Back to post</span>
+
+		</a>
+		
+		<h1 class="thin ellipsis">Post actions</h1>
+
+	</div>
+
+
+	<div class="summary">
+		
+		<img src="{{ post.thumbnail.url }}">
+
+		<h2 class="thin">{{ post.title }}</h2>
+		
+	</div>
+	
+
+	<ul class="actions_menu">
+		
+		{% if is_owner %}
+		
+			<li>
+
+				<a href="{% url 'posts:update' post.id %}">Edit</a>
+
+			</li>
+
+			<li>
+
+				<a href="{% url 'posts:delete' post.id %}">Delete</a>
+
+			</li>
+		
+		{% else %}
+		
+			<li>
+
+				<a href="{% url 'posts:report' post.id %}" title="Report">Report</a>
+
+			</li>
+		
+		{% endif %}
+		
+	</ul>
+
+
+</div>
+{% endblock content %}
+

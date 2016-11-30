@@ -1,5 +1,13 @@
-/* Profile Page Javascript File */
-/* Dependencies: JQuery, Base.js, User.js */
+/* 
+
+	Profile page javascript file
+
+	Dependencies: JQuery, Base.js, User.js
+
+*/
+
+
+
 
 /* ------------------------------------------------------------------------------------ */
 
@@ -550,19 +558,6 @@
 				);
 
 
-				anchor.appendChild(
-
-						Ulo.create("div", {"class": "video_icon"})
-
-					)
-
-					.appendChild(
-
-						Ulo.create("span", {"class": "icon icon_play"})
-
-				);
-
-
 				/* */
 				element = element.appendChild( Ulo.create("div", {"class": "post_data"}) );
 
@@ -656,11 +651,12 @@
 			
 			auth_id = Ulo.Session.get()[Ulo.Session.AUTH_NAME];
 
+
 			for(var i in connections){
 
 				connection = Ulo.create("div", {"class": "item"});
 
-				element = connection.appendChild( Ulo.create("div", {"class": "spacing"}) );
+				element = connection.appendChild(Ulo.create("div", {"class": "spacing"}));
 
 
 				/* Render a connection link if the user is not the logged in user */

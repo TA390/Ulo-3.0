@@ -1,0 +1,50 @@
+{% extends base_template %}
+{% load staticfiles i18n %}
+
+
+{% block title %}Report Complete{% endblock title %}
+
+{% block css %}
+	<link class="css_file" href="{% static 'css/posts/post_report_complete.css' %}" rel="stylesheet" type="text/css">
+{% endblock css %}
+
+
+{% block content %}
+<div id="post_report_complete">
+
+	<div class="centre" data-close-pip="true">
+		
+		<div class="wrapper">
+
+			<div class="header">
+				
+				{% if request.is_ajax == True %}
+
+				<h1 class="spacing">Thank you for your report</h1>
+
+				<button class="icon icon_cross" type="button" data-close-pip="true">
+				
+					<span class="hide">Close</span>
+				
+				</button>
+
+				{% else %}
+
+				<h1>Thank you for your report</h1>
+
+				{% endif %}
+			
+			</div>
+			
+			<p>
+				If we find the content to be in violation of our rules, we will take the necessary course of action.
+			</p>
+
+		</div>
+
+	</div>
+
+</div>
+{% endblock content %}
+
+

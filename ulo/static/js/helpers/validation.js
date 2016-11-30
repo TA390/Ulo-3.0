@@ -515,10 +515,8 @@
 			Return the form's error container.
 
 			@param form: form.
-			@param create: boolean - if true create the element if it does not exist and
-				prepend it to the form.
 		*/
-		getNonField: function(form, create){
+		getNonField: function(form){
 
 			var id = this.format_form_id.replace('{form_id}', form.id),
 			

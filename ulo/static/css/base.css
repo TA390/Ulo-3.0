@@ -147,8 +147,17 @@ header, nav{
 	width: 100%;
 	height: 48px;
 	line-height: 48px;
-	background-color: #333;
-	color: #FFF;
+	background-color: #FFF;
+	color: #333;
+
+}
+
+header{
+
+	z-index: 9000;
+	position: fixed;
+	top: 0; left: 0; right: 0; bottom: 0;
+	border-bottom: 1px solid #333;
 
 }
 
@@ -166,14 +175,15 @@ nav div.col{
 
 }
 
-span.loading_bar{
+header span.loading_bar{
 
 	z-index: 10;
 	position: absolute;
 	top: 48px; left: 0;
 	transition: width 0.6s ease;
 	height: 1px;
-	background-color: #1C82DA;
+	background-color: #9219DD;
+	box-shadow: 0 1px 2px 0.5px rgba(51, 51, 51, 0.2);
 
 }
 
@@ -181,13 +191,13 @@ span.loading_bar{
 
 #nav_search{
 
-	z-index: 4;
+	z-index: 5;
 	position: relative;
 	float: left;
 	padding: 0 20px;
-	width: 46px;
+	width: 66px;
 	transition: all 0.4s ease;
-	background-color: #333;
+	background-color: #FFF;
 
 }
 
@@ -276,7 +286,7 @@ div.search_data{
 
 }
 
-	#nav_search_form button{
+#nav_search_form button{
 
 	position: absolute;
 	top: 11px; right: 0;
@@ -314,6 +324,7 @@ div.search_data.open{
 	height: 0;
 	transition: height 0.2s ease;
 	background-color: #333;
+	color: #FFF;
 	overflow: hidden;
 
 }
@@ -335,8 +346,8 @@ div.search_data.open{
 
 #suggestions ul{
 
-	color: #333;
-	background-color: #FFF;
+	color: #FFF;
+	background-color: #333;
 
 }
 
@@ -344,14 +355,13 @@ div.search_data.open{
 
 	display: block;
 	padding: 6px 10px;
-	color: #333;
+	color: #FFF;
 
 }
 
 #suggestions a:hover,
 #suggestions a:hover span{
 
-	color: #FFF;
 	background-color: #333;
 
 }
@@ -407,7 +417,7 @@ div.nav_logo{
 
 	margin: auto;
 	position: absolute;
-	top: 0; left: 0; right: 10px;
+	top: 0; left: 0; right: 0;
 	width: 26px;
 
 }
@@ -423,22 +433,21 @@ div.nav_logo a{
 /* ---------------------------------- */
 
 div.nav_menu{
-
+	
 	float: right;
 
 }
 
 #toggle_nav_ul{
 
-	display: inline-block;
-	vertical-align: middle;
-	margin: auto 20px;
+	position: absolute;
+	top: 11px; right: 20px;
 
 }
 
 #nav_ul{
 
-	z-index: 2;
+	z-index: 5;
 	position: absolute;
 	top: 48px; left: 0; right: 0;
 	display: block;
@@ -446,7 +455,7 @@ div.nav_menu{
 	width: 100%;
 	min-width: 0;
 	height: 0;
-	transition: all 0.4s ease;
+	transition: width 0.4s ease, top 0.4s ease;
 	overflow: hidden;
 	text-align: left;
 
@@ -459,6 +468,8 @@ div.nav_menu{
 	height: -moz-calc(100% - 48px);
 	height: calc(100% - 48px);
 	background-color: rgba(51, 51, 51, 0.96);
+
+	height: auto;
 	overflow: scroll;
 
 }
@@ -473,6 +484,12 @@ body.nav_ul_open{
 
 	display: block;
 	padding: 0 10px;
+	color: #333;
+
+}
+
+#nav_ul.open a{
+
 	color: #FFF;
 
 }
@@ -533,9 +550,10 @@ body.nav_ul_open{
 
 		position: relative;
 		top: 0;
-		background-color: #333;
 		overflow: visible;
 		text-align: right;
+		background-color: #FFF;
+		color: #333;
 
 	}
 
@@ -554,6 +572,12 @@ body.nav_ul_open{
 	
 	}
 
+	#nav_ul.open a{
+
+		color: #333;
+
+	}
+
 }
 
 /* END NAV BAR */
@@ -567,9 +591,10 @@ body.nav_ul_open{
 
 #messages{
 
+	z-index: 8999;
 	display: none;
-	position: absolute;
-	top: 0; left: 0; right: 0;
+	position: fixed;
+	top: 48px; left: 0; right: 0;
 
 	padding: 0 10px 10px 10px;
 	text-align: center;
@@ -801,9 +826,55 @@ body.modal_open{
 }
 
 
+.caret_up, .caret_down, .caret_left, .caret_right{
+
+	width: 0;
+	height: 0;
+
+}
+
+.caret_up, .caret_down{
+
+	border-left: 8px solid transparent;
+	border-right: 8px solid transparent;	
+
+}
+
+.caret_left, .caret_right{
+
+	border-top: 8px solid transparent;
+	border-bottom: 8px solid transparent;	
+
+}
+
+.caret_up{
+
+	border-bottom: 8px solid #333;
+
+}
+
+.caret_down {
+
+	border-top: 8px solid #333;
+
+}
+
+.caret_left {
+
+	border-right:8px solid #333; 
+
+}
+
+.caret_right {
+
+	border-left: 8px solid #333;
+
+}
+
+
 .animation{
 
-	display: none;
+	display: block;
 	position: absolute;
 	top: 0; left: 0; right: 0; bottom: 0;
 	margin: auto;
@@ -892,8 +963,9 @@ body.modal_open{
 
 .bounce{
 
-	display: block;
-	padding-bottom: 20px;
+	position: absolute;
+	top: 0; bottom: 0; left: 0; right: 0;
+	margin: auto;
 	width: 70px;
 	height: 20px;
 
@@ -1014,7 +1086,7 @@ body.modal_open{
 	width: 26px;
 	height: 26px;
 	background-repeat: no-repeat;
-	background-size: 26px 858px;
+	background-size: 26px 1170px;
 	background-image: url("../icons/icons.svg");
 
 }
@@ -1025,198 +1097,362 @@ body.modal_open{
 
 }
 
-.icon_search{
+.icon_logo_white{
 
 	background-position: 0 -26px;
 
 }
 
-.icon_cross_white{
+.icon_search{
 
 	background-position: 0 -52px;
 
 }
 
-.icon_down_arrow_white{
+.icon_search_white{
 
 	background-position: 0 -78px;
 
 }
 
-.icon_up_arrow_white{
+.icon_cross{
 
 	background-position: 0 -104px;
 
 }
 
-.icon_left_arrow_white{
+.icon_cross_white{
 
 	background-position: 0 -130px;
 
 }
 
-.icon_right_arrow_white{
+.icon_down_arrow{
 
 	background-position: 0 -156px;
 
 }
 
-.icon_camera{
+.icon_up_arrow{
 
 	background-position: 0 -182px;
 
 }
 
-
-.icon_filter_video{
-
-	background-position: 0 -208px;
-
-}
-.icon_filter_user{
-
-	background-position: 0 -234px;
-
-}
-.icon_filter_image{
-
-	background-position: 0 -260px;
-
-}
-.icon_filter{
-
-	background-position: 0 -286px;
-
-}
-
-
-.icon_menu_white{
-
-	background-position: 0 -312px;
-
-}
-
-.icon_down_arrow{
-
-	background-position: 0 -338px;
-
-}
-
-.icon_up_arrow{
-
-	background-position: 0 -364px;
-
-}
-
 .icon_left_arrow{
 
-	background-position: 0 -390px;
+	background-position: 0 -208px;
 
 }
 
 .icon_right_arrow{
 
-	background-position: 0 -416px;
+	background-position: 0 -234px;
+
+}
+
+.icon_down_arrow_white{
+
+	background-position: 0 -260px;
+
+}
+
+.icon_up_arrow_white{
+
+	background-position: 0 -286px;
+
+}
+
+.icon_left_arrow_white{
+
+	background-position: 0 -312px;
+
+}
+
+.icon_right_arrow_white{
+
+	background-position: 0 -338px;
 
 }
 
 .icon_menu{
 
-	background-position: 0 -442px;
+	background-position: 0 -364px;
 
 }
 
-.icon_follow{
+.icon_menu_white{
 
-	background-position: 0 -468px;
-
-}
-
-.icon_unfollow{
-
-	background-position: 0 -494px;
+	background-position: 0 -390px;
 
 }
 
-.icon_colour_picker{
+.icon_camera{
 
-	background-position: 0 -520px;
-
-}
-
-.icon_edit{
-
-	background-position: 0 -546px;
+	background-position: 0 -416px;
 
 }
 
 .icon_camera_white{
 
+	background-position: 0 -442px;
+
+}
+
+.icon_video{
+
+	background-position: 0 -468px;
+
+}
+
+.icon_video_white{
+
+	background-position: 0 -494px;
+
+}
+
+.icon_image{
+
+	background-position: 0 -520px;
+
+}
+
+.icon_image_white{
+
+	background-position: 0 -546px;
+
+}
+
+.icon_account{
+
 	background-position: 0 -572px;
 
 }
 
-.icon_cross{
+.icon_account_white{
 
 	background-position: 0 -598px;
 
 }
 
-.icon_rotate{
+.icon_follow{
 
 	background-position: 0 -624px;
 
 }
 
-.icon_play{
+.icon_follow_white{
 
 	background-position: 0 -650px;
 
 }
 
-.icon_pause{
+.icon_unfollow{
 
 	background-position: 0 -676px;
 
 }
 
-.icon_volume{
+.icon_unfollow_white{
 
 	background-position: 0 -702px;
 
 }
 
-.icon_mute{
+.icon_play{
 
 	background-position: 0 -728px;
 
 }
 
-.icon_expand{
+.icon_play_white{
 
 	background-position: 0 -754px;
 
 }
 
-.icon_loop{
+.icon_pause{
 
 	background-position: 0 -780px;
 
 }
 
-.icon_repeat{
+.icon_pause_white{
 
 	background-position: 0 -806px;
 
 }
 
-.icon_location{
+.icon_volume{
 
 	background-position: 0 -832px;
 
 }
 
+.icon_volume_white{
+
+	background-position: 0 -858px;
+
+}
+
+.icon_mute{
+
+	background-position: 0 -884px;
+
+}
+
+.icon_mute_white{
+
+	background-position: 0 -910px;
+
+}
+
+.icon_expand{
+
+	background-position: 0 -936px;
+
+}
+
+.icon_expand_white{
+
+	background-position: 0 -962px;
+
+}
+
+.icon_loop{
+
+	background-position: 0 -988px;
+
+}
+
+.icon_loop_white{
+
+	background-position: 0 -1014px;
+
+}
+
+.icon_repeat{
+
+	background-position: 0 -1040px;
+
+}
+
+.icon_repeat_white{
+
+	background-position: 0 -1066px;
+
+}
+
+.icon_location{
+
+	background-position: 0 -1092px;
+
+}
+
+.icon_location_white{
+
+	background-position: 0 -1118px;
+
+}
+
+.icon_colour_picker{
+
+	background-position: 0 -1144px;
+
+}
+
 /* END ICONS */
+/* -------------------------------------------------------------------------- */
+
+
+
+
+/* FONT ICONS */
+/* -------------------------------------------------------------------------- */
+
+.font_icon{
+
+	display: block;
+	width: 26px;
+	height: 26px;
+	background-image: url("../icons/font_icons.svg");
+	background-repeat: no-repeat;
+	background-size: 52px 286px;
+
+}
+
+.font_icon.selected{
+
+	background-position-x: -26px;
+
+}
+
+.icon_love{
+
+	background-position: 0 0;
+
+}
+
+.icon_like{
+
+	background-position: 0 -26px;
+
+}
+
+.icon_dislike{
+
+	background-position: 0 -52px;
+
+}
+
+.icon_no{
+
+	background-position: 0 -78px;
+
+}
+
+.icon_yes{
+
+	background-position: 0 -104px;
+
+}
+
+.icon_smile{
+
+	background-position: 0 -130px;
+
+}
+
+.icon_sad{
+
+	background-position: 0 -156px;
+
+}
+
+.icon_tongue{
+
+	background-position: 0 -182px;
+
+}
+
+.icon_angry{
+
+	background-position: 0 -208px;
+
+}
+
+.icon_sick{
+
+	background-position: 0 -234px;
+
+}
+
+.icon_star{
+
+	background-position: 0 -260px;
+
+}
+
 /* -------------------------------------------------------------------------- */
 
 

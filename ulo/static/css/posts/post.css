@@ -1,0 +1,435 @@
+/* -------------------------------------------------------------------------- */
+
+#post{
+
+	display: table;
+	margin: auto;
+	width: 100%;
+	height: 100%;
+
+}
+
+#post > .centre{
+
+	display: table-cell;
+	vertical-align: middle;
+
+}
+
+/* -------------------------------------------------------------------------- */
+
+#post_form div.field{
+
+	margin: 20px 0;
+
+}
+
+#post_form p.validation{
+
+	margin: 0 0 10px 0;
+	color: #1C82DA;
+
+}
+
+#post_form_errors{
+
+	margin-bottom: 20px;
+
+}
+
+/* -------------------------------------------------------------------------- */
+
+#post_form{
+
+	margin: 20px auto;
+	padding: 20px;
+	max-width: 420px;
+	background-color: #FFF;
+
+}
+
+#post_form button{
+
+	background-color: transparent;
+
+}
+
+#post_form label{
+
+	display: block;
+	margin-bottom: 10px;
+
+}
+
+#post_form input,
+#post_form textarea,
+#post_form .table{
+
+	display: block;
+	padding: 0 15px;
+	width: 100%;
+	height: 40px;
+	line-height: 40px;
+	border: none;
+	border-radius: 4px;
+	outline: none;
+	text-align: left;
+	background-color: #F6F6F6;
+
+}
+
+#post_form textarea{
+	
+	display: block;
+	resize: vertical;
+	width: 100%!important;
+	max-width: 100%!important;
+	min-width: 100%!important;
+	padding: 10px 15px;
+	line-height: normal;
+
+}
+
+/* -------------------------------------------------------------------------- */
+
+#file_container{
+
+	position: relative;
+	text-align: center;
+
+}
+
+#file_container canvas{
+
+	display: block;
+	width: 100%;
+
+}
+
+#file_container .animation{
+
+	background-color: rgba(255, 255, 255, 0.6);
+
+}
+
+#file_container .file_input{
+
+	width: 100%;
+	height: 40px;
+	border-radius: 4px;
+	background-color: #F6F6F6;
+
+}
+
+#file_container p{
+
+	margin: 0;
+	font-size: 14px;
+	line-height: 40px;
+	text-align: left;
+	color: #A9A9A9;
+
+}
+
+#file_container .file_input:hover p{
+
+	color: #333;
+
+}
+
+#file_container span.icon{
+
+	float: left;
+	margin: 7px 15px;
+
+}
+
+/* ---------------------------------- */
+
+#file_container .loading{
+
+	position: absolute;
+	top: 0; left: 0; right: 0; bottom: 0;
+	background-color: rgba(255, 255, 255, 0.6);
+
+}
+
+#file_container .data{
+
+	margin: auto;
+	position: absolute;
+	top: 0; left: 20px; bottom: 0; right: 20px;
+	height: 6px;
+
+}
+
+#file_container .bar{
+
+	display: block;
+	margin-bottom: 10px;
+	height: 100%;
+	overflow: hidden;
+
+}
+
+#file_container .outer{
+
+	width: 100%;
+	border-radius: 3px;
+	background-color: #F6F6F6;
+
+}
+
+#file_container .inner{
+
+	width: 0;
+	background-color: #333;
+
+}
+
+/* -------------------------------------------------------------------------- */
+
+#post_form .table{
+
+	display: table;
+	table-layout: fixed;
+
+}
+
+#post_form div.cell{
+
+	display: table-cell;
+	vertical-align: middle;
+
+}
+
+#post_form div.content{
+
+	position: relative;
+	width: 100%;
+	height: 40px;
+
+}
+
+#post_form div.option{
+
+	width: 26px;
+	padding-right: 15px;
+
+}
+
+#post_form span.text{
+
+	position: absolute;
+	top: 0; left: 0; right: 0; bottom: 0;
+
+}
+
+#post_form .arrow{
+
+	width: 26px;
+	padding-left: 15px;
+	cursor: pointer;
+
+}
+
+#post_form .arrow span{
+
+	transition: background-position 0.2s ease;
+
+}
+
+/* FORM MENUS */
+/* -------------------------------------------------------------------------- */
+
+#post_form button.menu_open,
+#post_form div.button.menu_open{
+
+	border-radius: 4px 4px 0 0;
+	border: 1px solid #F6F6F6;
+
+}
+
+#post_form div.menu{
+
+	position: relative;
+
+}
+
+#post_form ul{
+
+	z-index: 2;
+	position: absolute;
+	top: 0; left: 0; right: 0;
+	border-radius: 0 0 4px 4px;
+	margin-bottom: 10px;
+	height: 0;
+	transition: height 0.4s ease;
+	overflow: hidden;
+
+}
+
+#post_form ul.open{
+
+	height: auto;
+	border: 1px solid #F6F6F6;
+	border-top: 1px solid #FFF;
+
+}
+
+#post_form div.menu li{
+
+	display: block;
+	padding: 0 15px;
+	height: 40px;
+	line-height: 40px;
+	cursor: pointer;
+	background-color: #FFF;
+
+}
+
+#post_form div.menu li:hover,
+#post_form div.menu li.selected{
+
+	background-color: #F6F6F6;
+	border-color: #F6F6F6;
+
+}
+
+/* END FORM MENUS */
+/* -------------------------------------------------------------------------- */
+
+
+/* OPTIONS MENU */
+/* -------------------------------------------------------------------------- */
+
+
+#post_form input.text{
+
+	padding: 0;
+	background-color: transparent;
+	cursor: pointer;
+
+}
+
+#post_form li.table{
+
+	width: auto;
+	border-radius: 0;
+
+}
+
+/* END OPTIONS MENU */
+/* -------------------------------------------------------------------------- */
+
+
+/* ICONS MENU */
+/* -------------------------------------------------------------------------- */
+
+#post_form ul.icons{
+
+	z-index: 4;
+	top: auto; left: 0; right: auto; bottom: 0;
+	width: 230px;
+	border: none;
+	border-radius: 4px;
+	background-color: #F6F6F6;
+
+}
+
+#post_form ul.icons.open{
+
+	box-shadow: 0 0 1px 1px rgba(100, 100, 100, 0.2);
+
+}
+
+#post_form ul.icons li{
+
+	display: block;
+	float: left;
+	margin: 5px;
+	padding: 5px;
+	width: 26px;
+	height: 26px;
+	background-color: #F6F6F6;	
+
+}
+
+#post_form ul.icons span,
+#post_form button.toggle_icons,
+#post_form button.toggle_icons span{
+
+	display: block;
+	width: 26px;
+	height: 26px;
+
+}
+
+#post_form ul.icons li:hover,
+#post_form ul.icons li.selected{
+
+	background-color: #FFF;
+	border-color: #FFF;
+
+}
+
+
+/* END ICONS MENU */
+/* -------------------------------------------------------------------------- */
+
+
+
+
+
+/* -------------------------------------------------------------------------- */
+
+#toggle_settings{
+
+	float: left;
+	color: #1C82DA;
+
+}
+
+#add_option{
+
+	float: right;
+	color: #1C82DA;
+
+}
+
+#add_option.remove{
+
+	color: #C00041;
+
+}
+
+/* -------------------------------------------------------------------------- */
+
+
+/* -------------------------------------------------------------------------- */
+
+input#post_submit{
+
+	margin: 40px auto 20px auto;
+	padding: 0 30px;
+	width: auto;
+	background-color: #333;
+	transition: background-color 0.8s ease;
+	color: #FFF;
+	cursor: pointer;
+	text-align: center;
+
+}
+
+input#post_submit:hover{
+
+	background-color: #1C82DA;
+
+}
+
+/* -------------------------------------------------------------------------- */
+
+
+
+
+

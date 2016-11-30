@@ -5,7 +5,7 @@
 from __future__ import unicode_literals
 
 # Core django imports
-from django.utils.translation import ugettext, ugettext_lazy as _
+from django.utils.translation import ugettext_lazy as _
 
 # Thrid party app imports
 
@@ -53,6 +53,16 @@ CATEGORIES = (
 
 )
 
+CATEGORIES_LIST = [None] + [name for value, name in CATEGORIES]
+
+def get_category(post):
+
+	if post['category'] == None:
+
+		return None
+
+	return CATEGORIES_LIST[post['category']]
+
 # ----------------------------------------------------------------------------------------
 
 
@@ -62,14 +72,14 @@ CATEGORIES = (
 # ----------------------------------------------------------------------------------------
 
 ENABLED = 1
-ANONYMOUS = 2
-DISABLED = 3
+DISABLED = 2
+ANONYMOUS = 3
 
 COMMENT_SETTINGS = (
 
 	(ENABLED, _('Enabled')),
-	# (ANONYMOUS, _('Anonymous')),
 	(DISABLED, _('Disabled')),
+	# (ANONYMOUS, _('Anonymous')),
 
 )
 
@@ -130,13 +140,6 @@ PRIVACY_SETTINGS = (
 # VOTES
 # ----------------------------------------------------------------------------------------
 
-# Text values - names given to each option
-LOVE_CHAR = ugettext('Love')
-LIKE_CHAR = ugettext('Like')
-DISLIKE_CHAR = ugettext('Dislike')
-TEXT_CHAR = None # user defined text - its values is used as the input fields placeholder
-
-# Option values - type identifiers
 LOVE_INT = 1
 LIKE_INT = 2
 DISLIKE_INT = 3
@@ -144,10 +147,10 @@ TEXT_INT = 4
 
 OPTIONS = (
 
-	(LOVE_INT, LOVE_CHAR),
-	(LIKE_INT, LIKE_CHAR),
-	(DISLIKE_INT, DISLIKE_CHAR),
-	(TEXT_INT, TEXT_CHAR)
+	(LOVE_INT, _('Love')),
+	(LIKE_INT, _('Like')),
+	(DISLIKE_INT, _('Dislike')),
+	(TEXT_INT, None)
 
 )
 

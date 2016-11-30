@@ -1,6 +1,5 @@
 /* -------------------------------------------------------------------------- */
 
-
 #capture_container{
 
 	padding: 60px 0 10px 0;
@@ -72,8 +71,6 @@ body.capture_modal_open{
 
 }
 
-
-
 /* -------------------------------------------------------------------------- */
 
 #capture_footer{
@@ -101,26 +98,27 @@ body.capture_modal_open{
 
 }
 
-
 /* -------------------------------------------------------------------------- */
 
-div.file_input{
-
+.file_input{
+	
 	display: inline-block;
-	vertical-align: top;
+	vertical-align: middle;
 	position: relative;
-	width: 32px;
-	height: 32px;
+	margin: auto;
+	width: 30px;
+	height: 30px;
 	overflow: hidden;
 	border-radius: 4px;
+	text-align: center;
+	background-color: #FFF;
 
 }
 
-input.file{
+#main_content input.file{
 
-	z-index: 2;
 	position: absolute;
-	top: 0; left: 0; bottom: right: 0;
+	top: 0; left: 0;
 	width: 100%;
 	height: 100%;
 	cursor: pointer;
@@ -138,18 +136,27 @@ input.file{
 }
 
 /* Chrome fix */
-input.file::-webkit-file-upload-button{
+#main_content input.file::-webkit-file-upload-button{
+
 	cursor: pointer;
+
 }
 
 /* IE fix */
-/*input.file::-ms-value {
+/*
+input.file::-ms-value {
+
 	display: none;
+
 }
+
 input.file::-ms-browse{
+
 	width: 200px;
 	border: none;
-}*/
+
+}
+*/
 
 /* -------------------------------------------------------------------------- */
 
@@ -227,10 +234,14 @@ input.file::-ms-browse{
 }
 
 #editor_content > div:first-child{
+
 	background-color: red;
+
 }
 #editor_content > div:last-child{
+
 	background-color: blue;
+
 }
 
 #editor_content > .clipping_mask{
@@ -284,22 +295,28 @@ input.file::-ms-browse{
 
 	display: inline-block;
 	vertical-align: middle;
-	margin: 0 5px;
+	margin: auto 5px;
 	height: 32px;
-	line-height: 32px;
+	line-height: 30px;
 	border: 1px solid #666666;
 	background-color: #FFF;
 	border-radius: 4px;
 	cursor: pointer;
+	text-align: center;
 
 }
 
-#editor_footer button.icon,
 #editor_footer button.slider,
 #editor_footer div.file_input{
 
 	width: 32px;
-	
+
+}
+
+#editor span.icon{
+
+	display: inline-block;
+	vertical-align: middle;
 
 }
 
@@ -478,13 +495,13 @@ div.editor_actions #editor_submit{
 
 	outline: none;
 	border-radius: 4px;
-	background-color: rgba(255, 255, 255, 0.5);
+	background-color: rgba(255, 255, 255, 0.6);
 
 }
 
 #toggle_editor_menu_actions > span.icon{
 
-	margin-top: -12px;
+	margin-top: -6px;
 
 }
 

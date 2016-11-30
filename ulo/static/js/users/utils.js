@@ -1,7 +1,14 @@
-/* Profile Page Javascript File */
-/* Dependencies: JQuery, Base.js */
+/*
+
+	User helper functions javascript file
+
+	Dependencies: JQuery, Base.js
+
+*/
+
 
 "use strict";
+
 
 /* ------------------------------------------------------------------------------------ */
 
@@ -29,26 +36,43 @@ _Connect.prototype = {
 
 	/* -------------------------------------------------------------------------------- */
 
+	getIconName: function(type){
+
+		return type + (type === "follow" ? "" : "_white");
+
+	},
+
+	/* -------------------------------------------------------------------------------- */
+
 	create: function(type, user_id){
 
-		var anchor = Ulo.create("a", {
+		var cap_type = Ulo.capitalise(type),
 
+		anchor = Ulo.create("a", {
+
+			"title": cap_type,
 			"class": "connect " + type,
 			"href": "/user/" + type + "/" + user_id + "/"
 
-		})
+		});
 
-		anchor.appendChild( Ulo.create("span", {"class": "icon icon_" + type}) );
 
-		anchor.appendChild( Ulo.create("span", {
+		anchor.appendChild(Ulo.create("span", {
+
+			"class": "icon icon_" + this.getIconName(type)}) 
+
+		);
+
+		anchor.appendChild(Ulo.create("span", {
 
 				"class": "text"
 
-			}, type.charAt(0).toUpperCase() + type.slice(1)) );
+			},  cap_type)
+
+		);
 
 
 		$(anchor).on(Ulo.evts.click, {self: this}, this.request);
-
 
 		return anchor;
 
@@ -106,45 +130,52 @@ _Connect.prototype = {
 
 						else{
 
-							var follow = Ulo.hasClass(e.currentTarget, "follow");
+							var follow = Ulo.hasClass(e.currentTarget, "follow"),
 
-							var remove_add = follow ? ["follow", "unfollow"] : ["unfollow", "follow"];
+							remove_add = follow ? ["follow", "unfollow"] : ["unfollow", "follow"];
+
+
+							/* Update the url */
 
 							e.currentTarget.href = e.currentTarget.href.replace(remove_add[0], remove_add[1]);
 
-							Ulo.removeClass(e.currentTarget, remove_add[0]);
 
-							Ulo.addClass(e.currentTarget, remove_add[1]);
+							/* Toggle the class on the button */
 
+							Ulo.replaceClass(e.currentTarget, new RegExp(remove_add[0]), remove_add[1]);
+
+
+							/* Change the icon */
 
 							var icon = e.currentTarget.querySelector("span.icon");
 
 							if(icon !== null){
 
-								Ulo.removeClass(icon, "icon_" + remove_add[0]);
-
-								Ulo.addClass(icon, "icon_" + remove_add[1])
+								Ulo.replaceIcon(icon, self.getIconName(remove_add[1]));
 
 							}
 
 
-							var text = e.currentTarget.querySelector("span.text");
+							/* Update the text */
+
+							var text = e.currentTarget.querySelector("span.text"),
+
+							cap_text = Ulo.capitalise(remove_add[1]);
 
 							if(text !== null){
 
-								var t = remove_add[1];
-
 								Ulo.empty(text).appendChild( 
 
-									document.createTextNode(
-
-										t.charAt(0).toUpperCase() + t.slice(1)
-
-									) 
+									document.createTextNode(cap_text) 
 
 								);
 
 							}
+
+							e.currentTarget.setAttribute("title", cap_text);
+
+
+							/* Update the counters */
 
 							updateCounters(e.currentTarget, follow);
 
@@ -192,13 +223,17 @@ function updateCounters(context, increment, value){
 
 		if(value === undefined){
 
-			value = parseInt( counter.innerHTML ) + (increment ? 1 : -1)
+			value = parseInt(counter.innerHTML.replace(/,/g, "")) + (increment ? 1 : -1)
 
 		}
 
-		if(value >= 0 && value===value){
+		if(value >= 0 && value === value){
 
-			Ulo.empty(counter).appendChild( document.createTextNode(value) );
+			Ulo.empty(counter).appendChild( 
+
+				document.createTextNode(value.toLocaleString())
+
+			);
 
 			counter = context.querySelector("span.abbr_count");
 

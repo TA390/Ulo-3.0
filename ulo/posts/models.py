@@ -25,14 +25,14 @@ from ulo.models import UloModel
 
 class Post(UloModel):
 	"""
-	Table for user generated posts.
+	Posts table.
 	"""
 	
 	# ------------------------------------------------------------------------------------
 
 	def file_path(self, filename):
 		"""
-		Create file path for the images/video in the user's post
+		Create file path for the file in the user's post
 		"""
 		
 		return 'posts/%s/%s' %(timezone.now().strftime("%m-%y"), filename)
@@ -43,30 +43,59 @@ class Post(UloModel):
 	# POST (REQUIRED) FIELDS
 	# ------------------------------------------------------------------------------------
 	
-	# Video file
 	file = models.FileField(
 	
-		_('Add video'),
+		_('file'),
 		max_length=200,
 		upload_to=file_path,
+		help_text=_('Add video.'),
 	
 	)
 
-	# Video thumbnail
 	thumbnail = models.ImageField(
 	
-		_('Media thumbnail'),
+		_('thumbnail'),
 		max_length=220,
 		upload_to=file_path,
 	
 	)
 	
-	# Title of the post
 	title = models.CharField(
 	
 		_('title'), 
 		max_length=100,
 		help_text=_('Title your post.'),
+	
+	)
+
+	views = models.BigIntegerField(
+	
+		_('views'),
+		default=0,
+	
+	)
+
+	duration = models.DecimalField(
+
+		_('duration'),
+		max_digits=10,
+		decimal_places=6
+
+	)
+
+	thumbnail_time = models.DecimalField(
+
+		_('thumbnail time'),
+		max_digits=10,
+		decimal_places=6
+
+	)
+
+	comment_settings = models.PositiveSmallIntegerField(
+	
+		_('comments'),
+		choices=COMMENT_SETTINGS,
+		default=ENABLED
 	
 	)
 
@@ -86,7 +115,7 @@ class Post(UloModel):
 	
 	)
 	
-	# VARCHAR is faster when searching the entire contents of a field
+	# VARCHAR is faster when searching the entire contents of a field.
 	description = models.CharField(
 	
 		_('description'), 
@@ -96,21 +125,6 @@ class Post(UloModel):
 	)
 
 	# END POST (OPTIONAL) FIELDS
-	# ------------------------------------------------------------------------------------
-
-
-	# SETTINGS FIELDS
-	# ------------------------------------------------------------------------------------
-	
-	comment_settings = models.PositiveSmallIntegerField(
-	
-		_('comments'),
-		choices=COMMENT_SETTINGS,
-		default=ENABLED
-	
-	)
-
-	# END SETTINGS FIELDS
 	# ------------------------------------------------------------------------------------
 
 
@@ -138,41 +152,16 @@ class Post(UloModel):
 	
 	)
 
-	comments_count = models.PositiveIntegerField(_('Comments counter'), default=0)
+	comments_count = models.PositiveIntegerField(
+
+		_('comments counter'), 
+		default=0
+
+	)
 
 	# END INFO FIELDS
 	# ------------------------------------------------------------------------------------
 
-
-	# VIDEO FIELDS
-	# ------------------------------------------------------------------------------------
-
-	views = models.BigIntegerField(
-	
-		_('views'),
-		default=0,
-	
-	)
-
-	duration = models.DecimalField(
-
-		_('duration'),
-		max_digits=10,
-		decimal_places=6
-
-	)
-
-	thumbnail_time = models.DecimalField(
-
-		_('thumbnail time'),
-		max_digits=10,
-		decimal_places=6
-
-	)
-
-	# END VIDEO FIELDS
-	# ------------------------------------------------------------------------------------
-	
 
 	# DB RELATIONSHIPS
 	# ------------------------------------------------------------------------------------
@@ -209,8 +198,7 @@ class Post(UloModel):
 
 class PostOption(UloModel):
 	"""
-	The vote options selected by the post creator for his/her post. Options are the 
-	buttons which enable user's to vote on the post (e.g. love, like, dislike)
+	Vote options for a post.
 	"""
 
 	# POSTOPTION FIELDS
@@ -224,15 +212,15 @@ class PostOption(UloModel):
 	
 	)
 
-	# Integer value that ids the option e.g. "Like" == 2, "Free Text" == 4.
-	option_type = models.PositiveSmallIntegerField(
+	# Option identifier.
+	type = models.PositiveSmallIntegerField(
 	
-		_('option type'),
+		_('type'),
 		choices=OPTIONS,
 	
 	)
 
-	# Hexadecimal colour value 
+	# Hexadecimal colour value.
 	colour = models.CharField(
 	
 		_('colour'),
@@ -241,7 +229,7 @@ class PostOption(UloModel):
 	
 	)
 
-	# Name that represent the icon - used as a class name to render the icon.
+	# Class name of the icon.
 	icon = models.CharField(
 	
 		_('icon'),
@@ -250,7 +238,7 @@ class PostOption(UloModel):
 	
 	)
 
-	# Counter for the number of votes an option has.
+	# Number of votes for this option.
 	count = models.PositiveIntegerField(
 	
 		_('votes counter'),
@@ -293,7 +281,7 @@ class PostOption(UloModel):
 
 class PostVote(UloModel):
 	"""
-	Table to collect user information on the votes made for a post.
+	Collect user information on a vote.
 	"""
 
 	# INFO FIELDS
@@ -314,7 +302,7 @@ class PostVote(UloModel):
 	# ------------------------------------------------------------------------------------
 
 	post = models.ForeignKey(Post, on_delete=models.CASCADE)
-	
+
 	postoption = models.ForeignKey(PostOption, on_delete=models.CASCADE)
 	
 	user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -334,8 +322,7 @@ class PostVote(UloModel):
 
 	def __str__(self):
 
-		return "user id: " + str(self.user_id) + " postoption id: " + \
-			str(self.postoption_id) + " post id: " + str(self.post_id)
+		return "user id: " + str(self.user_id) + " postoption id: " + str(self.postoption_id)
 
 # ----------------------------------------------------------------------------------------
 
@@ -415,7 +402,7 @@ class PostReport(UloModel):
 
 	def __str__(self):
 
-		return self.post.title+': '+self.issue+' (by: '+self.user.username+')'
+		return self.post.title + ': ' + self.issue + ' (by: ' + self.user.username + ')'
 
 # ----------------------------------------------------------------------------------------
 

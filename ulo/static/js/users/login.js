@@ -1,8 +1,16 @@
-/* Sign Up Form javascript file */
-/* Dependencies: jQuery, base.js */
+/* 
+
+	Log in form javascript file
+
+	Dependencies: JQuery, Base.js
+
+*/
+
+
 
 
 /* ------------------------------------------------------------------------------------ */
+
 (function(){
 
 "use strict";

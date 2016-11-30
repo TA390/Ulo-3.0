@@ -77,7 +77,7 @@
 
                             <div class="search_close">
 
-                                <button class="close icon icon_cross_white" type="button">
+                                <button class="close icon icon_cross" type="button">
                                 
                                     <span class="hide">Close</span>
 
@@ -91,7 +91,7 @@
 
                                 <button class="toggle_filter_ul" data-toggle="filter_ul" type="button">
 
-                                    <span class="icon icon_down_arrow_white"></span>
+                                    <span class="icon icon_down_arrow"></span>
                                     <span class="hide">Filters</span>
 
                                 </button>
@@ -103,11 +103,11 @@
 
                                 <ul id="filter_ul">
 
-                                    <li class="filter" data-icon="filter_video">
+                                    <li class="filter" data-icon="video">
                                         Videos
                                     </li>
                                     
-                                    <li class="filter" data-icon="filter_user">
+                                    <li class="filter" data-icon="account">
                                         Accounts
                                     </li>
                                 
@@ -179,7 +179,7 @@
             <div class="col nav_menu">
 
                 <a href="{% url 'navigation' %}" id="toggle_nav_ul" data-toggle="nav_ul" title="Menu">
-                    <span class="icon icon_menu_white"></span>
+                    <span class="icon icon_menu"></span>
                     <span class="hide">Menu</span>
                 </a>
 
@@ -193,7 +193,7 @@
 
                     </li><li>
                         
-                        <a href="#" class="ellipsis" data-apl="true" title="Post">Post</a>
+                        <a href="{% url 'posts:post' %}" class="ellipsis" data-apl="true" title="Post">Post</a>
 
                     </li><li>
                         

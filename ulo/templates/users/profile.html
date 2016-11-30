@@ -42,14 +42,14 @@
 
 						<ul class="picture_menu">
 							<li>
-								<button class="change_picture" type="button">
+								<div class="button change_picture">
 									Change
 									<input accept="image/gif,image/jpeg,image/jpg,image/png" capture="capture" class="file" id="picture" name="picture" type="file">
-								</button>
+								</div>
 							</li>
 							
 							<li>
-								<button class="delete_picture" type="button">Delete</button>
+								<button class="button delete_picture" type="button">Delete</button>
 							</li>
 
 						</ul>
@@ -76,7 +76,7 @@
 						{% if is_following %}
 
 							<a class="connect unfollow" href="{% url 'users:unfollow' profile.id %}" title="Unfollow">
-								<span class="icon icon_unfollow"></span
+								<span class="icon icon_unfollow_white"></span
 								><span class="text lrg">Unfollow</span>
 							</a>
 						
@@ -237,12 +237,6 @@
 
 							<img src="{{ MEDIA_URL }}{{ post.thumbnail }}">
 
-							<div class="video_icon">
-
-								<span class="icon icon_play"></span>
-
-							</div>
-
 						</a>
 							
 						<div class="post_data">
@@ -319,7 +313,7 @@
 							<div class="connection_actions">
 
 								<a class="connect unfollow" href="{% url 'users:unfollow' follower.id %}" title="Unfollow">
-									<span class="icon icon_unfollow"></span
+									<span class="icon icon_unfollow_white"></span
 									><span class="text lrg">Unfollow</span>
 								</a>
 
@@ -406,7 +400,7 @@
 							<div class="connection_actions">
 
 								<a class="connect unfollow" href="{% url 'users:unfollow' following.id %}" title="Unfollow">
-									<span class="icon icon_unfollow"></span
+									<span class="icon icon_unfollow_white"></span
 									><span class="text">Unfollow</span>
 								</a>
 
