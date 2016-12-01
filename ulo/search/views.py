@@ -12,9 +12,8 @@ from django.utils.translation import ugettext_lazy as _
 # Thrid party app imports
 
 # Project imports
-from .utils import es
-# from posts.search import post_search
-# from posts.utils import IMAGE, VIDEO
+from .utils import es, search_filters
+from posts.search import post_search
 from users.models import User
 from users.search import user_search
 from ulo.utils import get_messages_json
@@ -320,9 +319,27 @@ class AutocompleteView(UloView):
 
 			if q != '':
 
-				fltr = search_filters.get(request.GET.get('filter'))
+				fltr = search_filters.get(request)
 
-				if fltr == None:
+				if fltr == search_filters.VIDEO:
+
+					results['posts'] = self.get_results(
+
+						'post_suggestions', 
+						es.post_autocomplete(q)
+
+					)
+
+				elif fltr == search_filters.ACCOUNT:
+
+					results['users'] = self.get_results(
+
+						'user_suggestions', 
+						es.user_autocomplete(q)
+
+					)
+
+				else:
 
 					responses = es.autocomplete(q).get('responses')
 
@@ -335,23 +352,6 @@ class AutocompleteView(UloView):
 
 						})
 
-				elif fltr == USER:
-
-					results['users'] = self.get_results(
-
-						'user_suggestions', 
-						es.user_autocomplete(q)
-
-					)
-
-				else:
-
-					results['posts'] = self.get_results(
-
-						'post_suggestions', 
-						es.post_autocomplete(q, media_type='null' if fltr==POST else fltr)
-
-					)
 
 			return JsonResponse(results, status=200)
 

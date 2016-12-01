@@ -48,6 +48,11 @@ urlpatterns = [
 	url(r'^navigation/$', NavigationView.as_view(), name='navigation'),
 
 
+	# SEARCH APP
+
+	url(r'^search/', include('search.urls', namespace='search')),
+
+
 	# POSTS APP
 
 	url(r'^post/', include('posts.urls', namespace='posts')),

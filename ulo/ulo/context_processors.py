@@ -10,6 +10,7 @@ from django.conf import settings
 # Thrid party app imports
 
 # Project imports
+from search.utils import search_filters
 
 # ----------------------------------------------------------------------------------------
 
@@ -30,6 +31,10 @@ BASE_AJAX_TEMPLATE_NAME = 'base_ajax.html'
 
 # ----------------------------------------------------------------------------------------
 
+SEARCH_FILTER_KEY = 'query_filter'
+
+# ----------------------------------------------------------------------------------------
+
 def base_template(request):
 	
 	template = BASE_AJAX_TEMPLATE_NAME if request.is_ajax() else BASE_TEMPLATE_NAME
@@ -37,7 +42,8 @@ def base_template(request):
 	return {
 
 		BASE_TEMPLATE_KEY: template,
-		SITE_NAME_KEY: settings.SITE_NAME
+		SITE_NAME_KEY: settings.SITE_NAME,
+		SEARCH_FILTER_KEY: search_filters
 
 	}
 

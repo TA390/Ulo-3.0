@@ -53,6 +53,35 @@ class EsBulkProcessing(EsException):
 # INDEX API MIXIN
 # ----------------------------------------------------------------------------------------
 
+class SearchFilters(object):
+
+	def __init__(self):
+
+		self.FILTER_KEY = 'query_filter'
+
+		self.ACCOUNT = 1
+
+		self.VIDEO = 2
+
+		self.IMAGE = 3
+
+
+	def get(self, request):
+
+		return request.GET(self.FILTER_KEY, '')
+
+# ----------------------------------------------------------------------------------------
+
+search_filters = SearchFilters()
+
+# ----------------------------------------------------------------------------------------
+
+
+
+
+# INDEX API MIXIN
+# ----------------------------------------------------------------------------------------
+
 class IndexAPIMixin(object):
 
 	# ------------------------------------------------------------------------------------
@@ -1560,12 +1589,6 @@ class SearchAPIMixin(object):
 							'max_expansions': '10'
 
 						},
-
-						'context': {
-
-							'media': media_type
-
-						}
 		
 					}
 		
@@ -1577,8 +1600,7 @@ class SearchAPIMixin(object):
 
 	# ------------------------------------------------------------------------------------
 
-	def post_autocomplete(self, query, media_type='null', types=None, fail_silently=True, 
-		**param_kwargs):
+	def post_autocomplete(self, query, types=None, fail_silently=True, **param_kwargs):
 
 		return self.request_response(
 
@@ -1586,7 +1608,7 @@ class SearchAPIMixin(object):
 
 				self.get_url(self.indices['posts'], types, '_search', params=param_kwargs),
 
-				data=serialiser.dumps( self.post_autocomplete_query(query, media_type) )
+				data=serialiser.dumps( self.post_autocomplete_query(query) )
 		
 			),
 

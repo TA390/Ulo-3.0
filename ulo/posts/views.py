@@ -851,7 +851,7 @@ class PostCommentView(LoginRequiredMixin, UloFormView):
 			comment = form.save()
 
 
-			# Update the comments counter.
+			# Update the counter.
 
 			if form.post == None:
 
