@@ -1055,11 +1055,11 @@ window.Ulo = {
 /*
 	Base class to create draggable elements.
 
-	@param id: Draggable element ID (this.element).
+	@param element: Element node or element ID.
 	@param settings: Optional settings to add or override existing settings (this.settings).
 	@param target: Optional element stored in the class. 
 */
-function Draggable(id, settings, target){
+function Draggable(element, settings, target){
 	
 	try{
 		
@@ -1078,7 +1078,15 @@ function Draggable(id, settings, target){
 		this.target = target;
 
 		/* Relative or absolute positioned html element */
-		this.element = document.getElementById(id);
+		var isElementNode = (
+
+			element && 
+			element.nodeType !== undefined && 
+			element.nodeType === element.ELEMENT_NODE
+
+		);
+
+		this.element = (isElementNode ? element : document.getElementById(element));
 
 		/* Fefault settings */
 		this.settings = {
@@ -1090,7 +1098,7 @@ function Draggable(id, settings, target){
 			horizontal: true, vertical: true,
 
 			/* Start position offsets */
-			offset: { X: 0, Y: 0 }
+			offsetX: 0, offsetY: 0
 		
 		}
 		
@@ -1301,18 +1309,20 @@ Draggable.prototype = {
 
 	/* -------------------------------------------------------------------------------- */
 	/*
+		Return the X and Y position of "target".
 
+		@param target: Element node.
 	*/
 	getOffset: function(target){
 
-		var offset = this.settings.offset,
+		var scroll = this.getScrollOffsets(),
 
 		bounding = target.parentNode.getBoundingClientRect();
 		
 		return {
 
-			X: target.clientWidth * 0.5 + bounding.left - offset.X,
-			Y: target.clientHeight * 0.5 + bounding.top - offset.Y,
+			X: target.clientWidth * 0.5 + bounding.left + scroll.X - this.settings.offsetX,
+			Y: target.clientHeight * 0.5 + bounding.top + scroll.Y - this.settings.offsetY
 
 		}
 
@@ -1320,10 +1330,9 @@ Draggable.prototype = {
 
 	/* -------------------------------------------------------------------------------- */
 	/*
-		Return the on screen position of the current event or throw an exception.
+		Return the X and Y position of the event throw an exception.
 		
-		@params: e: Event. 
-		@param coord: The client coordinate (must be a capitalised string "X" or "Y") 
+		@params: e: Event.
 	*/
 	getPosition: function(e){
 		
@@ -1339,12 +1348,12 @@ Draggable.prototype = {
 		/* Raw event data with scroll offsets applied */
 		else if(e.originalEvent.clientX !== undefined){
 		
-			var scroll = getScrollOffsets();
+			var scroll = e.data.self.getScrollOffsets();
 
 			return { 
 
-				X: e.originalEvent.clientX + scroll, 
-				Y: e.originalEvent.clientY + scroll
+				X: e.originalEvent.clientX + scroll.X, 
+				Y: e.originalEvent.clientY + scroll.Y
 
 			}
 		
@@ -2335,7 +2344,7 @@ Draggable.prototype = {
 
 		/* ---------------------------------------------------------------------------- */
 		/*
-			Clone "element" returning a new element with the same attributes.
+			Shallow clone "element" returning a new element with the same attributes.
 		*/
 		cloneElement: function(element){
 
@@ -2628,11 +2637,11 @@ Draggable.prototype = {
 		*/
 		getScripts: function(scripts, replace){
 
-			scripts = scripts.getElementsByTagName("script");
+			scripts = scripts.getElementsByTagName("script"),
 
-			var current_scripts = $("script.js_file");
+			current_scripts = $("script.js_file"),
 
-			var main = Ulo.getMain();
+			main = Ulo.getMain();
 
 
 			/* Fallback solutions */
@@ -2679,7 +2688,7 @@ Draggable.prototype = {
 						$(script).on("load", {self: this}, this.jsLoad);
 
 
-						main.js.push( script );
+						main.js.push(script);
 
 						/*
 							Append each script relying on "async=false" to load each file 
@@ -2752,7 +2761,7 @@ Draggable.prototype = {
 
 			var self = e.data.self;
 			
-			self.resolve( self.deferred.resolve );
+			self.resolve(self.deferred.resolve);
 
 		},
 
@@ -2953,7 +2962,7 @@ Draggable.prototype = {
 
 				if(current_main.loading <= 0){
 
-					this.resolve( this.cssComplete, arguments );
+					this.resolve(this.cssComplete, arguments);
 
 				}
 
@@ -3229,6 +3238,8 @@ Draggable.prototype = {
 
 		isOwner: function(id){
 
+			console.log(this.auth_id, id);
+
 			return this.auth_id !== null && this.auth_id == id;
 
 		},
@@ -3401,7 +3412,7 @@ Draggable.prototype = {
 
 			var pip = context.querySelector("input[name='pip']");
 
-			return pip !== null && pip.value == true;
+			return pip !== null && (pip.value === "true" || pip.value === true);
 		
 		},
 

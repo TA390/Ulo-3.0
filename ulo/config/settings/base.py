@@ -119,6 +119,7 @@ INSTALLED_APPS = [
     'comments',
     'emails',
     'posts',
+    'search',
     'ulo',
     'users'
 

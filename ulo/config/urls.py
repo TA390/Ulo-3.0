@@ -27,7 +27,7 @@ from django.contrib import admin
 # Thrid party app imports
 
 # Project imports
-from pages.views import HomeView, NavigationView
+from pages.views import HomeAuthView, NavigationView
 from users.views import SignUpView, LoginView, LogoutView
 
 # ----------------------------------------------------------------------------------------
@@ -42,7 +42,7 @@ urlpatterns = [
 
 	# PAGES APP
 
-	url(r'^$', HomeView.as_view(), name='home'),
+	url(r'^$', HomeAuthView.as_view(), name='home'),
 
 	# Site navigation when js is disabled.
 	url(r'^navigation/$', NavigationView.as_view(), name='navigation'),

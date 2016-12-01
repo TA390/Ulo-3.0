@@ -14,560 +14,6 @@
 "use strict";
 
 
-	// /* -------------------------------------------------------------------------------- */
-	// /*
-	// 	Base class for video slider controls.
-
-	// 	@param settings: Object of settings. See Draggable class.
-	// 	@param selector: Query selector that returns the slider button.
-	// 	@param media_class: Class name set on the container when the slider is in use.
-	// */
-	// function VideoControl(settings, selector, media_class){
-
-	// 	/* Slider button's negative margin */
-
-	// 	settings.marginOffset = settings.marginOffset || 0;
-
-	// 	/* Slider container's position offset. */
-
-	// 	settings.positionOffset = settings.positionOffset || 0;
-
-	// 	/* Slider button's query selector. E.g. "button.slider". */
-		
-	// 	this.selector = selector;
-
-	// 	/* Class set on the container while the slider is in use. */
-		
-	// 	this.media_class = media_class;
-
-
-	// 	/* Run base class constructor. */
-
-	// 	window.Draggable.call(this, null, settings);
-
-	// }
-
-	// /* -------------------------------------------------------------------------------- */
-
-	// VideoControl.prototype = Ulo.inherit(window.Draggable.prototype);
-
-	// /* -------------------------------------------------------------------------------- */
-
-	// VideoControl.prototype.constructor = VideoControl;
-
-	// /* -------------------------------------------------------------------------------- */
-	// /*
-	// 	Register start events on the slider button and its container.
-
-	// 	@param container: Media container (An element that contains the video and controls).
-	// 	@param selector: Query selector to return the element that can be click to move the slider.
-	// */
-	// VideoControl.prototype.register = function(container, selector){
-
-	// 	/* Get the slider button */
-
-	// 	var slider = container.querySelector(this.selector);
-
-	// 	/* Store the container as a property on the slider button */
-
-	// 	slider.container = container;
-
-
-	// 	/* Get the element that can be clicked to move the position of the slider */
-
-	// 	var element = container.querySelector(selector);
-
-	// 	/* Register the element to move the slider when clicked */
-
-	// 	$(element)
-
-	// 		.off(this.start_events, this.moveSlider)
-
-	// 		.on(this.start_events, {self: this}, this.moveSlider);
-
-
-	// 	/* Register the slider button */
-
-	// 	window.Draggable.prototype.register.call(this, slider);
-
-	// };
-
-	// /* -------------------------------------------------------------------------------- */
-	// /*
-	// 	Unregister start events on the slider button and its container.
-
-	// 	@param container: Media container (An element that contains the video and controls).
-	// 	@param selector: Query selector to return the element that can be click to move the slider.
-	// */
-	// VideoControl.prototype.unregister = function(container, selector){
-
-	// 	/* Remove the media class set on the container */
-
-	// 	Ulo.removeClass(container, this.media_class);
-
-
-	// 	/* Get the element that can be clicked to move the position of the slider */
-
-	// 	var element = container.querySelector(selector);
-
-	// 	/* Unregister the element to move the slider when clicked */
-
-	// 	$(element).off(this.start_events, this.moveSlider);
-
-	// 	/* Unregister the slider button */
-
-	// 	window.Draggable.prototype.unregister.call(this);
-	
-	// },
-
-	// /* -------------------------------------------------------------------------------- */
-	// /*
-	// 	Set this.element and add this.media_class to the container.
-	// */
-	// VideoControl.prototype.startHandler = function(e){
-
-	// 	var self = e.data.self;
-
-	// 	self.element = e.currentTarget;
-
-	// 	Ulo.addClass(e.currentTarget.container, self.media_class);
-
-	// 	window.Draggable.prototype.startHandler.call(this, e);
-
-	// };
-
-	// /* -------------------------------------------------------------------------------- */
-	// /*
-	// 	Remove this.media_class from the container.
-	// */
-	// VideoControl.prototype.endHandler = function(e){
-
-	// 	var self = e.data.self;
-
-	// 	if(self.element){
-
-	// 		Ulo.removeClass(self.element.container, self.media_class);
-
-	// 	}
-
-	// 	window.Draggable.prototype.endHandler.call(this, e);
-
-	// };
-
-	// /* -------------------------------------------------------------------------------- */
-
-	// VideoControl.prototype.getClickPosition = function(e){
-
-	// 	var keys = this.settings.horizontal ? ["X", "left"] : ["Y", "top"];
-
-	// 	return (
-
-	// 		this.getPosition(e)[keys[0]] - 
-	// 		this.settings.positionOffset - 
-	// 		e.currentTarget.getBoundingClientRect()[keys[1]]
-
-	// 	);
-
-	// };
-
-	// /* -------------------------------------------------------------------------------- */
-	// /*
-	// 	Return the video element.
-	// */
-	// VideoControl.prototype.getVideo = function(){
-
-	// 	return this.element.container.querySelector("video");
-
-	// };
-
-	// /* -------------------------------------------------------------------------------- */
-	// /*
-	// 	Update the position of the slider element.
-	// */
-	// VideoControl.prototype.moveSlider = function(e){
-
-	// 	try{
-
-	// 		var self = e.data.self,
-
-	// 		args = [self.getClickPosition(e)];
-
-
-	// 		if(self.settings.horizontal){
-
-	// 			args.push("left", "right");
-
-	// 		} else{
-
-	// 			args.push("top", "bottom");
-
-	// 		}
-
-
-	// 		self.element = e.currentTarget = e.currentTarget.querySelector(self.selector);
-			
-	// 		if(self.element !== null){
-
-	// 			self.calcPosition.apply(self, args);
-
-	// 			self.startHandler.call(this, e);
-
-	// 		}
-
-	// 	} catch(ex){
-
-	// 		console.log(ex);
-
-	// 	}
-
-	// };
-
-	// /* -------------------------------------------------------------------------------- */
-	// /*
-	// 	Return the position of the slider as a percentage.
-	// */
-	// VideoControl.prototype.calcPosition = function(pos, p1, p2){
-
-	// 	pos += this.settings.marginOffset;
-
-
-	// 	if(pos < this.settings[p1]){ 
-		
-	// 		pos = this.settings[p1]; 
-		
-	// 	} else if(pos > this.settings[p2]){ 
-		
-	// 		pos = this.settings[p2]; 
-		
-	// 	}
-
-
-	// 	return this.pixelToPercent(pos, this.settings[p2]);
-
-	// };
-
-	// /* -------------------------------------------------------------------------------- */
-
-
-
-
-	// /* -------------------------------------------------------------------------------- */
-
-	// function TrackControl(){
-
-	// 	/*
-	// 		marginOffset: Slider's left margin (-10px) as a positive value.
-	// 		positionOffset: Slider's width (20px) minus the slider's left margin (-10px).
-	// 	*/
-	// 	var settings = {vertical: false, marginOffset: 10, positionOffset: 30};
-
-	// 	VideoControl.call(this, settings, "button.track_slider", "track_controls");
-
-	// }
-
-	// /* -------------------------------------------------------------------------------- */
-
-	// TrackControl.prototype = Ulo.inherit(VideoControl.prototype);
-
-	// /* -------------------------------------------------------------------------------- */
-
-	// TrackControl.prototype.constructor = TrackControl;
-
-	// /* -------------------------------------------------------------------------------- */
-
-	// TrackControl.prototype.calcPosition = function(pos, p1, p2){
-
-	// 	/* Dynamically set the max width */
-
-	// 	this.settings[p2] = this.element.parentNode.clientWidth;
-
-	// 	/* Get the position of the slider as a percentage */
-
-	// 	pos = VideoControl.prototype.calcPosition.call(this, pos, p1, p2);
-
-
-
-	// 	var progress = this.element.container.querySelector("span.track_progress");
-
-	// 	progress.style.width = this.element.style[p1] = pos + "%";
-
-
-	// 	var video = this.getVideo();
-
-	// 	/* Set the time of the video */
-
-	// 	video.currentTime = video.duration * pos * 0.01;
-
-
-	// 	if(video.looped === true){
-
-	// 		/* Set the position of the loop fragments */
-
-	// 		if(video.fragmentStart > video.currentTime){
-
-	// 			var fragment = this.element.container.querySelector("button.track_start");
-
-	// 			var span = this.element.container.querySelector("span.track_start");
-
-	// 			fragment.style.left = span.style.width = progress.style.width;
-
-	// 			video.fragmentStart = video.currentTime;
-				
-
-	// 		} else if(video.fragmentEnd < video.currentTime){
-
-	// 			var fragment = this.element.container.querySelector("button.track_end");
-
-	// 			var span = this.element.container.querySelector("span.track_end");
-
-	// 			fragment.style.left = progress.style.width;
-
-	// 			span.style.width = (100 - pos) + "%";
-
-	// 			video.fragmentEnd = video.currentTime;
-
-	// 		}
-
-	// 	}
-
-	// };
-
-	// /* -------------------------------------------------------------------------------- */
-
-
-
-
-	// /* -------------------------------------------------------------------------------- */
-
-	// function FragmentControl(){
-		
-	// 	/*
-	// 		marginOffset: Slider's left margin (-7px) as a positive value.
-	// 		positionOffset: Slider's width (14px) minus the slider's left margin (-7px).
-	// 		timeGap: Minimum loop value in seconds.
-	// 	*/
-	// 	var settings = { vertical: false, marginOffset: 7, positionOffset: 21, timeGap: 5 };
-
-	// 	/* Run base class constructor */
-
-	// 	VideoControl.call(this, settings, "", "track_controls");
-
-	// }
-
-	// /* -------------------------------------------------------------------------------- */
-
-	// FragmentControl.prototype = Ulo.inherit(VideoControl.prototype);
-
-	// /* -------------------------------------------------------------------------------- */
-
-	// FragmentControl.prototype.constructor = FragmentControl;
-
-	// /* -------------------------------------------------------------------------------- */
-
-	// FragmentControl.prototype.startHandler = function(e){
-
-	// 	/* Set the selector value */
-
-	// 	e.data.self.selector = "button." + e.currentTarget.getAttribute("data-selector");
-
-	// 	VideoControl.prototype.startHandler.call(this, e);
-
-	// };
-
-	// /* -------------------------------------------------------------------------------- */
-
-	// FragmentControl.prototype.hasFragment = function(video){
-
-	// 	return video.duration > this.settings.timeGap;
-
-	// };
-
-	// /* -------------------------------------------------------------------------------- */
-
-
-	// FragmentControl.prototype.register = function(container){
-
-	// 	var video = container.querySelector("video");
-
-	// 	/* Get the sliders */
-
-	// 	var start = container.querySelector("button.track_start"),
-
-	// 	end = container.querySelector("button.track_end");
-
-	// 	start.isStartFragment = true;
-
-
-	// 	/* Store a reference to the container */
-
-	// 	start.container = end.container = container;
-
-
-	// 	/* Reset the fragment values */			
-
-	// 	video.fragmentStart = 0;
-
-	// 	start.style.left = "0%";
-
-	// 	video.fragmentEnd = video.duration;
-
-	// 	end.style.left = "100%";
-
-
-	// 	/* Register the slider button */
-
-	// 	window.Draggable.prototype.register.call(this, start);
-
-	// 	window.Draggable.prototype.register.call(this, end);
-
-	// };
-
-	// /* -------------------------------------------------------------------------------- */
-
-	// FragmentControl.prototype.unregister = function(container, start, end){
-
-	// 	var start = container.querySelector("span.track_start"),
-
-	// 	end = container.querySelector("span.track_end");
-
-	// 	start.style.width = end.style.width = "0%";
-
-
-	// 	start = container.querySelector("button.track_start"),
-
-	// 	end = container.querySelector("button.track_end");
-
-	// 	window.Draggable.prototype.unregister.call(this, start);
-
-	// 	window.Draggable.prototype.unregister.call(this, end);
-
-	// }
-
-	// /* -------------------------------------------------------------------------------- */
-
-	// FragmentControl.prototype.setSlider = function(pos, time, video){
-
-	// 	var progress = this.element.container.querySelector("span.track_progress");
-
-	// 	var button = this.element.container.querySelector("button.track_slider");
-
-	// 	progress.style.width = button.style.left = pos + "%";
-
-	// 	video.currentTime = time;
-
-	// };
-
-	// /* -------------------------------------------------------------------------------- */
-
-	// FragmentControl.prototype.calcPosition = function(pos, p1, p2){
-
-
-	// 	/* Set the max width */
-
-	// 	this.settings[p2] = this.element.parentNode.clientWidth;
-
-	// 	/* Get the position of the slider */
-
-	// 	pos = VideoControl.prototype.calcPosition.call(this, pos, p1, p2);
-
-
-
-	// 	var video = this.getVideo(),
-
-	// 	time = video.duration * pos * 0.01;
-
-
-	// 	if(this.element.isStartFragment === true){
-
-	// 		if(time < video.fragmentEnd - this.settings.timeGap){
-
-	// 			video.fragmentStart = time;
-
-	// 			var span = this.element.container.querySelector("span.track_start");
-
-	// 			span.style.width = this.element.style.left = pos + "%";
-
-	// 			if(video.currentTime < time){
-
-	// 				this.setSlider(pos, time, video);
-
-	// 			}
-
-	// 		}
-
-	// 	} else if(time > video.fragmentStart + this.settings.timeGap){
-
-	// 		video.fragmentEnd = time;
-
-	// 		this.element.style.left = pos + "%";
-
-	// 		var span = this.element.container.querySelector("span.track_end");
-
-	// 		span.style.width = (100 - pos) + "%";
-
-
-	// 		if(video.currentTime > time){
-
-	// 			this.setSlider(pos, time, video);
-
-	// 		}			
-
-	// 	}
-
-	// };
-
-	// /* -------------------------------------------------------------------------------- */
-
-
-
-
-	// /* -------------------------------------------------------------------------------- */
-
-	// function VolumeControl(){
-		
-	// 	/*
-	// 		marginOffset: Slider's top margin (-6px) as a positive value.
-	// 		positionOffset: Slider's height (12px) minus the slider's top margin (-6px).
-	// 	*/
-	// 	var settings = { horizontal: false, bottom: 74, marginOffset: 6, positionOffset: 18 };
-
-	// 	VideoControl.call(this, settings, "button.volume_slider", "volume_controls");
-
-	// }
-
-	// /* -------------------------------------------------------------------------------- */
-
-	// VolumeControl.prototype = Ulo.inherit(VideoControl.prototype);
-
-	// /* -------------------------------------------------------------------------------- */
-
-	// VolumeControl.prototype.constructor = VolumeControl;
-
-	// /* -------------------------------------------------------------------------------- */
-
-	// VolumeControl.prototype.calcPosition = function(pos, p1, p2){
-
-	// 	/* Set the position of the slider (Invert the percentage: 100 - percentage) */
-
-	// 	pos = 100 - VideoControl.prototype.calcPosition.call(this, pos, p1, p2);
-
-	// 	this.element.style[p2] = pos + "%";
-
-	// 	/* Set the volume of the video */
-
-	// 	var video = this.getVideo();
-
-	// 	video.volume = pos * 0.01;
-
-	// 	video.muted = video.volume === 0;
-
-	// };
-
-	// /* -------------------------------------------------------------------------------- */
-
-
-
-
 	/* -------------------------------------------------------------------------------- */
 	/*
 		Base class for video slider controls.
@@ -620,7 +66,11 @@
 
 		/* Register the element. */
 
-		$(target).on(this.start_events, {self: this, container: container}, this.startHandler);
+		$(target)
+
+			.off(this.start_events, this.startHandler)
+
+			.on(this.start_events, {self: this, container: container}, this.startHandler);
 
 	};
 
@@ -632,7 +82,6 @@
 		@param selector: Query selector that returns the element to attach start events to.
 	*/
 	VideoControl.prototype.unregister = function(container, selector){
-
 
 		/* Remove the media class set on the container */
 
@@ -938,9 +387,17 @@
 
 		var data = {self: this, container: container};
 
-		$(start).on(this.start_events, data, this.startHandler);
+		$(start)
+			
+			.off(this.start_events, this.startHandler)
 
-		$(end).on(this.start_events, data, this.startHandler);
+			.on(this.start_events, data, this.startHandler);
+
+		$(end)
+
+			.off(this.start_events, this.startHandler)
+			
+			.on(this.start_events, data, this.startHandler);
 
 	};
 
@@ -1834,7 +1291,7 @@
 
 				var track = e.data.container.querySelector("div.video_track");
 
-				if(e.target !== undefined && Ulo.isDescendant(track, e.target, 5) === false){
+				if(e.target === undefined || Ulo.isDescendant(track, e.target, 5) === false){
 
 					self.toggleControls(e.data.container, false);
 
@@ -1990,7 +1447,7 @@
 
 			button.appendChild(
 
-				Ulo.create("span", { "class": "icon icon_repeat" })
+				Ulo.create("span", { "class": "icon icon_repeat_white" })
 
 			);
 
@@ -2344,97 +1801,106 @@
 
 			else if(Ulo.requestAvailable()){
 
-				/* Get the form relative to the vote button */
-				var form = e.currentTarget.parentNode.parentNode,
+				Ulo.acquireRequest();
 
-				vote = e.currentTarget.value,
-
-				voted = form.querySelector("input[name='voted']"),
-
-				data = "vote=" + vote + "&voted=" + voted.value;
+				Ulo.addClass(e.currentTarget, Ulo.cls.disabled);
 
 
-				Ulo.request({
+				setTimeout(function(){
 
-						type:"GET",
-						data: data,
-						url: form.getAttribute("action")
+					/* Get the form relative to the vote button */
+					var form = e.currentTarget.parentNode.parentNode,
 
-					})
+					vote = e.currentTarget.value,
 
-					/* Params: server data, status code, xhr */
-					.done(function(data, sc, xhr){
+					voted = form.querySelector("input[name='voted']"),
 
-						/* If the session has changed update the entire page.  */
-						
-						if(Ulo.Session.hasChanged(xhr)){
+					data = "vote=" + vote + "&voted=" + voted.value;
 
-							Ulo.Pip.updatePage(xhr);
 
-						}
+					Ulo.request({
 
-						/* If the login form is returned display it. */
+							type:"GET",
+							data: data,
+							url: form.getAttribute("action")
 
-						else if(data.html){
+						})
 
-							Ulo.Pip.displayPage(xhr, "login");
+						/* Params: server data, status code, xhr */
+						.done(function(data, sc, xhr){
 
-						}
+							/* If the session has changed update the entire page.  */
+							
+							if(Ulo.Session.hasChanged(xhr)){
 
-						else{
-
-							/* Update the counter values for the votes */
-
-							var current_vote = form.querySelector("button[value='"+ voted.value +"']");
-
-							if(current_vote !== e.currentTarget){
-
-								self.selectVote(e.currentTarget, true);
-
-								if(current_vote !== null){
-
-									updateCounters(current_vote.parentNode, false);
-
-								}
+								Ulo.Pip.updatePage(xhr);
 
 							}
 
-							self.selectVote(current_vote, false);
+							/* If the login form is returned display it. */
 
-							voted.value = vote !== voted.value ? vote : "";
+							else if(data.html){
 
-							updateCounters(e.currentTarget.parentNode, !!voted.value);
+								Ulo.Pip.displayPage(xhr, "login");
 
+							}
 
-							/* Update the sparklines */
+							else{
 
-							var sparkbar = Ulo.get("sparkbar");
+								/* Update the counter values for the votes */
 
-							if(sparkbar !== null){
+								var current_vote = form.querySelector("button[value='"+ voted.value +"']");
 
-								var total = 0,
+								if(current_vote !== e.currentTarget){
 
-								counters = $("span.vote_count", form);
+									self.selectVote(e.currentTarget, true);
 
+									if(current_vote !== null){
 
-								for(var i=0; i<counters.length; ++i){
+										updateCounters(current_vote.parentNode, false);
 
-									total += parseInt(counters[i].innerHTML);
+									}
 
 								}
 
+								self.selectVote(current_vote, false);
 
-								if(total === total){
+								voted.value = vote !== voted.value ? vote : "";
 
-									var lines = sparkbar.getElementsByTagName("span");
+								updateCounters(e.currentTarget.parentNode, !!voted.value);
 
-									for(var i=0, value; i<counters.length && i<lines.length; ++i){
 
-										value = parseInt(counters[i].innerHTML);
+								/* Update the sparklines */
 
-										if(value===value){
+								var sparkbar = Ulo.get("sparkbar");
 
-											lines[i].style.width = (total===0 ? 0 : 100*value/total)+"%";
+								if(sparkbar !== null){
+
+									var total = 0,
+
+									counters = $("span.vote_count", form);
+
+
+									for(var i=0; i<counters.length; ++i){
+
+										total += parseInt(counters[i].innerHTML);
+
+									}
+
+
+									if(total === total){
+
+										var lines = sparkbar.getElementsByTagName("span");
+
+										for(var i=0, value; i<counters.length && i<lines.length; ++i){
+
+											value = parseInt(counters[i].innerHTML);
+
+											if(value===value){
+
+												lines[i].style.width = (total===0 ? 0 : 100*value/total)+"%";
+
+											}
 
 										}
 
@@ -2444,21 +1910,26 @@
 
 							}
 
-						}
+						})
 
-					})
+						/* Params: xhr, status code, error type */
+						.fail(function(xhr, sc, type){
 
-					/* Params: xhr, status code, error type */
-					.fail(function(xhr, sc, type){
+							if(Ulo.Session.hasChanged(xhr)){
 
-						if(Ulo.Session.hasChanged(xhr)){
+								Ulo.messages("Your session has expired. Refresh the page and try again.");
 
-							Ulo.messages("Your session has expired. Refresh the page and try again.");
+							}
+							
+						})
 
-						}
-						
-				});
+						.always(function(){
 
+							Ulo.removeClass(e.currentTarget, Ulo.cls.disabled);
+
+					});
+
+				}, 500);
 
 			}
 
@@ -2586,24 +2057,33 @@
 
 		/* ---------------------------------------------------------------------------- */
 		/*
+			Return a post or null.
+
+			@param post_id: Post ID.
+		*/
+		getPost: function(post_id){
+
+			return Ulo.get(Ulo.getMainID(), "div.post[data-id='" + post_id + "']");
+
+		},
+
+		/* ---------------------------------------------------------------------------- */
+		/*
 			Display a dialog box that gives the user a button to delete the post.
 		*/
 		deletePost: function(e){
 
 			var self = e.data.self,
 
-			post_id = this.getAttribute("data-id");
+			post_id = this.getAttribute("data-id"),
+
+			post = self.getPost(post_id);
+
 
 			/*
 				Determine if the post belongs to the user.
-
-				Timeline View: Posts that belong to the user are rendered in their 
-				timeline with an id of "post_<id>".
-
-				Post Detail View: The button attribute "data-page" is given the value 
-				"detail" if the post belongs to the user.
 			*/
-			if(Ulo.get("post_" + post_id) || this.getAttribute("data-page") === "detail"){
+			if(post !== null && Ulo.Session.isOwner(post.getAttribute("data-user"))){
 
 
 				var elem = Ulo.create("div", {"class": "delete_dialog"});
@@ -2715,17 +2195,9 @@
 							*/
 							else if(page === "timeline"){
 
-								var post = Ulo.get("post_" + post_id);
-
-								if(Ulo.checkTempDependencies(true, "Timeline")){
-
-									Ulo.Temp.Timeline.deletePost(post);
-
-								}
-
 								/* Delete the post from the timeline and the Pip */
 
-								Ulo.remove(post, Ulo.get("post_detail"));
+								Ulo.remove(self.getPost(post_id), Ulo.get("post_detail"));
 
 								Ulo.messages("Your post has been deleted.");
 

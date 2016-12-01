@@ -127,6 +127,8 @@ def elapsed_time(date_time):
 
 	except Exception as e:
 
+		print(e)
+
 		return ''
 
 # ----------------------------------------------------------------------------------------

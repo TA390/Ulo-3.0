@@ -528,8 +528,14 @@ div.post_data .cell{
 div.side_panel{
 
 	display: none;
-	width: 300px;
-	float: right;
+
+}
+
+div.side_panel img{
+
+	display: block;
+	width: 100%;
+	margin-bottom: 20px;
 
 }
 
@@ -538,8 +544,8 @@ span.panel_divider{
 	display: block;
 	position: absolute;
 	top: 0; right: 300px; bottom: 0;
-	width: 1px;
 	background-color: #E6E6E6;
+	width: 1px;
 
 }
 
@@ -561,7 +567,9 @@ span.panel_divider{
 
 	#post_detail div.side_panel{
 
-		display: block;	
+		display: block;
+		float: right;	
+		width: 300px;
 
 	}
 
@@ -653,13 +661,16 @@ button.vote{
 	float: left;
 	width: 34px;
 	height: 34px;
-	background-color: red;
+	background-color: transparent;
 
 }
 
 button.vote span{
 
+	display: block;
 	margin: 4px;
+	width: 26px;
+	height: 26px;
 	transform: scale(1.2);
 
 }

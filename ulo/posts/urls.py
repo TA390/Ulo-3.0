@@ -51,8 +51,8 @@ urlpatterns = [
 	url(r'^(?P<pk>[\d]+)/delete/$', views.PostDeleteView.as_view(), name='delete'),
 
 	# Report post
-	url(r'^report/complete/$', views.PostReportCompleteView.as_view(), name='report_complete'),
 	url(r'^(?P<pk>[\d]+)/report/$', views.PostReportView.as_view(), name='report'),
+	url(r'^report/complete/$', views.PostReportCompleteView.as_view(), name='report_complete'),
 
 	# Post actions menu (JS disabled)
 	url(r'^(?P<pk>[\d]+)/actions/$', views.PostActionsView.as_view(), name='actions'),

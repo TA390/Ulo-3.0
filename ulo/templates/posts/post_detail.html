@@ -13,7 +13,7 @@
 {% block content %}
 <div id="post_detail">
 
-	<div class="post">
+	<div class="post" data-id="{{ post.id }}">
 
 
 		<div class="post_media">
@@ -254,7 +254,6 @@
 					<div class="post_meta post_panel">
 				
 						<span class="published">{{ post.published|short_date }}</span>
-
 						<span class="views ellipsis">{{ post.views }}&nbsp;view{% if post.views != 1 %}s{% endif %}</span>
 					
 					</div>
@@ -415,7 +414,7 @@
 
 					<li class="action">
 					
-						<button class="delete_post" type="button"{% if is_owner %} data-page="detail"{% endif %}>Delete</button>
+						<button class="delete_post" type="button" data-page="detail">Delete</button>
 					
 					</li>
 

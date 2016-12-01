@@ -243,8 +243,6 @@
 		},
 
 
-
-
 		/* ---------------------------------------------------------------------------- */
 		/*
 			Select a new tab.
@@ -345,14 +343,22 @@
 
 			if(Ulo.requestAvailable() && (initial === true || anchor.disabled !== true)){
 
+				Ulo.acquireRequest();
+
+
 				var self = this,
 
 				request = {
 
 					type: "GET", 
-					url: anchor.href + "?max_id=" + (anchor.max_id || "") + "&profile_id=" + getProfileID()
+					url: (
 
-				}
+						anchor.href + "?max_id=" + (anchor.max_id || "") + 
+						"&profile_id=" + getProfileID()
+
+					)
+
+				};
 
 
 				if(initial){
@@ -366,81 +372,85 @@
 					Ulo.Animate.pulse(anchor, true);
 
 				}
+				
+
+				setTimeout(function(){
+					
+					Ulo.request(request)
+
+						/* Params: server data, status code, xhr */
+						.done(function(data, sc, xhr){
+
+							if(Ulo.Session.hasChanged(xhr)){
+
+								Ulo.Pip.updatePage();
+
+							} else{
+
+								var container = self.getContainer(self.selected);
 
 
-				Ulo.request(request)
+								if(initial === true){
 
-					/* Params: server data, status code, xhr */
-					.done(function(data, sc, xhr){
+									if(data.count !== undefined){
 
-						if(Ulo.Session.hasChanged(xhr)){
+										updateCounters(self.selected, null, data.count);
 
-							Ulo.Pip.updatePage();
+									}
 
-						} else{
+									if(data.has_next){
 
-							var container = self.getContainer(self.selected);
+										anchor = self.registerLoad(self.selected, true);
 
+									}
 
-							if(initial === true){
-
-								if(data.count !== undefined){
-
-									updateCounters(self.selected, null, data.count);
+									Ulo.removeClass(container, Ulo.cls.hide);
 
 								}
+
 
 								if(data.has_next){
 
-									anchor = self.registerLoad(self.selected, true);
+									anchor.max_id = data.max_id;
+
+								} else if(initial === false){
+
+									self.unregisterLoad(anchor);
 
 								}
 
-								Ulo.removeClass(container, Ulo.cls.hide);
+
+								var id = self.selected.id;
+
+								if(data.tab_data && data.tab_data.length > 0){
+
+									self[id](data.tab_data);
+
+								} else if(initial === true){
+
+									self.empty(container);
+
+								}
 
 							}
 
+						})
+						
+						.always(function(){
 
-							if(data.has_next){
+							if(initial){
 
-								anchor.max_id = data.max_id;
+								Ulo.Animate.set(100);
 
-							} else if(initial === false){
+							} else{
 
-								self.unregisterLoad(anchor);
+								Ulo.Animate.pulse(anchor, false);
 
-							}
-
-
-							var id = self.selected.id;
-
-							if(data.tab_data && data.tab_data.length > 0){
-
-								self[id](data.tab_data);
-
-							} else if(initial === true){
-
-								self.empty(container);
-
-							}
-
-						}
-
-					})
+							}	
 					
-					.always(function(){
+					});
 
-						if(initial){
-
-							Ulo.Animate.set(100);
-
-						} else{
-
-							Ulo.Animate.pulse(anchor, false);
-
-						}	
-				
-				});
+				}, 500);
 
 			}
 

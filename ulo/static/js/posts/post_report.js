@@ -3,7 +3,8 @@
 
 
 /* ------------------------------------------------------------------------------------ */
-(function () {
+(function(){
+
 "use strict";
 
 
@@ -19,9 +20,10 @@
 
 		this.setSubmitDisabled(true);
 
-		this.register();	
+		this.register();
 
 	}
+
 	PostReport.prototype = {
 
 		constructor: PostReport,
@@ -31,7 +33,7 @@
 			Register all event handlers.
 		*/
 		register: function(){
-			
+
 			$(this.getForm()).on("submit", {self: this}, this.submit);
 
 			/* Detect when a radio button has been selected */
@@ -285,4 +287,6 @@
 	});
 
 /* ------------------------------------------------------------------------------------ */
+
 }());
+

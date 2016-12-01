@@ -60,333 +60,6 @@ function roundDownTo(n, m){
 /* ------------------------------------------------------------------------------------ */
 
 
-/* ------------------------------------------------------------------------------------ */
-/* BASE CLASS */
-/* ------------------------------------------------------------------------------------ */
-/* 
-	Create a draggable element.
-
-	@param id: id of a relative or absolutely positioned html element.
-	@param settings: an object of variables to extend the classes settings object.
-
-	A draggable object can be moved within its bounding box defined by the
-	css positions in settings. Override calcPosition() to alter the default behaviour.
-
-*/
-function Draggable(id, settings){
-	
-	try{
-		
-		/* Events */
-		this.start_events = "mousedown touchstart pointerdown";
-		this.move_events = "mousemove touchmove pointermove";
-		this.end_events = "mouseup touchend pointerup";
-
-		/* Client X and Y positions set when a start event is triggered. */
-		self.start = { X:0, Y:0 };
-
-		/*
-			Optional target element - If set to null the class will not trigger the start
-			events.
-		*/
-		this.target = true;
-
-		/* Relative or absolute positioned html element */
-		this.element = document.getElementById(id);
-
-		/* Fefault settings */
-		this.settings = {
-			
-			/* Css box boundaries */
-			top: 0, right: 0, bottom: 0, left: 0,
-			
-			/* Directions of movement */
-			horizontal: true, vertical: true
-		
-		}
-		
-		for(var key in settings){
-		
-			/* Override or add variables to the settings object */
-			this.settings[key] = settings[key];
-		
-		}
-
-	} catch(e){
-
-		debug(e);
-	
-	}
-
-}
-
-Draggable.prototype = {
-	
-	constructor: Draggable,
-
-	/* -------------------------------------------------------------------------------- */
-	/*
-		Register start events on the element.
-	*/
-	register: function(element){
-	
-		$(element || this.element).off(this.start_events, this.startHandler)
-			.on(this.start_events, {self: this}, this.startHandler);
-
-	},
-
-	/* -------------------------------------------------------------------------------- */
-	/*
-		Unregister start events on the element.
-	*/
-	unregister: function(element){
-		
-		$(element || this.element).off(this.start_events, this.startHandler);
-
-	},
-
-	/* -------------------------------------------------------------------------------- */
-
-
-	/* EVENT HANDLERS */
-	/* -------------------------------------------------------------------------------- */
-	/*
-		Set the starting postions (X and Y) and register the move and end events.
-	*/
-	startHandler: function(e){
-		
-		try{
-
-			var self = e.data.self;
-			
-			if(self.element !== null && self.target !== null){
-
-				self.start = self.getPosition(e);
-				self.start.X -= e.currentTarget.offsetLeft;
-				self.start.Y -= e.currentTarget.offsetTop;
-
-				/* Add move and end events to the document */
-				$(document).on(self.move_events, {self: self}, self.moveHandler);
-				$(document).on(self.end_events, {self: self}, self.endHandler);
-
-				/* Event handled */
-				e.stopPropagation();
-				e.preventDefault();
-
-			}
-
-		}catch(e){
-	
-			debug(e);
-	
-		}
-	
-	},
-
-	/* -------------------------------------------------------------------------------- */
-	/*
-		Set the new left and top position of the element. See calcPosition.
-	*/
-	moveHandler: function(e){
-		
-		try{
-		
-			var self = e.data.self,
-			pos = self.getPosition(e);
-
-			/* If horizontal movements are enabled set the left postition */
-			if(self.settings.horizontal){
-			
-				self.calcPosition(pos.X-self.start.X, "left", "right");
-			
-			}
-
-			/* If vertical movements are enabled set the top postition */
-			if(self.settings.vertical){
-				
-				self.calcPosition(pos.Y-self.start.Y, "top", "bottom");
-			
-			}
-
-			/* Event handled */
-			e.stopPropagation();
-			e.preventDefault();
-
-		}catch(e){
-		
-			debug(e);
-		
-		}
-	
-	},
-
-	/* -------------------------------------------------------------------------------- */
-	/*
-		Remove the move and end events from the document.
-	*/
-	endHandler: function(e){
-	
-		try{
-			
-			var self = e.data.self;
-			
-			/* Remove move and end events */
-			$(document).off(self.move_events, self.moveHandler);
-			$(document).off(self.end_events, self.endHandler);
-	
-			/* Event handled */
-			e.stopPropagation();
-			e.preventDefault();	
-			
-		}catch(e){
-	
-			debug(e);
-	
-		}
-	
-	},
-
-	/* END EVENT HANDLERS */
-	/* -------------------------------------------------------------------------------- */
-
-
-	/* ELEMENT POSITIONING */
-	/* -------------------------------------------------------------------------------- */
-	/*
-		Set the new position of the element constraining it to its bounding box positions 
-		defined by the settings object.
-	
-		@param e: Event object.
-		@param pos: X or Y position of the event. 
-		@param p1: First bounding position ("left" or "top").
-		@param p2: Second bounding position ("right" or "bottom").
-	*/
-	calcPosition: function(pos, p1, p2){
-
-		if(pos < this.settings[p1]){ 
-		
-			pos = this.settings[p1]; 
-		
-		} else if(pos > this.settings[p2]){ 
-		
-			pos = this.settings[p2]; 
-		
-		}
-
-		this.element.style[p1] = pos + "px";
-
-	},
-
-	/* END ELEMENT POSITIONING */
-	/* -------------------------------------------------------------------------------- */
-
-
-	/* HELPER FUNCTIONS */
-	/* -------------------------------------------------------------------------------- */
-	/*
-		Return the pixel value (pix) as a percentage.
-		
-		@param pixels: Pixel length.
-		@param length: Full length of the element to which pix is a section of.
-	*/
-	pixelToPercent: function(pixels, length){
-	
-		return 100*pixels / length;
-	
-	},
-
-	/* -------------------------------------------------------------------------------- */
-	/*
-		Return the on screen position of the current event or throw an exception.
-		
-		@params: e: the event object. 
-		@param coord: the client coordinate (must be a capitalised string "X" or "Y") 
-	*/
-	getPosition: function(e){
-		
-		var pos;
-		
-		/* JQuery's normalised pageX/Y */
-		if(e.pageX !== undefined){
-		
-			return { X: e.pageX, Y: e.pageY };
-	
-		} 
-
-		/* Raw event data with scroll offsets applied */
-		else if(e.originalEvent.clientX !== undefined){
-		
-			var scroll = getScrollOffsets();
-
-			return { 
-
-				X: e.originalEvent.clientX + scroll, 
-				Y: e.originalEvent.clientY + scroll
-
-			}
-		
-		}
-
-		/* Touch events */
-		else if(e.originalEvent.touches !== undefined){
-		
-			return { 
-
-				X: e.originalEvent.touches[0].pageX, 
-				Y: e.originalEvent.touches[0].pageY
-
-			} 
-		
-		}
-
-		// /* Pointer events: UNTESTED!!! */
-		// else if(e.originalEvent.currentPoint){
-			
-		// 	return e.originalEvent.currentPoint[coord.toLowerCase()];
-		
-		// }
-		
-		throw new Error("Start position not found.");
-	
-	},
-
-	/* -------------------------------------------------------------------------------- */
-	/* 
-		Return the scroll X and Y offset positions.
-		Javascript The Definitive Guide (6th Edition) pg: 391
-	*/
-	getScrollOffsets: function(){
-	
-		/* All browsers except IE8 and before */
-		if(window.pageXOffset !== null){
-	
-			return {X: window.pageXOffset, Y: window.pageYOffset};
-	
-		}
-	
-		/* For IE or any browser in standard mode */
-		var d = window.document;
-	
-		if(d.compatMode === "CSS1Compat"){
-	
-			return { X: d.documentElement.scrollLeft, Y: d.documentElement.scrollTop };
-	
-		}
-	
-		/* For browsers in Quirks mode */
-		return { X: d.body.scrollLeft, Y: d.body.scrollTop };
-	
-	}
-
-	/* END HELPER FUNCTIONS */
-	/* -------------------------------------------------------------------------------- */
-
-}
-
-/* END BASE CLASS */
-/* ------------------------------------------------------------------------------------ */
-
-
 
 
 /* ------------------------------------------------------------------------------------ */
@@ -397,7 +70,7 @@ Draggable.prototype = {
 */
 function ScaleElement(){
 
-	Draggable.call(this, "scale_slider", { vertical: false });
+	window.Draggable.call(this, "scale_slider", { vertical: false });
 
 	this.elements = [];
 
@@ -408,7 +81,7 @@ function ScaleElement(){
 }
 /* ------------------------------------------------------------------------------------ */
 
-ScaleElement.prototype = Ulo.inherit(Draggable.prototype);
+ScaleElement.prototype = Ulo.inherit(window.Draggable.prototype);
 
 /* ------------------------------------------------------------------------------------ */
 
@@ -606,12 +279,12 @@ ScaleElement.prototype.scale_all = function(){
 */
 function MoveElement(){
 
-	Draggable.call(this);
+	window.Draggable.call(this);
 
 }
 /* ------------------------------------------------------------------------------------ */
 
-MoveElement.prototype = Ulo.inherit(Draggable.prototype);
+MoveElement.prototype = Ulo.inherit(window.Draggable.prototype);
 
 /* ------------------------------------------------------------------------------------ */
 
@@ -701,7 +374,7 @@ MoveElement.prototype.calcPosition = function(pos, p1, p2){
 */
 function VideoThumbnail(){
 
-	Draggable.call(this, "thumbnail_slider", { vertical: false });
+	window.Draggable.call(this, "thumbnail_slider", { vertical: false, offsetX: -4 });
 
 	if(this.element === null){
 
@@ -720,7 +393,7 @@ function VideoThumbnail(){
 }
 /* ------------------------------------------------------------------------------------ */
 
-VideoThumbnail.prototype = Ulo.inherit(Draggable.prototype);
+VideoThumbnail.prototype = Ulo.inherit(window.Draggable.prototype);
 
 /* ------------------------------------------------------------------------------------ */
 
@@ -736,7 +409,7 @@ VideoThumbnail.prototype.register = function(){
 
 	$(this.getTime()).on(evt, {self: this}, this.setTime);
 
-	Draggable.prototype.register.apply(this, arguments);
+	window.Draggable.prototype.register.apply(this, arguments);
 
 };
 
@@ -750,7 +423,7 @@ VideoThumbnail.prototype.unregister = function(){
 
 	$(this.getTime()).off(evt, this.setTime);
 
-	Draggable.prototype.unregister.apply(this, arguments);
+	window.Draggable.prototype.unregister.apply(this, arguments);
 
 };
 

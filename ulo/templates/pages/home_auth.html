@@ -1,0 +1,350 @@
+{% extends base_template %}
+{% load staticfiles i18n ulo_humanise %}
+
+
+{% block title %}{{ block.super }}{% endblock %}
+
+{% block css %}
+	<link class="css_file" href="{% static 'css/posts/post_detail.css' %}" rel="stylesheet" type="text/css">
+	<link class="css_file" href="{% static 'css/pages/home_auth.css' %}" rel="stylesheet" type="text/css">
+{% endblock css %}
+
+{% block content %}
+<div id="home_auth">
+
+	<div class="left_panel side_panel">
+
+		<div class="wrapper">
+
+			<div class="position">
+
+				<img src="https://s1.2mdn.net/viewad/4157372/UK_MakeIt_300x250.jpg">
+			
+			</div>
+
+		</div>
+
+	</div>
+
+
+	<div class="content">
+
+		<div id="timeline">
+
+			{% for post in posts %}		
+			<div class="post" data-id="{{ post.id }}" data-user="{{ post.user_id }}">
+
+
+				<div class="post_media">
+			
+					<div class="media_container">
+
+						<div class="video_player">
+
+							<video preload="none" poster="{{ MEDIA_URL }}{{ post.thumbnail }}">
+								
+								<source src="{{ MEDIA_URL }}{{ post.file }}" type="video/mp4">
+								Your browser does not support video playback.
+									
+							</video>
+
+						</div>
+
+
+						<div class="video_actions cloak">
+
+
+							<div class="video_track">
+
+								<div class="fragment hide">
+
+									<div class="track_fragment">
+
+										<button class="track_start" data-selector="track_start" type="button">
+												
+											<span class="pin"></span>
+
+										</button>
+
+										<button class="track_end" data-selector="track_end" type="button">
+											
+											<span class="pin"></span>
+
+										</button>
+
+									</div>
+
+								</div>
+
+								<div class="track">
+
+									<div class="track_bar">
+
+										<div class="track_range">
+										
+											<span class="track_buffer"></span>
+											<span class="track_progress"></span>
+											<span class="track_start"></span>
+											<span class="track_end"></span>
+											<span class="track_thumbnail" data-src="{{ post.thumbnail }}" style="left: {% widthratio post.thumbnail_time post.duration 100 %}%"></span>
+									
+										</div>
+
+										<button class="track_slider" type="button"></button>
+
+									</div>
+
+								</div>
+
+							</div>
+
+							<div class="video_controls cf">
+
+								<div class="left">
+
+									<button class="play" type="button">
+										
+										<span class="play icon icon_play_white"></span>
+
+									</button>
+
+									<button class="loop" type="button" title="Loop">
+										
+										<span class="loop icon icon_loop"></span>
+
+									</button>
+
+								</div>
+
+								<div class="video_time">
+
+									<span class="current_time">0:00</span>&nbsp;/&nbsp;
+									<span class="duration">0:00</span>
+
+								</div>
+
+								<div class="right">
+
+									<div class="volume_container">
+										
+										<div class="volume_bar">
+
+											<div class="volume_range">
+
+												<div class="volume_level">
+													
+													<span class="volume_value"></span>
+
+													<button class="volume_slider" type="button"></button>
+
+												</div>
+												
+
+											</div>
+
+										</div>
+
+										<button class="volume" type="button">
+											
+											<span class="volume icon icon_volume_white"></span>
+
+										</button>
+
+									</div>
+
+									<button class="fullscreen" type="button">
+										
+										<span class="icon icon_expand_white"></span>
+
+									</button>
+
+								</div>
+
+							</div>
+
+						</div>
+
+					</div>
+
+				</div>
+				<!-- END .post_media -->
+
+
+				<div class="post_data cf">
+
+					<div class="post_panel">
+
+						<a class="title" href="{% url 'posts:detail' post.id %}" title="Post Detail" data-apl="true">
+							<h1 class="post_title thin">{{ post.title }}</h1>
+						</a>
+
+						<div class="post_meta">
+							
+							<span class="views ellipsis">{{ post.views }}&nbsp;view{% if post.views != 1 %}s{% endif %}</span>
+							<span class="separator"></span>
+							<span class="published">{{ post.published|short_date }}</span>
+					
+						</div>
+
+					</div>
+
+
+					<div class="post_actions post_panel">
+
+						<form class="post_vote_form" action="{% url 'posts:vote' post.id %}" method="get">
+				
+						{% for option in post.options %}<div class="vote">
+
+							{% if option.vote_id == None %}
+
+								<button class="vote" name="vote" value="{{ option.option_id }}" data-count="{{ option.count }}" type="submit" title="{{ option.text }}">
+
+									<span {% if option.icon == '' %}class="vote" style="background-color:{{ option.colour }}"{% else %}class="font_icon {{ option.icon }}"{% endif %}></span>
+
+								</button>
+							
+							{% else %}
+							
+								<input name="voted" type="hidden" value="{{ option.vote_id }}">
+
+								<button class="vote" name="vote" value="{{ option.option_id }}" data-count="{{ option.count }}" type="submit" title="{{ option.text }}">
+
+									<span {% if option.icon == '' %}class="selected" style="background-color:{{ option.colour }}"{% else %}class="selected font_icon {{ option.icon }}"{% endif %}></span>
+
+								</button>
+							
+							{% endif %}
+
+							<div class="vote_data">
+
+								<span class="vote_text ellipsis">{{ option.text }}</span>
+								<span class="vote_count full_count ellipsis">{{ option.count }}</span>
+
+							</div>
+
+							</div>{% endfor %}
+				
+						</form>
+
+						<a class="toggle_actions_menu" href="{% url 'posts:actions' post.id %}" title="Post actions" data-toggle="post_menu" data-id="{{ post.id }}"{% if post.user_id == user.id %} data-is-owner="true"{% endif %}>
+
+							<span class="icon icon_menu"></span>
+							<span class="hide">Post actions</span>
+						
+						</a>
+
+					</div>
+
+
+					<div class="post_user post_panel">
+					
+						<div class="user_profile">
+
+							<a href="{% url 'users:profile' post.username %}" class="profile" data-apl="true" title="{{ post.name }}">
+						
+								<img class="user_thumbnail" src="{{ MEDIA_URL }}{{ post.user_thumbnail }}">
+
+								<div class="user_names">
+									
+									<h2 class="name thin ellipsis">{{ post.name }}</h2>
+									<span class="username ellipsis">@{{ post.username }}</span>
+									
+								</div>
+
+							</a>
+
+						</div>
+					
+					</div>
+
+				</div>
+				<!-- END .post_data -->
+
+
+			</div>
+			{% empty %}
+
+			<p class="no_posts">Your timeline is empty. Follow people you find interesting to receive their posts in your timeline.</p>
+
+			{% endfor %}	
+			<!-- END .post -->
+
+		</div>
+		<!-- END timeline -->
+
+		{% if has_next %}
+
+		<div class="load">
+				
+			<a id="load_posts" href="{{ request.path_info }}?max_id={{ max_id }}">Load more</a>
+			
+		</div>
+		
+		{% endif %}
+
+	</div>
+
+
+	<div class="right_panel side_panel">
+
+		<div class="wrapper">
+
+			<div class="position">
+
+				<img src="https://s1.2mdn.net/viewad/4157372/UK_MakeIt_300x250.jpg">
+
+				<img src="https://s1.2mdn.net/viewad/4157372/UK_MakeIt_300x250.jpg">
+			
+			</div>
+
+		</div>
+
+	</div>
+
+
+</div>
+
+<!-- POST ACTIONS MENU -->
+<div id="post_menu" class="actions_menu">
+	
+	<ul>
+
+		<span class="user">
+	
+			<li class="action">
+			
+				<button class="report_post" type="button">Report</button>
+			
+			</li>
+
+		</span>
+
+		<span class="owner">
+	
+			<li class="action">
+			
+				<button class="edit_post" type="button">Edit</button>
+			
+			</li>
+
+			<li class="action">
+			
+				<button class="delete_post" type="button" data-page="timeline">Delete</button>
+			
+			</li>
+
+		</span>
+	
+	</ul>
+
+</div>
+<!-- END POST ACTIONS MENU -->
+
+{% endblock content %}
+
+{% block js %}
+	<script class="js_file" src="{% static 'js/users/utils.js' %}"></script>
+	<script class="js_file" src="{% static 'js/posts/post_detail.js' %}"></script>
+	<script class="js_file" src="{% static 'js/pages/home_auth.js' %}"></script>
+{% endblock js %}
+
