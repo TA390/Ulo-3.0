@@ -5,18 +5,83 @@
 {% block title %}{{ block.super }}{% endblock %}
 
 {% block css %}
-
+	<link class="css_file" href="{% static 'css/pages/home_unauth.css' %}" rel="stylesheet" type="text/css">
 {% endblock css %}
 
 {% block content %}
 <div id="home_unauth">
-	
 
+	<div class="header">
+
+		
+
+	</div>
+	
+	<div class="container cf">
+
+		{% for post in posts %}		
+		<div class="post">
+
+			<div class="spacing">
+
+				<a class="thumbnail" href="{% url 'posts:detail' post.id %}" title="{{ post.title }}" data-apl="true">
+						
+					<img src="{{ MEDIA_URL }}{{ post.thumbnail }}">
+					
+				</a>
+
+				<div class="post_data">
+
+					<a class="title" href="{% url 'posts:detail' post.id %}" title="{{ post.title }}" data-apl="true">
+						
+						<span class="post_title bold ellipsis">{{ post.title }}</span>
+						
+					</a>
+
+					<div class="post_user">
+
+						<div class="published">
+
+							<span class="date">{{ post.published|elapsed_time }}</span>
+
+						</div>
+
+						<div class="user_profile">
+
+							<a href="{% url 'users:profile' post.user.username %}" class="profile" data-apl="true" title="{{ post.name }}">
+							
+								<img class="user_thumbnail" src="{{ MEDIA_URL }}{{ post.user.thumbnail }}">
+
+								<div class="user_names">
+										
+									<span class="name bold ellipsis">{{ post.user.name }}</span>
+									<span class="username ellipsis">@{{ post.user.username }}</span>
+										
+								</div>
+
+							</a>
+
+						</div>
+
+					</div>
+
+				</div>
+
+			</div>
+
+		</div>
+
+		{% endfor %}	
+		<!-- END .post -->
+
+	</div>
 
 </div>
 {% endblock content %}
 
 {% block js %}
-
+	<script class="js_file" src="{% static 'js/users/utils.js' %}"></script>
+	<script class="js_file" src="{% static 'js/posts/post_detail.js' %}"></script>
+	<script class="js_file" src="{% static 'js/pages/home_unauth.js' %}"></script>
 {% endblock js %}
 

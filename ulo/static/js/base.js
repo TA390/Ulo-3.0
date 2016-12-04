@@ -80,6 +80,60 @@ if (!Function.prototype.bind){
 }
 
 /* ------------------------------------------------------------------------------------ */
+/*
+	Source: https://github.com/Alhadis/Snippets/blob/master/js/polyfills/IE8-child-elements.js
+*/
+if(!("firstElementChild" in document.documentElement)){
+
+	Object.defineProperty(Element.prototype, "firstElementChild", {
+	
+		get: function(){
+			
+			for(var nodes = this.children, n, i = 0, l = nodes.length; i < l; ++i){
+				
+				if(n = nodes[i], 1 === n.nodeType){
+
+					return n;
+				
+				}
+
+			}
+
+			return null;
+		}
+
+	});
+
+}
+
+/* ------------------------------------------------------------------------------------ */
+/*
+	Source: https://github.com/Alhadis/Snippets/blob/master/js/polyfills/IE8-child-elements.js
+*/
+if(!("lastElementChild" in document.documentElement)){
+
+	Object.defineProperty(Element.prototype, "lastElementChild", {
+
+		get: function(){
+
+			for(var nodes = this.children, n, i = nodes.length - 1; i >= 0; --i){
+				
+				if(n = nodes[i], 1 === n.nodeType){
+
+					return n;
+			
+				}
+
+			}
+
+			return null;
+		
+		}
+
+	});
+}
+
+/* ------------------------------------------------------------------------------------ */
 
 if(!Array.isArray){
 
@@ -262,7 +316,7 @@ window.Ulo = {
 
 		@param request: Request data object.
 		@param reference: Optional reference assigned to the xhr instance.
-		@param manual_release: Boolean = if true the xhr instance will not be released
+		@param manual_release: Boolean - if true the xhr instance will not be released
 			automatically on completion.
 	*/
 	request: function(request, reference, manual_release){
@@ -1050,6 +1104,35 @@ window.Ulo = {
 
 
 
+/* GLOBALS */
+/* ------------------------------------------------------------------------------------ */
+/* 
+	(5-Feb-16)
+	https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/encodeURI.
+	
+*/
+function fixedEncodeURI(str){
+
+    return encodeURI(str).replace(/%5B/g, '[').replace(/%5D/g, ']');
+
+}
+
+/* ------------------------------------------------------------------------------------ */
+/*
+	(5-Feb-16)
+	https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/
+		encodeURIComponent.
+*/
+function fixedEncodeURIComponent(str){
+
+	return encodeURIComponent(str).replace(/[!'()*]/g, function(c){
+
+		return '%' + c.charCodeAt(0).toString(16);
+
+	});
+
+}
+
 /* DRAGGABLE */
 /* ------------------------------------------------------------------------------------ */
 /*
@@ -1059,7 +1142,7 @@ window.Ulo = {
 	@param settings: Optional settings to add or override existing settings (this.settings).
 	@param target: Optional element stored in the class. 
 */
-function Draggable(element, settings, target){
+function Draggable(element, settings, target, centre){
 	
 	try{
 		
@@ -1076,6 +1159,9 @@ function Draggable(element, settings, target){
 			in the start event.
 		*/
 		this.target = target;
+
+
+		this.centre = (centre === undefined ? true : centre);
 
 		/* Relative or absolute positioned html element */
 		var isElementNode = (
@@ -1161,9 +1247,12 @@ Draggable.prototype = {
 
 				/* Move the element to start position */
 
-				self.start = self.getOffset(e.currentTarget);
-				self.moveHandler.call(this, e);
+				if(self.centre === true){
 
+					self.start = self.getOffset(e.currentTarget);
+					self.moveHandler.call(this, e);
+
+				}
 
 				/* Set the start position for move events */
 
@@ -1416,6 +1505,10 @@ Draggable.prototype = {
 };
 
 /* END DRAGGABLE */
+/* ------------------------------------------------------------------------------------ */
+
+
+/* END GLOBALS */
 /* ------------------------------------------------------------------------------------ */
 
 
@@ -2129,18 +2222,34 @@ Draggable.prototype = {
 		var container = this.getContainer();
 
 
-		var button = container.querySelector("button.toggle_filter_ul");
+		/* Search filters */
 
-		Ulo.menus(button, "height", false, false, this.filters);
+		var filter = this.getFilter(),
 
+		button = container.querySelector("button.toggle_filter_ul"),
+
+		target = Ulo.get("filter_ul", "li[data-value='" + filter.value + "']");
+
+		if(target !== null){
+
+			Ulo.addClass(target, "selected");
+
+			Ulo.replaceIcon(button.querySelector("span.icon"), target.getAttribute("data-icon"));
+
+		}
+
+		Ulo.menus(button, "height", "open", false, this.filters.bind(this));
+
+
+		/* Search form */
 
 		$(this.getForm()).on("submit", {self: this}, this.submit);
 
-		$(container.querySelector("button.close"))
-			.on(Ulo.evts.click, {self: this}, this.close);
+		$(this.getInput()).on("input", {self: this}, this.autocomplete);
 
-		$(container.querySelector("button.submit"))
-			.on(Ulo.evts.click, {self: this}, this.open);
+		$(container.querySelector("button.close")).on(Ulo.evts.click, {self: this}, this.close);
+
+		$(container.querySelector("button.submit")).on(Ulo.evts.click, {self: this}, this.open);
 
 	}
 
@@ -2150,46 +2259,33 @@ Draggable.prototype = {
 
 		/* ----------------------------------------------------------------------------- */
 		/*
-			Handle filter selection and update the icon displayed on the search filters 
-			button.
-
-			@params *: See Class Menu callback function.
+			Register search suggestions links.
 		*/
-		filters: function(isClosed, button, menu, target){
+		register: function(a){
 
-			var icon_name = null,
+			if(Ulo.Page !== undefined){
 
-			selected = menu.querySelector("li.selected");
-
-
-			if(Ulo.isDescendant(menu, target, 1)){
-
-				if(selected === target){
-
-					icon_name = "down_arrow";
-
-				} else{
-
-					icon_name = target.getAttribute("data-icon");
-
-					Ulo.removeClass(selected, "selected");
-
-				}
-
-				Ulo.toggleClass(target, "selected");
-
-			} else if(selected === null){
-				
-				icon_name = (isClosed ? "down" : "up") + "_arrow";
+				$(a).on(Ulo.evts.click, {self: this}, this.search);
 
 			}
 
+		},
 
-			if(icon_name !== null){
+		/* ----------------------------------------------------------------------------- */
+		/*
+			Update the search input field before following the link. See posts().
+		*/
+		search: function(e){
 
-				Ulo.replaceIcon(button.querySelector("span.icon"), icon_name);
+			e.preventDefault();
 
-			}
+			var self = e.data.self,
+
+			query = e.currentTarget.querySelector("div.title");
+
+			self.getInput().value = query.textContent || query.innerHTML;
+			
+			Ulo.Page.getPage(e.currentTarget.href, true);
 
 		},
 
@@ -2215,7 +2311,47 @@ Draggable.prototype = {
 
 		/* ----------------------------------------------------------------------------- */
 		/*
-			Open search form if it is not visible else submit the form.
+			Return the nav search input field.
+		*/
+		getInput: function(){
+
+			return Ulo.get("nav_search_form", "input[name='q']");
+
+		},
+
+		/* ----------------------------------------------------------------------------- */
+		/*
+			Return the nav search filter field.
+		*/
+		getFilter: function(){
+
+			return Ulo.get("nav_search_form", "input.query_filter");
+
+		},
+
+		/* ----------------------------------------------------------------------------- */
+		/*
+			Return the nav search suggestions / filter container.
+		*/
+		getSuggestionsContainer: function(){
+
+			return Ulo.get("nav_search", "div.search_data");
+
+		},
+
+		/* ----------------------------------------------------------------------------- */
+		/*
+			Return the nav search suggestions container.
+		*/
+		getSuggestions: function(){
+
+			return Ulo.get("suggestions");
+
+		},
+
+		/* ----------------------------------------------------------------------------- */
+		/*
+			Open the search form if it is not visible else submit the form.
 		*/
 		open: function(e){
 
@@ -2223,11 +2359,12 @@ Draggable.prototype = {
 
 			container = self.getContainer();
 
+
 			if(container.clientWidth < 100){	
 
 				e.preventDefault();
 
-				Ulo.addClass(container, "open");
+				Ulo.addClass(container, Ulo.cls.open);
 
 			} else{
 
@@ -2241,25 +2378,565 @@ Draggable.prototype = {
 
 		/* ----------------------------------------------------------------------------- */
 		/*
-			Close search form.
+			Close the search form.
 		*/
 		close: function(e){
 
 			e.preventDefault();
 
-			Ulo.removeClass(e.data.self.getContainer(), "open");
+			Ulo.removeClass(e.data.self.getContainer(), Ulo.cls.open);
 
 		},
 
 		/* ----------------------------------------------------------------------------- */
 		/*
-			Submit handler.
+			Submit search form.
 		*/
 		submit: function(e){
 
+			var self = e.data.self,
+
+			input = self.getInput(),
+
+			value = $.trim(input.value);
+
+			
+			if(value !== ""){
+
+				/*
+					Do not trigger e.preventDefault() if the url cannot be updated 
+					following an ajax call.
+				*/
+				if(Ulo.Page === undefined){
+		
+					return true;
+				
+				}
+
+				var url = e.target.getAttribute("action") + "?" + $(e.target).serialize();	
+				
+				Ulo.Page.getPage(url, true);
+
+			}
+
 			e.preventDefault();
 
-			console.log("submit");
+		},
+
+		/* ----------------------------------------------------------------------------- */
+		/*
+			Filter selection.
+
+			@params *: See Class Menu callback function.
+		*/
+		filters: function(isClosed, button, menu, target){
+
+			var icon_name = null,
+
+			selected = menu.querySelector("li.selected");
+
+
+			if(Ulo.isDescendant(menu, target, 1)){
+
+				var filter_value = null;
+
+
+				if(selected === target){
+
+					icon_name = "down_arrow";
+
+				} else{
+
+					filter_value = target.getAttribute("data-value");
+
+					icon_name = target.getAttribute("data-icon");
+
+					Ulo.removeClass(selected, "selected");
+
+				}
+
+
+				Ulo.toggleClass(target, "selected");
+
+				this.getFilter().value = filter_value;
+
+				this.autocomplete();
+
+
+			} else if(selected === null){
+				
+				icon_name = (isClosed ? "down" : "up") + "_arrow";
+
+			}
+
+
+			if(icon_name !== null){
+
+				Ulo.replaceIcon(button.querySelector("span.icon"), icon_name);
+
+			}
+
+		},
+
+		/* ----------------------------------------------------------------------------- */
+		/*
+			Fetch search suggestions.
+		*/
+		autocomplete: function(e){
+
+			if(e === undefined){
+
+				e = { data: { self: this }, currentTarget: this.getInput() };
+
+			} else{
+
+				e.preventDefault();
+
+			}
+
+			var self = e.data.self,
+
+			value = $.trim(e.currentTarget.value);
+
+			if(value !== "" && Ulo.requestAvailable("autocomplete")){
+
+				Ulo.request({
+
+						type: "GET",
+						data: $(self.getForm()).serialize(),
+						url: "/search/autocomplete/"
+
+					}, "autocomplete")
+
+					.done(function(data, sc, xhr){
+
+						self.suggestions(data);
+
+				});
+
+			} else{
+
+				self.hideSuggestions();
+
+			}
+
+		},
+
+		/* ----------------------------------------------------------------------------- */
+		/*
+			Render the sugeestions.
+		*/
+		suggestions: function(data){
+
+			var keys = ["posts", "users"], 
+
+			isEmpty = true,
+
+			suggestions, 
+
+			container;
+
+
+			for(var key in keys){
+
+				key = keys[key];
+
+				suggestions = data[key];
+
+				container = Ulo.get("suggestions", "ul." + key + "_suggestions");
+
+
+				Ulo.empty(container, key);
+
+				if(suggestions && suggestions.length > 0){
+
+					isEmpty = false;
+
+					this[key](suggestions, container);
+
+					Ulo.removeClass(container, Ulo.cls.hide);
+
+				} else{
+
+					Ulo.addClass(container, Ulo.cls.hide);
+
+				}
+
+			}
+
+
+			if(isEmpty){
+
+				this.hideSuggestions();
+
+			} else{
+
+				this.showSuggestions();
+
+			}
+
+		},
+
+		/* ----------------------------------------------------------------------------- */
+		/*
+			HTML for user suggestions.
+
+			@param suggestions: User suggestions.
+			@param container: User suggestions container.
+		*/
+		users: function(suggestions, container){
+
+			var i, li, user, source;
+
+			for(i in suggestions){
+
+				source = suggestions[i]._source;
+
+				li = Ulo.create("li");
+
+				user = li.appendChild(
+
+					Ulo.create("a", {
+
+						"href": Ulo.getUserURL(source.username),
+						"data-apl": "true"
+
+					})
+
+				);
+
+				user.appendChild(
+
+					Ulo.create("img", {"src": Ulo.getMediaURL(source.thumbnail)})
+
+				);
+
+				user = user.appendChild(
+
+					Ulo.create("div", {"class": "names"})
+
+				);
+
+				user.appendChild(
+
+					Ulo.create("span", {"class": "name ellipsis"}, source.name)
+
+				);
+
+				user.appendChild(
+
+					Ulo.create("span", {
+
+						"class": "username ellipsis"}, 
+						"@" + source.username
+
+					)
+
+				);
+
+				Ulo.register(li);
+
+				container.appendChild(li);
+
+			}
+
+		},
+
+		/* ----------------------------------------------------------------------------- */
+		/*
+			HTML for post suggestions.
+
+			@param suggestions: Post suggestions.
+			@param container: Post suggestions container.
+		*/
+		posts: function(suggestions, container){
+
+			var i, li, title, filter = this.getForm().querySelector("input.query_filter");
+
+			for(i in suggestions){
+
+				li = Ulo.create("li");
+
+				title = li.appendChild(
+
+					Ulo.create("a", {
+
+						"href": (
+
+							"/search/?q=" + fixedEncodeURIComponent(suggestions[i].text) + 
+							"&" + filter.name + "=" + filter.value
+
+						),
+						"data-apl": "true"
+
+					})
+
+				);
+
+				this.register(title);
+
+				title.appendChild(
+
+					Ulo.create("div", {"class": "title"}, suggestions[i].text)
+
+				);
+
+				container.appendChild(li);
+
+			}
+
+		},
+
+		/* ----------------------------------------------------------------------------- */
+		/*
+			Hide search suggestions.
+		*/
+		hideSuggestions: function(e){
+
+			var self = (e === undefined ? this : e.data.self),
+
+			hide = (
+
+				e === undefined ||
+				Ulo.isDescendant(self.getForm(), e.target, 2) === false &&
+				Ulo.isDescendant(Ulo.get("filter_ul"), e.target, 2) === false
+
+			);
+
+			if(hide){
+
+				var container = self.getSuggestionsContainer(),
+
+				suggestions = self.getSuggestions();
+
+
+				Ulo.removeClass(container, Ulo.cls.open);
+
+				Ulo.removeClass(suggestions, Ulo.cls.open);
+
+
+				$(suggestions)
+
+					.off("mouseover", self.focusLink)
+					
+					.off("mouseout", self.blurLink);
+
+
+				$(document)
+
+					.off("keydown",  self.shortcuts)
+					
+					.off(Ulo.evts.click, self.hideSuggestions);
+
+			}
+
+		},
+
+		/* ----------------------------------------------------------------------------- */
+		/*
+			Show search suggestions.
+		*/
+		showSuggestions: function(){
+
+			var container = this.getSuggestionsContainer(),
+
+			suggestions = this.getSuggestions();
+
+			
+			Ulo.addClass(container, Ulo.cls.open);
+				
+			Ulo.addClass(suggestions, Ulo.cls.open);
+
+
+			$(suggestions)
+
+				.on("mouseover", {self: this}, this.focusLink)
+					
+				.on("mouseout", {self: this}, this.blurLink);
+
+			$(document)
+
+				.on("keydown", {self: this}, this.shortcuts)
+
+				.on(Ulo.evts.click, {self: this}, this.hideSuggestions);
+
+		},
+
+		/* ----------------------------------------------------------------------------- */
+		/*
+			Select the next or previous suggestions.
+
+			@param next: Boolean - if true select next, else select previous.
+			@param selected: Current selection or null.
+			@param suggestions: Suggestions container.
+		*/
+		selectSibling: function(next, selected, suggestions){
+
+			var sibling,
+
+			direction = next ? 
+
+				{ element: "firstElementChild", sibling: "nextSibling" }
+
+				:
+
+				{ element: "lastElementChild", sibling: "previousSibling" };
+
+
+			/* Select the first or last li */
+
+			if(selected === null){
+
+				/* Get the first or last ul. */
+
+				sibling = suggestions[direction.element];
+
+				/* Set sibling to the first or last li in the ul. */
+
+				sibling = sibling[direction.element];
+
+			}
+
+			/* Select the next or previous li */
+
+			else{
+
+				/* Get the next or previous li. */
+
+				sibling = selected[direction.sibling];
+
+
+				if(sibling === null){
+
+					/* Get the next or previous ul. */
+
+					sibling = selected.parentNode[direction.sibling];
+
+
+					/* Ignore all non element nodes */
+
+					while(sibling !== null && sibling.nodeType !== selected.ELEMENT_NODE){
+
+						sibling = sibling[direction.sibling];
+
+					}
+
+
+					/* If there is no next or previous ul wrap back around */
+
+					if(sibling === null){
+
+						sibling = suggestions[direction.element];
+
+					}
+
+					/* Set sibling to the first or last li in the next or previous ul. */
+
+					sibling = sibling[direction.element];
+
+				}	
+
+			}
+
+			Ulo.removeClass(selected, "selected");
+
+			Ulo.addClass(sibling, "selected");
+
+			sibling.querySelector("a").focus();
+
+		},
+
+		/* ----------------------------------------------------------------------------- */
+		/*
+			Navigate the suggestions with the arrow keys.
+		*/
+		shortcuts: function(e){
+
+			var self = e.data.self,
+
+			suggestions = self.getSuggestions(),
+
+			selected = suggestions.querySelector("li.selected");
+
+
+			/* Up arrow */
+
+			if(e.which === 38){
+
+				e.preventDefault();
+
+				self.selectSibling(false, selected, suggestions);
+
+			}
+
+			/* Down arrow */
+
+			else if(e.which === 40){
+
+				e.preventDefault();
+
+				self.selectSibling(true, selected, suggestions);
+
+			}
+
+		},
+
+
+		/* ----------------------------------------------------------------------------- */
+		/*
+			Focus the suggestions link.
+		*/
+		focusLink: function(e){
+
+			if(e.target !== e.currentTarget){
+
+				/* Normalise e.target to the li element */
+
+				while(e.target !== null && e.target.nodeName !== "LI"){
+
+					e.target = e.target.parentNode;
+
+				}
+
+				/* Get the current selection */
+
+				var selected = e.currentTarget.querySelector("li.selected");
+
+				/* If target is not the current selection update the selection */
+
+				if(e.target !== null && selected !== e.target){
+
+					Ulo.removeClass(selected, "selected");
+
+					Ulo.addClass(e.target, "selected");
+
+					e.target.querySelector("a").focus();
+
+				}
+
+			}
+
+		},
+
+		/* ----------------------------------------------------------------------------- */
+		/*
+			Blur the selected suggestion.
+		*/
+		blurLink: function(e){
+
+			/* Get the current selection */
+
+			var selected = e.currentTarget.querySelector("li.selected");
+
+			/* Deselect the element */
+
+			if(selected !== null){
+
+				Ulo.removeClass(selected, "selected");
+
+				selected.querySelector("a").blur();
+
+			}
 
 		},
 
@@ -3238,8 +3915,6 @@ Draggable.prototype = {
 
 		isOwner: function(id){
 
-			console.log(this.auth_id, id);
-
 			return this.auth_id !== null && this.auth_id == id;
 
 		},
@@ -3319,6 +3994,14 @@ Draggable.prototype = {
 		hasChanged: function(xhr){
 
 			return xhr.getResponseHeader("session-changed") !== null
+
+		},
+
+		/* ---------------------------------------------------------------------------- */
+
+		getUser: function(){
+
+			return this.auth_id;
 
 		},
 

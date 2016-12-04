@@ -20,7 +20,7 @@ html{
 
 .post_panel{
 
-	padding: 20px;
+	margin-bottom: 20px;
 
 }
 
@@ -523,6 +523,12 @@ div.post_data .cell{
 
 }
 
+div.main_panel{
+
+ 	padding: 20px;
+
+ }
+
 /* ---------------------------------- */
 
 div.side_panel{
@@ -535,7 +541,6 @@ div.side_panel img{
 
 	display: block;
 	width: 100%;
-	margin-bottom: 20px;
 
 }
 
@@ -581,8 +586,30 @@ span.panel_divider{
 
 
 
+/* ADVERTS */
+/* -------------------------------------------------------------------------- */
+
+
+div.advertisements{
+
+	margin: 20px;
+
+}
+
+/* END ADVERTS */
+/* -------------------------------------------------------------------------- */
+
+
+
+
 /* TITLE AND DESCRIPTION */
 /* -------------------------------------------------------------------------- */
+
+div.post_info{
+
+	margin-bottom: 15px;
+
+}
 
 h1.post_title{
 
@@ -610,6 +637,7 @@ h1.post_title{
 
 #toggle_post_description span.icon{
 
+	margin-right: -6px;
 	transition: background-position 0.4s ease;
 
 }
@@ -631,9 +659,11 @@ h1.post_title{
 
 }
 
-#post_description .description{
+#post_description .description,
+#post_description .category{
 
-	margin: 10px 0;
+	display: block;
+	margin: 0 0 5px 0;
 
 }
 
@@ -649,8 +679,9 @@ h1.post_title{
 div.vote{
 
 	display: inline-block;
-	vertical-align: middle;
+	vertical-align: top;
 	max-width: 50%;
+	overflow: hidden;
 
 }
 
@@ -658,58 +689,115 @@ div.vote{
 
 button.vote{
 
-	float: left;
-	width: 34px;
-	height: 34px;
+	display: block;
+	margin-right: 10px;
+	max-width: 100%;
+	height: 26px;
+	line-height: 26px;
 	background-color: transparent;
+
+}
+
+button.vote.selected,
+button.vote.selected span.abbr_count{
+
+	color: #1C82DA;
 
 }
 
 button.vote span{
 
-	display: block;
-	margin: 4px;
-	width: 26px;
-	height: 26px;
-	transform: scale(1.2);
+	float: left;
 
+}
+
+button.vote div{
+
+	margin-left: 31px;
+	height: 26px;
+	line-height: 26px;
+	overflow: hidden;
+
+}
+
+button.vote span.vote_icon{
+
+	width: 26px;
+	height: 100%;
+	border-radius: 100%;
+
+}
+
+button.vote span.vote_text{
+
+	display: inline-block;
+	vertical-align: top;
+	padding-right: 6px;
+	max-width: 100%;
+	font-size: 14px;
+
+}
+
+button.vote span.abbr_count{
+
+	font-size: 12px;
+	color: #666;
+
+}
+
+button.vote span.full_count{
+
+	display: none;
+	
 }
 
 /* ---------------------------------- */
 
-div.vote_data{
+/*div.vote_data{
 
-	margin-left: 40px;
+	margin-left: 30px;
 	margin-right: 10px;
-	max-width: 100%;
+	height: 26px;
+	line-height: 26px;
+	overflow: hidden;
 
-}
+}*/
 
 div.vote_data span{
 
-	display: block;
+/*	float: none;
+	display: inline-block;
+	vertical-align: top;
+	max-width: 100%;*/
 
 }
 
-div.vote_data span.vote_text{
+/*div.vote_data span.vote_text{
 
 	font-size: 14px;
-	line-height: 20px;
 
 }
 
 div.vote_data span.vote_count{
 
-	font-size: 11px;
-	line-height: 11px;
+	padding-left: 5px;
+	font-size: 12px;
+	color: #666;
 
 }
+
+div.vote_data span.full_count{
+
+	display: none;
+
+}*/
 
 /* ---------------------------------- */
 
 form.post_vote_form{
 
-	margin-right: 20px;
+	/* Width of a.toggle_actions_menu */
+	margin-right: 13px;
 
 }
 
@@ -722,8 +810,7 @@ div.post_actions{
 div.post_actions a.toggle_actions_menu{
 
 	position: absolute;
-	top: 20px; right: 20px;
-	height: 34px;
+	top: 0; right: 0;
 
 }
 
@@ -738,27 +825,37 @@ div.post_actions a.toggle_actions_menu{
 
 div.post_meta{
 
-	font-size: 14px;
+	font-size: 12px;
+	overflow: hidden;
 
 }
 
 div.post_meta span{
 
 	display: block;
+	color: #666;
 
 }
 
 div.post_meta span.published{
 
 	float: left;
-	padding-right: 20px;
 
 }
 
 div.post_meta span.views{
 
 	overflow: hidden;
-	text-align: right;
+
+}
+
+div.post_meta span.views:before{
+
+	position: relative;
+	top: -2px;
+	content: "|";
+	padding: 0 8px;
+	color: #A9A9A9;
 
 }
 
@@ -781,7 +878,7 @@ div.user_actions{
 a.connect{
 
 	display: block;
-	margin: 9px 0 9px 10px;
+	margin: 4px 0 4px 10px;
 	height: 32px;
 	line-height: 32px;
 	overflow: hidden;
@@ -845,7 +942,7 @@ div.user_profile{
 a.profile{
 
 	display: inline-block;
-	vertical-align: top;
+	vertical-align: middle;
 	max-width: 100%;
 
 }
@@ -854,30 +951,35 @@ img.user_thumbnail{
 
 	display: block;
 	float: left;
-	width: 50px;
-	height: 50px;
+	width: 40px;
+	height: 40px;
 	border-radius: 4px;
 
 }
 
 div.user_names{
 
-	margin: 3px 0 3px 60px;
+	margin: 0 0 0 46px;
+
+}
+
+div.user_names span{
+
+	display: block;
 
 }
 
 div.user_names .name{
 
 	margin: 0;
-	font-size: 16px;
-	line-height: 24px;
+	font-size: 15px;
+	line-height: 22px;
 
 }
 
 div.user_names .username{
 
-	display: block;
-	line-height: 20px;
+	line-height: 18px;
 	color: #666;
 
 }
@@ -1002,46 +1104,14 @@ div.comment_text{
 
 
 
-/* ADVERTS */
-/* -------------------------------------------------------------------------- */
-
-
-div.advertisements{
-
-	margin: 20px 0;
-	padding: 0 20px;
-
-}
-
-div.advertisements img{
-
-	display: block;
-	width: 100%;
-
-}
-
-/* END ADVERTS */
-/* -------------------------------------------------------------------------- */
-
-
-
-
 /* ACTIONS MENU */
 /* -------------------------------------------------------------------------- */
 
 a.toggle_actions_menu{
 
 	display: block;
-	width: 20px;
+	width: 13px;
 	overflow: hidden;
-
-}
-
-a.toggle_actions_menu span.icon{
-
-	float: right;
-	width: 10px;
-	margin: 4px auto;
 
 }
 
@@ -1049,7 +1119,7 @@ div.actions_menu{
 
 	height: 0;
 	position: absolute;
-	bottom: 60px; right: 20px;
+	bottom: 40px; right: 0;
 	overflow: hidden;
 
 }

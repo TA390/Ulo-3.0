@@ -1,0 +1,193 @@
+{% extends base_template %}
+{% load staticfiles i18n ulo_humanise elasticsearch %}
+
+
+{% block title %}Search{% endblock title %}
+
+{% block css %}
+	<link class="css_file" href="{% static 'css/search/search.css' %}" rel="stylesheet" type="text/css">
+{% endblock css %}
+
+
+{% block content %}
+<div id="search">
+
+
+	<div class="header">
+
+		<div class="container box_border">
+
+			<noscript>
+
+				<form id="search_form" action="{% url 'search:search' %}" method="get">
+
+					<div class="cell">
+
+						<input id="search_input" type="search" name="q" autofocus="autofocus" value="{{ q }}" autocomplete="off" placeholder="Search">
+
+					</div>
+
+					<div class="cell">
+
+						<button id="search_submit"  type="submit">
+						
+							<span class="icon icon_search"></span>
+						
+						</button>
+
+					</div>
+
+				</form>
+
+			</noscript>
+
+		</div>
+
+	</div>
+
+
+	<div class="container box_border search_results">
+
+		<div id="search_adverts">
+
+			<div class="advert">
+
+				<img src="https://s1.2mdn.net/viewad/4157372/UK_MakeIt_300x250.jpg">
+
+			</div>
+
+		</div>
+
+		{% if results.posts_total == 0 and results.users_total == 0 %}
+
+			<div class="no_results">No results for <b>{{ q }}</b></div>
+
+		{% endif %}
+
+
+		{% if results.users_total != 0 %}
+
+		<div id="users_results" class="results_container{% if results.posts_total != 0%} minify{% endif %}">
+
+			<div class="results">
+
+				{% for user in results.users %}
+				{% with user=user|get_source %}
+
+				<div class="result">
+	
+					<a class="box_border" href="{% url 'users:profile' user.username %}" data-apl="true">
+
+						<img src="{{ MEDIA_URL }}{{ user.thumbnail }}">
+						
+						<span class="bold ellipsis">{{ user.name }}</span>
+						
+						<span class="ellipsis">@{{ user.username }}</span>
+
+					</a>
+
+				</div>
+
+				{% endwith %}
+				{% endfor %}
+
+			</div>
+
+			{% if results.users_next_page != None %}
+
+			<form id="search_users_form" class="load" action="{% url 'search:search' %}" method="get">
+
+				<input type="hidden" name="q" value="{{ q }}">
+				
+				<input type="hidden" name="page" value="{{ results.users_next_page }}">
+				
+				<input type="hidden" name="filter" value="{{ search_filters.users }}">
+
+				<button class="load" type="submit">
+					
+					{% if results.users_only == True %}Load{% else %}Search{% endif %} accounts
+				
+				</button>
+
+			</form>
+
+			{% endif %}
+
+		</div>
+
+		{% endif %}
+
+
+		{% if results.posts_total != 0 %}
+
+		<div id="posts_results" class="results_container">
+
+			<div class="results">
+
+				{% for post in results.posts %}
+				{% with source=post|get_source id=post|get_id %}
+
+				<div class="result box_border">
+
+					<a class="thumbnail" href="{% url 'posts:detail' id %}" data-apl="true">
+						
+						<img src="{{ MEDIA_URL }}{{ source.thumbnail }}">
+					
+					</a>
+
+					<div class="content">
+					
+						<a class="title bold" href="{% url 'posts:detail' id %}" data-apl="true">
+							
+							{{ source.title }}
+
+						</a>
+						
+						<a class="username ellipsis" href="#">@&lt;username&gt;</a>
+
+						<span class="published">{{ source.published|elapsed_time }}</span>
+
+					</div>
+
+				</div>
+
+				{% endwith %}
+				{% endfor %}
+
+			</div>
+
+			{% if results.posts_next_page %}
+			
+			<form id="search_posts_form" class="load" action="{% url 'search:search' %}" method="get">
+
+				<input type="hidden" name="q" value="{{ q }}">
+				
+				<input type="hidden" name="page" value="{{ results.posts_next_page }}">
+				
+				<input type="hidden" name="filter" value="{{ search_filters.posts }}">
+
+				<button class="load" type="submit">Load posts</button>
+
+			</form>
+
+			{% endif %}
+
+		</div>
+
+		{% endif %}
+
+
+	</div>
+
+
+</div>
+{% endblock content %}
+
+
+{% block js %}
+
+	<script class="js_file" src="{% static 'js/users/utils.js' %}"></script>
+	<script class="js_file" src="{% static 'js/search/search.js' %}"></script>
+
+{% endblock js %}
+

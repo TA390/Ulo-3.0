@@ -1,4 +1,4 @@
-/* -------------------------------------------------------------------------- */
+ /* ------------------------------------------------------------------------- */
 
 #main_content{
 
@@ -12,6 +12,7 @@
 	vertical-align: top;
 	padding: 20px 0;
 	max-width: 100%;
+	text-align: center;
 
 }
 
@@ -39,6 +40,12 @@
 
 }
 
+#timeline .post_data{
+
+	padding: 15px 20px 20px 20px;
+
+}
+
 p.no_posts{
 
 	margin: 0;
@@ -46,6 +53,8 @@ p.no_posts{
 	font-size: 16px;
 
 }
+
+/* ---------------------------------- */
 
 a.title{
 
@@ -55,33 +64,64 @@ a.title{
 
 }
 
-div.post_meta{
+h1.post_title{
 
-	margin-top: 4px;
+	font-size: 16px;
+	color: #333;
+
+}
+
+/* ---------------------------------- */
+
+div.post_actions{
+
+	margin: 2px 0 18px 0;
+
+}
+
+/* ---------------------------------- */
+
+div.post_user img{
+
+	width: 32px;
+	height: 32px;
+
+}
+
+div.user_names{
+
+	margin: 0 0 0 37px;
+
+}
+
+div.user_names .name{
+
+	line-height: 18px;
+	font-size: 14px;
+	color: #333;
+
+}
+
+div.user_names .username{
+
+	line-height: 14px;
+	font-size: 12px;
+
+}
+
+div.user_actions a.toggle_actions_menu{
+
+	width: 26px;
+	height: 32px;
 	overflow: hidden;
 
 }
 
-div.post_meta > span{
+a.toggle_actions_menu span.icon{
 
-	float: left;
-	color: #666;
-	font-size: 14px;
-	line-height: 20px;
-	text-align: right;
-
-}
-
-div.post_meta > span.published{
-
-	padding: 0;
-
-}
-
-span.separator:before{
-
-	content: "\00b7";
-	padding: 0 6px;
+	margin-top: 8px;
+	width: auto;
+	height: 16px;
 
 }
 
@@ -121,7 +161,7 @@ div.side_panel .position{
 	overflow: hidden;
 
 }
-
+/*
 @media all and (min-width: 900px){
 
 
@@ -144,7 +184,7 @@ div.side_panel .position{
 
 	}
 
-}
+}*/
 
 /* -------------------------------------------------------------------------- */
 
@@ -163,4 +203,4 @@ div.side_panel .position{
 
 }
 
-/* -------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------- 

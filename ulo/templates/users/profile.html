@@ -508,30 +508,37 @@
 
 		<div id="editor_footer">
 			
-			<div class="editor_control_panel">
+			<div id="scale_element">
 
-				<div class="editor_slider_container">
+				<div class="editor_slider">
 
-					<div class="editor_slider">
-						<div class="slider_container">
-							<button id="scale_slider" type="button" class="slider">
-								<span class="hide">Scale slider</span>
-							</button>
-						</div>
+					<button class="slider scale_slider" type="button">
+						
+						<span class="hide">Scale</span>
 
-						<div class="scale_bar slider_bar_container">
-							<span id="scale_slider_bar"></span>
-						</div>
-					</div>
+					
+					</button>
+
+					<span class="slider_track">
+						
+						<span class="trail"></span>
+
+					</span>
+
 				</div>
-
+				
 			</div>
 
 			<div class="editor_actions">
 
 				<button id="editor_submit" type="button">
-					Submit
-				</button>
+					Change
+				</button><div id="editor_input" class="file_input">
+						
+					<span class="icon icon_camera_white"></span>
+					<input accept="image/gif,image/jpeg,image/jpg,image/png" capture="capture" class="file" name="editor_photo" type="file">
+
+				</div>
 
 			</div>
 
@@ -540,20 +547,20 @@
 
 		<div id="editor_menu">
 
-				<button id="toggle_editor_menu_actions" type="button" class="toggle_menu" data-toggle="editor_menu_actions">
-					<span class="icon icon_down_arrow_white"></span>
-					<span class="hide">Editor menu</span>
+			<button id="toggle_editor_menu_actions" type="button" class="toggle_menu" data-toggle="editor_menu_actions">
+				<span class="icon icon_down_arrow_white"></span>
+				<span class="hide">Editor menu</span>
+			</button>
+
+			<div id="editor_menu_actions" class="hide">
+
+				<button class="editor_delete" type="button">
+					Delete
 				</button>
 
-				<div id="editor_menu_actions" class="hide">
-
-					<button class="editor_delete" type="button">
-						Delete
-					</button>
-
-				</div>
-
 			</div>
+
+		</div>
 
 
 	</div>

@@ -50,7 +50,7 @@ class EsBulkProcessing(EsException):
 
 
 
-# INDEX API MIXIN
+# SEARCH FILTERS
 # ----------------------------------------------------------------------------------------
 
 class SearchFilters(object):
@@ -59,16 +59,16 @@ class SearchFilters(object):
 
 		self.FILTER_KEY = 'query_filter'
 
-		self.ACCOUNT = 1
+		self.ACCOUNT = '1'
 
-		self.VIDEO = 2
+		self.VIDEO = '2'
 
-		self.IMAGE = 3
+		self.IMAGE = '3'
 
 
 	def get(self, request):
 
-		return request.GET(self.FILTER_KEY, '')
+		return request.GET.get(self.FILTER_KEY, '')
 
 # ----------------------------------------------------------------------------------------
 
@@ -1559,18 +1559,20 @@ class SearchAPIMixin(object):
 
 	# ------------------------------------------------------------------------------------
 
-	def post_autocomplete_query(self, query, media_type):
+	def post_autocomplete_query(self, query):
 
 		return {
 			
 			'size': 0, 
+
+			'_source': False,
 			
 			'suggest':{
 			
-				'text': query,	
-			
 				'post_suggestions' : {
 			
+					'text': query,
+
 					'completion': {	
 			
 						# Name of the field to run the query against.
@@ -1583,10 +1585,7 @@ class SearchAPIMixin(object):
 						'fuzzy': {
 
 							# Do not fuzzy match the first 3 characters.
-							'prefix_length': '3',
-
-							# Max number of fuzzy options.
-							'max_expansions': '10'
+							'prefix_length': '3'
 
 						},
 		
@@ -1623,13 +1622,15 @@ class SearchAPIMixin(object):
 		return {
 			
 			'size': 0,
+
+			'_source': ["name", "username", "thumbnail"],
 			
 			'suggest':{
 			
-				'text': query,	
-			
 				'user_suggestions' : {
 			
+					'text': query,
+
 					'completion': {	
 			
 						# Name of the field to run the query against.
@@ -1642,10 +1643,7 @@ class SearchAPIMixin(object):
 						'fuzzy': {
 
 							# Do not fuzzy match the first 3 characters.
-							'prefix_length': '3',
-
-							# Max number of fuzzy options.
-							'max_expansions': '10'
+							'prefix_length': '3'
 
 						}
 		
@@ -1677,21 +1675,13 @@ class SearchAPIMixin(object):
 
 	# ------------------------------------------------------------------------------------
 
-	def autocomplete(self, query, media_type='null', fail_silently=True, **param_kwargs):
+	def autocomplete(self, query, fail_silently=False, **param_kwargs):
 
 		data =  '{ "index": "%s" }\n' %(self.indices['posts'])
-		data += serialiser.dumps( 
-
-			self.post_autocomplete_query(query, media_type), encode=False 
-
-		) + '\n'
+		data += serialiser.dumps(self.post_autocomplete_query(query), encode=False) + '\n'
 		
 		data += '{ "index": "%s" }\n' %(self.indices['users'])
-		data += serialiser.dumps( 
-
-			self.user_autocomplete_query(query), encode=False 
-
-		) + '\n'
+		data += serialiser.dumps(self.user_autocomplete_query(query), encode=False) + '\n'
 
 		return self.request_response(
 

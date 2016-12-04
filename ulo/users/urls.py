@@ -24,6 +24,8 @@ from . import views
 # ----------------------------------------------------------------------------------------
 
 urlpatterns = [
+
+	url(r'^available/(?P<username>[\w]+)/$', views.UsernameAvailableView.as_view(), name='available'),
 		
 	# Follow user
 	url(r'^follow/(?P<pk>[\d]+)/$', views.FollowUserView.as_view(), name='follow'),

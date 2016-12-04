@@ -12,6 +12,7 @@ from django.http import JsonResponse
 # Thrid party app imports
 
 # Project imports
+from posts.models import Post
 from ulo.utils import get_cid, postfetchmany, validate_cid
 from ulo.views import UloView
 
@@ -28,7 +29,9 @@ class HomeUnauthView(UloView):
 
 
 	def get(self, request, *args, **kwargs):
-	
+		
+		kwargs['posts'] = Post.objects.select_related('user').all()[:24]
+
 		return super(HomeUnauthView, self).get(request, *args, **kwargs)
 
 # ----------------------------------------------------------------------------------------

@@ -274,7 +274,6 @@ div.location_icon{
 
 	display: block;
 	float: left;
-	margin-right: 5px;
 	width: 20px;
 	height: 20px;
 	overflow: hidden;
@@ -283,7 +282,7 @@ div.location_icon{
 
 span.icon_location{
 
-	margin-left: -3px;
+	margin-left: -7px;
 	margin-top: -3px;
 
 }
@@ -348,7 +347,7 @@ span.icon_location{
 
 #tab_content{
 
-	padding: 10px;
+	padding: 15px;
 
 }
 
@@ -367,7 +366,7 @@ span.icon_location{
 
 #tab_content div.spacing{
 
-	margin: 10px 10px;
+	margin: 5px;
 
 }
 
@@ -450,12 +449,7 @@ span.icon_location{
 	position: relative;
 	background-color: #FFF;
 	padding: 20px;
-
-	/*
-		The natural height of the element when title 
-		is two lines long.
-	*/
-	height: 75px;
+	height: 65px;
 
 }
 
@@ -464,7 +458,7 @@ span.icon_location{
 	display: inline-block;
 	max-width: 100%;
 	word-wrap: break-word;
-	font-size: 16px;
+	font-size: 14px;
 	overflow: hidden;
 
 }
@@ -491,6 +485,7 @@ span.icon_location{
 
 	position: absolute;
 	left:20px; right: 20px; bottom: 20px;
+	font-size: 13px;
 
 }
 

@@ -114,9 +114,11 @@ class SearchView(UloView):
 			page = int(request.GET.get('page', 1))
 
 			if page < 1:
+
 				raise ValueError
 
 			if page*size > max_total:
+				
 				return None
 
 		except ValueError:
@@ -157,23 +159,31 @@ class SearchView(UloView):
 
 
 			# Get the search filter.
-			fltr = search_filters.get(request.GET.get('filter'))
+			fltr = search_filters.get(request)
 
 
-			# If there is no filter search posts and users together.
-			if fltr == None:
+			if fltr == search_filters.VIDEO:
+
+				page = self.get_page(request, psize, post_search.max_result_window)
 
 
-				# Get the first set or results for posts and users when there is no filter.
-				responses = es.search(q, start=0, posts_size=psize, users_size=min_usize)
+				if page==None:
 
+					status = 400
 
-				if responses != None:
+				else:
 
-					responses = responses['responses']
+					posts, ptotal = self.get_results( 
 
-					posts, ptotal = self.get_results( self.get_index(responses, 0) )
-					users, utotal = self.get_results( self.get_index(responses, 1) )
+						es.post_search(
+
+							q,
+							size=psize,
+							start=(page-1)*psize
+						
+						)
+
+					)
 
 					results.update({
 
@@ -181,19 +191,14 @@ class SearchView(UloView):
 						'posts_total': ptotal,
 						'posts_next_page': self.next_page(
 
-							1, psize, ptotal, post_search.max_result_window
+							page, psize, ptotal, post_search.max_result_window
 
-						),
-
-						'users': users,
-						'users_total': utotal,
-						'users_next_page': 1 if utotal > min_usize else None
+						)
 
 					})
 
 
-			elif fltr == USER:
-				
+			elif fltr == search_filters.ACCOUNT:
 
 				page = self.get_page(request, usize, user_search.max_result_window)
 
@@ -230,30 +235,19 @@ class SearchView(UloView):
 					})
 
 
+			# If there is no filter search posts and users together.
 			else:
 
+				# Get the first set or results for posts and users when there is no filter.
+				responses = es.search(q, start=0, posts_size=psize, users_size=min_usize)
 
-				page = self.get_page(request, psize, post_search.max_result_window)
 
+				if responses != None:
 
-				if page==None:
+					responses = responses['responses']
 
-					status = 400
-
-				else:
-
-					posts, ptotal = self.get_results( 
-
-						es.post_search(
-
-							q,
-							size=psize,
-							start=(page-1)*psize,
-							media_type=None if fltr==POST else fltr
-						
-						)
-
-					)
+					posts, ptotal = self.get_results( self.get_index(responses, 0) )
+					users, utotal = self.get_results( self.get_index(responses, 1) )
 
 					results.update({
 
@@ -261,11 +255,15 @@ class SearchView(UloView):
 						'posts_total': ptotal,
 						'posts_next_page': self.next_page(
 
-							page, psize, ptotal, post_search.max_result_window
+							1, psize, ptotal, post_search.max_result_window
 
-						)
+						),
 
-					})
+						'users': users,
+						'users_total': utotal,
+						'users_next_page': 1 if utotal > min_usize else None
+
+					})				
 
 
 		if status == 400:
@@ -273,7 +271,7 @@ class SearchView(UloView):
 			messages.error(request, _('Search requests are limited to 1000 results.'))
 
 
-		if request.is_ajax() and request.GET.get('load')=='true':
+		if request.is_ajax() and request.GET.get('load') == 'true':
 			
 			results['messages'] = get_messages_json(request)
 
@@ -319,7 +317,9 @@ class AutocompleteView(UloView):
 
 			if q != '':
 
-				fltr = search_filters.get(request)
+				fltr = request.GET.get(search_filters.FILTER_KEY)
+
+				print(fltr == search_filters.ACCOUNT, fltr, search_filters.ACCOUNT)
 
 				if fltr == search_filters.VIDEO:
 
@@ -341,9 +341,11 @@ class AutocompleteView(UloView):
 
 				else:
 
-					responses = es.autocomplete(q).get('responses')
+					responses = es.autocomplete(q)
 
 					if responses != None:
+
+						responses = responses.get('responses')
 
 						results.update({
 

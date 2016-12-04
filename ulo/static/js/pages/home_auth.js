@@ -367,9 +367,7 @@
 
 					elem = post.appendChild(Ulo.create("div", {"class": "post_data cf"}));
 
-					parent = elem.appendChild(Ulo.create("div", {"class": "post_panel"}))
-
-						.appendChild(Ulo.create("a", {
+					parent = elem.appendChild(Ulo.create("a", {
 
 							"class": "title",
 							"href": Ulo.getPostURL(posts[i].id),
@@ -387,7 +385,7 @@
 					);
 
 
-					parent = elem.appendChild(Ulo.create("div", {"class": "post_actions post_panel"}))
+					parent = elem.appendChild(Ulo.create("div", {"class": "post_actions"}))
 
 					form = parent.appendChild(Ulo.create("form", {
 
@@ -408,14 +406,17 @@
 							"class": "vote", 
 							"name": "vote",
 							"type": "submit",
-							"value": option.option_id
+							"value": option.option_id,
+							"title": option.text
 
 						});
 
-						icon = child.appendChild(button).appendChild(Ulo.create("span"));
+						icon = child.appendChild(button).appendChild(Ulo.create("span", {"class": "vote_icon"}));
 
 
 						if(option.vote_id !== null){
+
+							Ulo.addClass(button, "selected");
 
 							child.appendChild(Ulo.create("input", {
 
@@ -427,35 +428,42 @@
 
 						}
 
-						if(posts[i].options[j].icon){
+						if(option.icon){
 
 							Ulo.addClass(icon, "font_icon " + option.icon);
 
 						}
 
-						if(posts[i].options[j].colour){
+						if(option.colour){
 
 							icon.style.backgroundColor = option.colour;
 
 						}
 
 						
-						child = child.appendChild(Ulo.create("div", {"class": "vote_data"}));
+						child = button.appendChild(Ulo.create("div", {"class": "vote_data"}));
 
-						child.appendChild(Ulo.create("span", {"class": "vote_text ellipsis"}, option.text));
+						child.appendChild(Ulo.create("span", {"class": "vote_text bold ellipsis"}, option.text));
 
-						child.appendChild(Ulo.create("span", {"class": "vote_count full_count ellipsis"}, option.count));
+						child.appendChild(Ulo.create("span", {"class": "abbr_count ellipsis"}, window.abbreviate(option.count)));
+
+						child.appendChild(Ulo.create("span", {"class": "full_count"}, option.count));
 
 					}
 
-					child = parent.appendChild(Ulo.create("a", {
 
-						"class": "toggle_actions_menu",
-						"href": "/post/" + posts[i].id + "/actions/",
-						"title": "Post actions",
-						"data-toggle": "post_menu",
-						"data-id": posts[i].id,
-						"data-is-owner": is_owner
+					parent = elem.appendChild(Ulo.create("div", {"class": "post_user"}));
+
+					child = parent.appendChild(Ulo.create("div", {"class": "user_actions"}))
+
+						.appendChild(Ulo.create("a", {
+
+							"class": "toggle_actions_menu",
+							"href": "/post/" + posts[i].id + "/actions/",
+							"title": "Post actions",
+							"data-toggle": "post_menu",
+							"data-id": posts[i].id,
+							"data-is-owner": is_owner
 
 					}));
 
@@ -463,10 +471,24 @@
 
 					child.appendChild(Ulo.create("span", {"class": "hide"}, "Post actions"));
 
+					// <div class="user_profile">
 
-					parent = elem.appendChild(Ulo.create("div", {"class": "post_user post_panel"}))
+					// 	<a href="{% url 'users:profile' post.username %}" class="profile" data-apl="true" title="{{ post.name }}">
+						
+					// 		<img class="user_thumbnail" src="{{ MEDIA_URL }}{{ post.user_thumbnail }}">
 
-						.appendChild(Ulo.create("div", {"class": "user_profile"}))
+					// 		<div class="user_names">
+									
+					// 			<span class="name bold ellipsis">{{ post.name }}</span>
+					// 			<span class="username ellipsis">@{{ post.username }}</span>
+									
+					// 		</div>
+
+					// 	</a>
+
+					// </div>
+
+					child = parent.appendChild(Ulo.create("div", {"class": "user_profile"}))
 
 						.appendChild(Ulo.create("a", {
 
@@ -477,43 +499,18 @@
 
 					}));
 
-					parent.appendChild(Ulo.create("img", {
+					child.appendChild(Ulo.create("img", {
 
 						"class": "user_thumbnail", 
 						"src": Ulo.getMediaURL(posts[i].user_thumbnail)
 
 					}));
 
+					child = child.appendChild(Ulo.create("div", {"class": "user_names"}));
 
-					parent = parent.appendChild(Ulo.create("span", {"class": "post_meta"}));
+					child.appendChild(Ulo.create("span", {"class": "name bold ellipsis"}, posts[i].name));
 
-					parent.appendChild(
-
-						Ulo.create(
-
-							"span", {"class": "views ellipsis"}, 
-							posts[i].views.toLocaleString() + " view" + (posts[i].views != 1 ? "s" : "")
-						)
-
-					);
-
-					parent.appendChild(
-
-						Ulo.create("span", {"class": "separator"})
-
-					);
-
-					parent.appendChild(
-
-						Ulo.create("span", {"class": "published"}, window.shortDate(posts[i].published))
-
-					);
-
-					parent = parent.appendChild(Ulo.create("div", {"class": "user_names"}));
-
-					parent.appendChild(Ulo.create("h2", {"class": "name thin ellipsis"}, posts[i].name));
-
-					parent.appendChild(Ulo.create("span", {"class": "username ellipsis"}, "@"+posts[i].username));
+					child.appendChild(Ulo.create("span", {"class": "username ellipsis"}, "@"+posts[i].username));
 
 					/* END POST DATA */
 

@@ -85,11 +85,11 @@
 
                             </div>
 
-                            <form id="nav_search_form" href="#" method="get">
+                            <form id="nav_search_form" action="{% url 'search:search' %}" method="get">
 
                                 <input class="box_border" type="search" name="q" autofocus="autofocus" value="{{ q }}" autocomplete="off" placeholder="Search {{ site_name }}">
 
-                                <input class="query_filter" type="hidden" name="{{ query_filter.FILTER_KEY }}" value="">
+                                <input class="query_filter" type="hidden" name="{{ query_filter.FILTER_KEY }}" value="{{ query_filter_value }}">
 
                                 <button class="toggle_filter_ul" data-toggle="filter_ul" type="button">
 
@@ -105,11 +105,11 @@
 
                                 <ul id="filter_ul">
 
-                                    <li class="filter" data-icon="video">
+                                    <li class="filter" data-icon="video" data-value="{{ query_filter.VIDEO }}">
                                         Videos
                                     </li>
                                     
-                                    <li class="filter" data-icon="account">
+                                    <li class="filter" data-icon="account" data-value="{{ query_filter.ACCOUNT }}">
                                         Accounts
                                     </li>
                                 
@@ -117,36 +117,9 @@
 
                                 <div id="suggestions">
 
-                                    <ul class="post_suggestions hide">
+                                    <ul class="posts_suggestions"></ul>
 
-                                        <li>
-                                            <a href="#">
-                                                <div class="title">
-                                                    Post title 1
-                                                </div>
-                                            </a>
-                                        </li>
-                                        
-                                        <li>
-                                            <a href="#">Post title 2</a>
-                                        </li>
-                                    
-                                    </ul>
-
-                                    <ul class="user_suggestions hide">
-
-                                        <li>
-                                            <a href="#">
-                                                <img src="https://x1.xingassets.com/assets/frontend_minified/img/users/nobody_m.original.jpg">
-                                                
-                                                <div class="names">
-                                                    <span class="name ellipsis">Taha</span>
-                                                    <span class="username ellipsis">@tahabdalla</span>
-                                                </div>
-                                            </a>
-                                        </li>
-                                    
-                                    </ul>
+                                    <ul class="users_suggestions"></ul>
 
                                 </div>
 
@@ -191,7 +164,7 @@
 
                     <li>
                         
-                        <a href="{% url 'users:profile' user.username %}" class="ellipsis" data-apl="true" title="Profile">{{ user.get_short_name }}</a>
+                        <a href="{% url 'users:profile' user.username %}" class="ellipsis" data-apl="true" title="{{ user.name }}">{{ user.get_short_name }}</a>
 
                     </li><li>
                         
@@ -199,7 +172,7 @@
 
                     </li><li>
                         
-                        <a href="#" class="ellipsis" data-apl="true" title="Settings">Settings</a>
+                        <a href="{% url 'settings:account' %}" class="ellipsis" data-apl="true" title="Settings">Settings</a>
 
                     </li><li>
                         

@@ -1,0 +1,182 @@
+/* -------------------------------------------------------------------------- */
+
+html{
+
+	background-color: #E6E6E6;
+
+}
+
+#main_content{
+
+	max-width: none;
+
+}
+
+#home_unauth{
+
+
+}
+
+/* -------------------------------------------------------------------------- */
+
+div.header{
+
+	height: 200px;
+	background-color:  #9219DD;
+
+}
+
+div.container{
+
+	padding: 15px;
+
+}
+
+/* -------------------------------------------------------------------------- */
+
+div.post{
+
+	float: left;
+	width: 100%;
+
+}
+
+div.spacing{
+
+	margin: 5px;
+	border-radius: 4px;
+	background-color: #FFF;
+	overflow: hidden;
+
+}
+
+@media all and (min-width: 540px){
+
+	div.post{
+
+		width: 50%;
+
+	}
+
+}
+
+@media all and (min-width: 800px){
+
+	div.post{
+
+		width: 33.333333%;
+
+	}
+
+}
+
+@media all and (min-width: 1060px){
+
+	div.post{
+
+		width: 25%;
+
+	}
+
+}
+
+/* -------------------------------------------------------------------------- */
+
+a.thumbnail{
+
+	display: block;
+
+}
+
+a.thumbnail img{
+
+	display: block;
+	width: 100%;
+
+}
+
+/* -------------------------------------------------------------------------- */
+
+div.post_data{
+
+	padding: 10px 15px 15px 15px;
+
+}
+
+/* -------------------------------------------------------------------------- */
+
+div.post_user{
+
+	overflow: hidden;
+
+}
+
+/* ---------------------------------- */
+
+div.user_profile img{
+
+	float: left;
+	margin-right: 10px;
+	width: 32px;
+	height: 32px;
+	border-radius: 4px;
+
+}
+
+div.user_names span{
+
+	display: block;
+
+}
+
+div.user_names .name{
+
+	line-height: 18px;
+	font-size: 14px;
+	color: #333;
+
+}
+
+div.user_names .username{
+
+	line-height: 14px;
+	font-size: 12px;
+	color: #666;
+
+}
+
+/* ---------------------------------- */
+
+div.published{
+
+	float: right;
+	margin-left: 10px;
+	font-size: 13px;
+
+}
+
+/* -------------------------------------------------------------------------- */
+
+a.title{
+
+	display: inline-block;
+	vertical-align: top;
+	margin-bottom: 10px;
+	max-width: 100%;
+
+}
+
+a.title > .post_title{
+
+	display: block;
+	font-size: 14px;
+/*	color:  #9219DD;*/
+
+}
+
+/* -------------------------------------------------------------------------- */
+
+/* -------------------------------------------------------------------------- */
+
+
+

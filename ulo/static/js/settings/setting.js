@@ -17,12 +17,12 @@
 
 		this.cls = "selected";
 
-		var tabs = getElement("tabs").getElementsByTagName("a");
+		var tabs = Ulo.get("tabs").getElementsByTagName("a");
 
 		/* Set this.active_tab */
 		for(var i=0; i<tabs.length; ++i){
 
-			if( hasClass(tabs[i], this.cls) ){
+			if(Ulo.hasClass(tabs[i], this.cls)){
 
 				this.active_tab = tabs[i];
 
@@ -66,7 +66,7 @@
 		*/
 		getContainer: function(tab){
 		
-			return getElement(this.getContainerID(tab));
+			return Ulo.get(this.getContainerID(tab));
 		
 		},
 
@@ -123,15 +123,19 @@
 		changeTab: function(tab, container){
 
 			/* Hide the current tab's content */
-			addClass(this.getContainer(this.active_tab), Ulo.cls.hide);
-			removeClass(this.active_tab, this.cls);
+			Ulo.addClass(this.getContainer(this.active_tab), Ulo.cls.hide);
+			Ulo.removeClass(this.active_tab, this.cls);
 
 			/* Display the selected tab's content */
-			removeClass(container, Ulo.cls.hide);
-			this.active_tab = addClass(tab, this.cls);
+			Ulo.removeClass(container, Ulo.cls.hide);
+			this.active_tab = Ulo.addClass(tab, this.cls);
 
 			/* Update the url */
-			updateURL(tab.getAttribute("href"));
+			if(Ulo.Page !== undefined){
+
+				Ulo.Page.updateHistory(tab.getAttribute("href"));
+
+			}
 
 			/* Set or reset the validation class */
 			this.validation(tab, container);
@@ -194,45 +198,31 @@
 
 			var self=this;
 
-			if(self.jqxhr===null){
+			if(Ulo.requestAvailable()){
 
-				self.jqxhr = $.ajax({
+				Ulo.request({
 
 						type: "GET", 
-						url: tab.getAttribute("href"), 
-						statusCode: requestCodes
+						url: tab.getAttribute("href")
 
 					})
 
 					/* Params: server data, status code, xhr */
 					.done(function(data, sc, xhr){
 
-						var container = getFragElement(
+						var container = Ulo.getFragment(
 
-							createDocFrag(data.html),
+							Ulo.createFragment(data.html),
 							self.getContainerID(tab)
 
 						);
 
-						addClass(container, Ulo.cls.hide);
+						Ulo.addClass(container, Ulo.cls.hide);
 						
-						getElement("tab_content").appendChild(container);
+						Ulo.get("tab_content").appendChild(container);
 
 						self.changeTab(tab, container);
 
-					})
-
-					/* Params: xhr, status code, error type */
-					.fail(function(xhr){
-						
-						requestMessages(xhr);
-					
-					})
-					
-					.always(function(){
-					
-						self.jqxhr = null;
-				
 				});
 			
 			}
@@ -253,7 +243,7 @@
 	function AccountSetting(){
 
 		/* Run the base class constructor first */
-		var form = Ulo.TEMP.Validation.apply(this, arguments);
+		var form = Ulo.Temp.Validation.apply(this, arguments);
 
 		/* Customise the validators */
 		this.setValidator("username", this.usernameAvailable);
@@ -267,7 +257,7 @@
 
 	/* -------------------------------------------------------------------------------- */
 
-	AccountSetting.prototype = inherit(Ulo.TEMP.Validation.prototype);
+	AccountSetting.prototype = Ulo.inherit(Ulo.Temp.Validation.prototype);
 
 	/* -------------------------------------------------------------------------------- */
 
@@ -285,7 +275,7 @@
 
 		}
 
-		Ulo.TEMP.Validation.prototype.done.call(this, form, data, xhr);
+		Ulo.Temp.Validation.prototype.done.call(this, form, data, xhr);
 
 	}
 
@@ -296,13 +286,13 @@
 	*/
 	AccountSetting.prototype.fail = function(form, xhr){
 
-		Ulo.TEMP.Validation.prototype.fail.call(this, form, xhr);
+		Ulo.Temp.Validation.prototype.fail.call(this, form, xhr);
 
-		if(xhr.responseJSON!==undefined && xhr.responseJSON.errors!==undefined){
+		if(xhr.responseJSON !== undefined && xhr.responseJSON.errors !== undefined){
 
 			for(var n in xhr.responseJSON.errors){
 
-				if(n!=="password"){
+				if(n !== "password"){
 
 					return true;
 
@@ -363,16 +353,15 @@
 
 			target,
 
-			"/user/available/"+target.value+"/",
+			"/user/available/" + target.value + "/",
 			
 			is_valid && is_evt && target.regexp.test(target.value)===false,
 			
 			function(target, available){
 
-				var data = available ? 
-					["Available", "available"] : ["Unavailable", "unavailable"];
+				var text = available ? "available" : "unavailable";
 				
-				this.addText(this.getField(target.name), data[0], data[1]);
+				this.addText(this.getField(target.name), Ulo.capitalise(text), text);
 
 			}
 
@@ -477,7 +466,7 @@
 	function PasswordSetting(){
 
 
-		var form = Ulo.TEMP.Validation.apply(this, arguments);
+		var form = Ulo.Temp.Validation.apply(this, arguments);
 		
 		this.validators["new_password"] = this.copy("password");
 		this.setValidator("new_password", this.matchPasswords);
@@ -492,7 +481,7 @@
 	
 	/* -------------------------------------------------------------------------------- */
 
-	PasswordSetting.prototype = inherit(Ulo.TEMP.Validation.prototype);
+	PasswordSetting.prototype = Ulo.inherit(Ulo.Temp.Validation.prototype);
 
 	/* -------------------------------------------------------------------------------- */
 
@@ -504,7 +493,7 @@
 	*/
 	PasswordSetting.prototype.always = function(form, xhr){
 
-		Ulo.TEMP.Validation.prototype.always.call(this, form, xhr);
+		Ulo.Temp.Validation.prototype.always.call(this, form, xhr);
 		this.setSubmitDisabled(false);
 
 	}
@@ -558,12 +547,13 @@
 
 		if(is_valid){
 
-			var vpw = getElement("verify_password");
+			var vpw = Ulo.get("verify_password");
 
 			if(this.not_empty.test(vpw.value)){
 
 				var container = this.getField(vpw.name),
-				npw = getElement("new_password")
+				
+				npw = Ulo.get("new_password")
 
 				this.removeText(container);
 

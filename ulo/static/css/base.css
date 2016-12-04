@@ -304,17 +304,15 @@ div.search_submit{
 
 div.search_data{
 
-	display: block;
 	position: absolute;
 	top: 48px; left: 0; right: 0;
 	line-height: normal;
 	text-align: left;
 
 }
-
 div.search_data.open{
 
-	box-shadow: 0 0 1px 1px rgba(51, 51, 51, 0.4);
+	border: 1px solid #333;
 
 }
 
@@ -328,14 +326,17 @@ div.search_data.open{
 	overflow: hidden;
 
 }
+#filter_ul.open{
 
+	height: auto;
+
+}
 #filter_ul li{
 
 	padding: 10px;
 	cursor: pointer;
 
 }
-
 #filter_ul li:hover,
 #filter_ul li.selected{
 
@@ -344,30 +345,38 @@ div.search_data.open{
 }
 
 
-#suggestions ul{
+#suggestions{
 
-	color: #FFF;
-	background-color: #333;
+	display: none;
+	background-color: #FFF;
+
+}
+
+#suggestions.open{
+
+	display: block;
 
 }
 
 #suggestions a{
 
 	display: block;
-	padding: 6px 10px;
+	padding: 10px;
+	color: #333;
+	outline: none;
+
+}
+#suggestions li:hover a,
+#suggestions li:hover span,
+#suggestions li.selected a,
+#suggestions li.selected span{
+
+	background-color: #333;
 	color: #FFF;
 
 }
 
-#suggestions a:hover,
-#suggestions a:hover span{
-
-	background-color: #333;
-
-}
-
-
-ul.post_suggestions div.title{
+ul.posts_suggestions div.title{
 
 	font-size: 1em;
 	max-height: 2.8em;
@@ -376,13 +385,11 @@ ul.post_suggestions div.title{
 	display: -webkit-box;
 	-webkit-line-clamp: 2;
 	-webkit-box-orient: vertical;
-
 	text-overflow: -o-ellipsis-lastline;
 
 }
 
-
-ul.user_suggestions img{
+ul.users_suggestions img{
 
 	float: left;
 	margin-right: 6px;
@@ -391,20 +398,17 @@ ul.user_suggestions img{
 	border-radius: 4px;
 
 }
-
-ul.user_suggestions div.names{
+ul.users_suggestions div.names{
 
 	overflow: hidden;
 
 }
-
-ul.user_suggestions span{
+ul.users_suggestions span{
 
 	display: block;
 
 }
-
-ul.user_suggestions span.username{
+ul.users_suggestions span.username{
 
 	font-size: 12px;
 	color: #999;
@@ -1075,10 +1079,11 @@ body.modal_open{
 .icon{
 
 	display: block;
+	margin: auto;
 	width: 26px;
 	height: 26px;
 	background-repeat: no-repeat;
-	background-size: 26px 1170px;
+	background-size: 26px 1222px;
 	background-image: url("../icons/icons.svg");
 
 }
@@ -1347,9 +1352,21 @@ body.modal_open{
 
 }
 
-.icon_colour_picker{
+.icon_edit{
 
 	background-position: 0 -1144px;
+
+}
+
+.icon_edit_white{
+
+	background-position: 0 -1170px;
+
+}
+
+.icon_colour_picker{
+
+	background-position: 0 -1196px;
 
 }
 
@@ -1361,6 +1378,91 @@ body.modal_open{
 
 /* FONT ICONS */
 /* -------------------------------------------------------------------------- */
+
+/*.font_icon{
+
+	display: block;
+	margin: auto;
+	width: 32px;
+	height: 32px;
+
+	background-image: url("../icons/font_icons.svg");
+	background-repeat: no-repeat;
+	background-size: 64px 352px;
+
+}
+
+.font_icon.selected{
+
+	background-position-x: -32px;
+
+}
+
+.icon_love{
+
+	background-position: 0 0;
+
+}
+
+.icon_like{
+
+	background-position: 0 -32px;
+
+}
+
+.icon_dislike{
+
+	background-position: 0 -64px;
+
+}
+
+.icon_no{
+
+	background-position: 0 -96px;
+
+}
+
+.icon_yes{
+
+	background-position: 0 -128px;
+
+}
+
+.icon_smile{
+
+	background-position: 0 -160px;
+
+}
+
+.icon_sad{
+
+	background-position: 0 -192px;
+
+}
+
+.icon_tongue{
+
+	background-position: 0 -224px;
+
+}
+
+.icon_angry{
+
+	background-position: 0 -256px;
+
+}
+
+.icon_sick{
+
+	background-position: 0 -288px;
+
+}
+
+.icon_star{
+
+	background-position: 0 -320px;
+
+}*/
 
 .font_icon{
 

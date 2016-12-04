@@ -33,6 +33,8 @@ BASE_AJAX_TEMPLATE_NAME = 'base_ajax.html'
 
 SEARCH_FILTER_KEY = 'query_filter'
 
+SEARCH_FILTER_VALUE_KEY = 'query_filter_value'
+
 # ----------------------------------------------------------------------------------------
 
 def base_template(request):
@@ -43,7 +45,8 @@ def base_template(request):
 
 		BASE_TEMPLATE_KEY: template,
 		SITE_NAME_KEY: settings.SITE_NAME,
-		SEARCH_FILTER_KEY: search_filters
+		SEARCH_FILTER_KEY: search_filters,
+		SEARCH_FILTER_VALUE_KEY: search_filters.get(request)
 
 	}
 

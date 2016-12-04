@@ -70,11 +70,13 @@ function roundDownTo(n, m){
 */
 function ScaleElement(){
 
-	window.Draggable.call(this, "scale_slider", { vertical: false });
+	var slider = Ulo.get("scale_element", "button.slider");
+
+	window.Draggable.call(this, slider, { vertical: false, marginOffset: 13 }, null);
+
+	this.trail = Ulo.get("scale_element", "span.trail");
 
 	this.elements = [];
-
-	this.target = null;
 
 	this.register();
 
@@ -144,7 +146,7 @@ ScaleElement.prototype.select = function(element){
 
 	this.target = element;
 
-	this.element.style.left = (element !== null && element.scale || "0%");
+	this.element.style.left = this.trail.style.width = (element !== null && element.scale || "0%");
 
 };
 
@@ -169,6 +171,8 @@ ScaleElement.prototype.update = function(){
 */
 ScaleElement.prototype.calcPosition = function(pos, p1, p2){
 
+	pos += this.settings.marginOffset;
+
 	/* Calculate the position of the slider */
 
 	if(pos < this.settings[p1]){ 
@@ -186,7 +190,7 @@ ScaleElement.prototype.calcPosition = function(pos, p1, p2){
 
 	/* Set the position of the slider */
 
-	this.element.style[p1] = this.target.scale = pos + "%";
+	this.element.style[p1] = this.trail.style.width = this.target.scale = pos + "%";
 
 
 	/* Scale the element */
@@ -279,7 +283,7 @@ ScaleElement.prototype.scale_all = function(){
 */
 function MoveElement(){
 
-	window.Draggable.call(this);
+	window.Draggable.call(this, null, {}, true, false);
 
 }
 /* ------------------------------------------------------------------------------------ */
@@ -374,15 +378,18 @@ MoveElement.prototype.calcPosition = function(pos, p1, p2){
 */
 function VideoThumbnail(){
 
-	window.Draggable.call(this, "thumbnail_slider", { vertical: false, offsetX: -4 });
+	var slider = Ulo.get("thumbnail_selector", "button.slider"),
 
-	if(this.element === null){
+	settings = { vertical: false, marginOffset: 13, offsetX: -4 };
+
+
+	if(slider === null){
 
 		this.select = this.update = function(){}
 
 	} else{
 
-		this.target = null;
+		window.Draggable.call(this, slider, settings, null);
 
 		this.register();
 
@@ -472,6 +479,8 @@ VideoThumbnail.prototype.close = function(){
 	@params *: See base class Draggable.
 */
 VideoThumbnail.prototype.calcPosition = function(pos, p1, p2){
+
+	pos += this.settings.marginOffset;
 
 	/* Calculate the position of the slider */
 
@@ -1415,11 +1424,17 @@ ImageEditor.prototype = {
 
 		this.selected = null;
 
-		this.MoveElement.close();
+		if(this.MoveElement){
+
+			this.MoveElement.close();
 		
-		this.ScaleElement.close();
+			this.ScaleElement.close();
+			
+			this.VideoThumbnail.close();
+
+		}
+
 		
-		this.VideoThumbnail.close();
 
 		this.resetOrientation();
 
@@ -1860,7 +1875,7 @@ ImageEditor.prototype = {
 			
 			var icon  = e.currentTarget.querySelector("span.icon");
 
-			Ulo.addClass(Ulo.removeClass(icon, "icon_down_arrow"), "icon_up_arrow");
+			Ulo.replaceIcon(icon, "up_arrow_white");
 
 			$(document).on(Ulo.evts.click, {self: self, ignore: true}, self._hideMenu);
 
@@ -1895,7 +1910,7 @@ ImageEditor.prototype = {
 
 				var icon  = button.querySelector("span.icon");
 
-				Ulo.addClass(Ulo.removeClass(icon, "icon_up_arrow"), "icon_down_arrow");
+				Ulo.replaceIcon(icon, "down_arrow_white");
 
 				$(document).off(Ulo.evts.click, this._hideMenu);
 
@@ -3406,6 +3421,7 @@ FileUpload.prototype = {
 		var is_valid = false,
 
 		count = this.Editor.count();
+
 
 		/*
 			If there are no files then assign this.file_type to the type of the current 

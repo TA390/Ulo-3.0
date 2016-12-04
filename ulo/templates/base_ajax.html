@@ -6,7 +6,7 @@
 
     <li>
         
-        <a href="{% url 'users:profile' user.username %}" class="ellipsis" data-apl="true" title="Profile">{{ user.get_short_name }}</a>
+        <a href="{% url 'users:profile' user.username %}" class="ellipsis" data-apl="true" title="{{ user.get_short_name }}">{{ user.get_short_name }}</a>
 
     </li><li>
         
@@ -14,7 +14,7 @@
 
     </li><li>
         
-        <a href="#" class="ellipsis" data-apl="true" title="Settings">Settings</a>
+        <a href="{% url 'settings:account' %}" class="ellipsis" data-apl="true" title="Settings">Settings</a>
 
     </li><li>
         

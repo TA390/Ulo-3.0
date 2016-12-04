@@ -269,7 +269,7 @@ class BaseProfileView(UloView):
 		"""
 
 		# Number or results to return per page.
-		self.per_page = 2
+		self.per_page = 16
 
 		# Set LIMIT to per_page plus one but return per_page results. The extra result is 
 		# used to determine if the rendered page should display a 'load more' button.

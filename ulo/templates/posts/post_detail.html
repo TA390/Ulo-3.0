@@ -13,7 +13,7 @@
 {% block content %}
 <div id="post_detail">
 
-	<div class="post" data-id="{{ post.id }}">
+	<div class="post" data-id="{{ post.id }}" data-user="{{ post.user_id }}">
 
 
 		<div class="post_media">
@@ -157,7 +157,7 @@
 
 				<div class="main_panel">
 						
-					<div class="post_panel">
+					<div class="post_info">
 
 						<div class="table">
 
@@ -167,7 +167,7 @@
 
 							</div>
 
-							{% if post.description != '' %}
+							{% if post.description != '' or post.category != None %}
 							<div id="toggle_post_description" class="cell">
 
 								<button type="button" data-toggle="post_description" title="Description" data-touch="local">
@@ -198,6 +198,13 @@
 
 						{% endif %}
 
+						<div class="post_meta">
+				
+							<span class="published ellipsis">{{ post.published|short_date }}</span>
+							<span class="views ellipsis">1,000,00{{ post.views }}&nbsp;view{% if post.views != 1 %}s{% endif %}</span>
+						
+						</div>
+
 					</div>
 
 
@@ -210,32 +217,41 @@
 						{% for option in post.options %}<div class="vote">
 
 							{% if option.vote_id == None %}
+							
+								<button class="vote" name="vote" value="{{ option.option_id }}" type="submit" title="{{ option.text }}">
 
-								<button class="vote" name="vote" value="{{ option.option_id }}" data-count="{{ option.count }}" type="submit" title="{{ option.text }}">
+									<span {% if option.icon == '' %}class="vote_icon" style="background-color:{{ option.colour }}"{% else %}class="vote_icon font_icon {{ option.icon }}"{% endif %}></span>
 
-									<span {% if option.icon == '' %}class="vote" style="background-color:{{ option.colour }}"{% else %}class="font_icon {{ option.icon }}"{% endif %}></span>
+									<div class="vote_data">
+
+										<span class="vote_text bold ellipsis">{{ option.text }}</span>
+										<span class="vote_count abbr_count ellipsis">{{ option.count|abbreviate }}</span>
+										<span class="full_count">{{ option.count }}</span>
+
+									</div>
 
 								</button>
 							
 							{% else %}
-							
+
 								<input name="voted" type="hidden" value="{{ option.vote_id }}">
 
-								<button class="vote" name="vote" value="{{ option.option_id }}" data-count="{{ option.count }}" type="submit" title="{{ option.text }}">
+								<button class="vote selected" name="vote" value="{{ option.option_id }}" type="submit" title="{{ option.text }}">
 
-									<span {% if option.icon == '' %}class="selected" style="background-color:{{ option.colour }}"{% else %}class="selected font_icon {{ option.icon }}"{% endif %}></span>
+									<span {% if option.icon == '' %}class="vote_icon" style="background-color:{{ option.colour }}"{% else %}class="vote_icon font_icon {{ option.icon }}"{% endif %}></span>
+
+									<div class="vote_data">
+
+										<span class="vote_text bold ellipsis">{{ option.text }}</span>
+										<span class="abbr_count ellipsis">{{ option.count|abbreviate }}</span>
+										<span class="full_count">{{ option.count }}</span>
+
+									</div>
 
 								</button>
-							
+
 							{% endif %}
-
-							<div class="vote_data">
-
-								<span class="vote_text ellipsis">{{ option.text }}</span>
-								<span class="vote_count full_count ellipsis">1,000,00{{ option.count }}</span>
-
-							</div>
-
+			
 							</div>{% endfor %}
 				
 						</form>
@@ -248,17 +264,6 @@
 						</a>
 
 					</div>
-
-
-
-					<div class="post_meta post_panel">
-				
-						<span class="published">{{ post.published|short_date }}</span>
-						<span class="views ellipsis">{{ post.views }}&nbsp;view{% if post.views != 1 %}s{% endif %}</span>
-					
-					</div>
-
-
 
 
 					<div class="post_user post_panel">
@@ -283,7 +288,7 @@
 
 								<span class="full_count">{{ post.followers_count }}</span>
 								<span class="abbr_count bold">{{ post.followers_count|abbreviate }}</span>
-								<span class="icon icon_unfollow"></span>
+								<span class="icon icon_unfollow_white"></span>
 							
 							</a>
 						
@@ -316,7 +321,7 @@
 
 					{% if comments_disabled == False %}
 
-					<div class="post_panel">
+					<div class="post_comment">
 						
 						<span class="comments_count">
 							{{ post.comments_count }}&nbsp;comment{% if post.comments_count != 1 %}s{% endif %}
@@ -350,7 +355,7 @@
 
 					{% else %}
 
-					<div id="comments_container" class="post_panel">
+					<div id="comments_container">
 
 						<p class="comments_disabled">Comments have been disabled for this post.</p>
 

@@ -1769,15 +1769,13 @@
 			Style the icon to appear selected or unselected.
 
 			@param button: Vote button.
-			@param select: Boolean - if true add "selected" to the icon class, else remove it.
+			@param select: Boolean - if true add "selected" to the button, else remove it.
 		*/
 		selectVote: function(button, select){
 
 			if(button !== null){
 
-				var toggle = (select ? Ulo.addClass : Ulo.removeClass);
-
-				toggle(button.querySelector(".font_icon"), "selected");
+				var toggle = (select ? Ulo.addClass : Ulo.removeClass)(button, "selected");
 
 			}
 

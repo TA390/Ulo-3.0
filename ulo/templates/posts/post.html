@@ -270,7 +270,7 @@
 
 			<div id="editor_header">
 			
-				<h2 class="ellipsis">Editor</h2>
+				<h2 class="ellipsis">Thumbnail</h2>
 
 				<button id="editor_close" type="button" data-close-modal="true">
 					<span class="icon icon_cross"></span>
@@ -290,9 +290,12 @@
 
 						<div class="crop" style="top: 30px; bottom: 30px; left: 30px; right: 30px;">
 
-							<span class="loading"></span>
-
-							<img src="https://storage.googleapis.com/imgfave/image_cache/1388048108204472.jpg">
+							<video preload="metadata" data-autoplay="true">
+						
+								<source src="/media/posts/12-16/a11d6937f4e747c2b4442e58c0053d6c.mp4" type="video/mp4">
+								Your browser does not support video playback.
+									
+							</video>
 
 						</div>
 
@@ -305,45 +308,44 @@
 
 			<div id="editor_footer">
 				
-				<div class="editor_control_panel">
+				<div id="thumbnail_selector">
+						
+					<div class="editor_slider thumbnail_slider">
 
-					<div id="video_thumbnail" class="editor_slider_container">
-						<div class="editor_slider">
+						<button class="slider thumbnail_slider" type="button">
+							
+							<span class="hide">Thumbnail slider</span>
+							<span class="splitter"></span>
+						
+						</button>
 
-							<div class="thumbnail_slider_container slider_container">
-								<button id="thumbnail_slider" type="button" class="slider">
-									<span class="hide">Thumbnail slider</span>
-									<span class="splitter"></span>
-								</button>
-							</div>
-
-							<div class="thumbnail_bar slider_bar_container">
-								<span id="thumbnail_slider_bar"></span>
-							</div>
-
-							<div class="thumbnail_input">
-								<input id="thumbnail_time" class="box_border bold" type="text" value="0:00">
-							</div>
-
-						</div>
 					</div>
 
-					<div class="editor_slider_container">
-
-						<div class="editor_slider">
-							<div class="slider_container">
-								<button id="scale_slider" type="button" class="slider">
-									<span class="hide">Scale slider</span>
-								</button>
-							</div>
-
-							<div class="scale_bar slider_bar_container">
-								<span id="scale_slider_bar"></span>
-							</div>
-						</div>
-					</div>
+					<input id="thumbnail_time" class="box_border bold" type="text" value="0:00">
 
 				</div>
+
+				<div id="scale_element">
+
+					<div class="editor_slider">
+
+						<button class="slider scale_slider" type="button">
+							
+							<span class="hide">Scale</span>
+
+						
+						</button>
+
+						<span class="slider_track">
+							
+							<span class="trail"></span>
+
+						</span>
+
+					</div>
+					
+				</div>
+
 
 				<div class="editor_actions">
 
@@ -351,7 +353,7 @@
 						Save
 					</button><div id="editor_input" class="file_input">
 						
-						<span class="icon icon_video"></span>
+						<span class="icon icon_video_white"></span>
 						{{ form.editor_file }}
 
 					</div>
@@ -364,7 +366,7 @@
 			<div id="editor_menu">
 
 				<button id="toggle_editor_menu_actions" type="button" class="toggle_menu" data-toggle="editor_menu_actions">
-					<span class="icon icon_down_arrow"></span>
+					<span class="icon icon_down_arrow_white"></span>
 					<span class="hide">Editor menu</span>
 				</button>
 

@@ -659,7 +659,7 @@
 
 			content = this.getContent(this.selected),
 			
-			auth_id = Ulo.Session.get()[Ulo.Session.AUTH_NAME];
+			auth_id = Ulo.Session.getUser();
 
 
 			for(var i in connections){
@@ -941,7 +941,7 @@
 
 							var menu = self.getMenu();
 
-							self.FileUpload = new FileUpload(menu, self.changePicture.bind(self), {});
+							self.FileUpload = new FileUpload(Ulo.getMain(), self.changePicture.bind(self), {});
 
 							$(self.getDelete()).on(Ulo.evts.click, {self: self}, self.deletePicture);
 

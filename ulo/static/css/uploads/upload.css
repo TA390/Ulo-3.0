@@ -173,7 +173,6 @@ input.file::-ms-browse{
 	max-height: 100%;
 	background-color: #FFF;
 	border-radius: 4px;
-
 	overflow: auto;
 
 }
@@ -200,9 +199,10 @@ input.file::-ms-browse{
 #editor_header > button{
 
 	position: absolute;
-	top:5px; right:10px;
-	width: 32px;
-	height: 32px;
+	top:7px; right:10px;
+	display: block;
+	width: 26px;
+	height: 26px;
 	background-color: transparent;
 
 }
@@ -235,12 +235,12 @@ input.file::-ms-browse{
 
 #editor_content > div:first-child{
 
-	background-color: red;
+	background-color: #1C82DA;
 
 }
 #editor_content > div:last-child{
 
-	background-color: blue;
+	background-color: #9219DD;
 
 }
 
@@ -290,171 +290,131 @@ input.file::-ms-browse{
 
 /* -------------------------------------------------------------------------- */
 
-#editor_footer button,
-#editor_footer div.file_input{
 
-	display: inline-block;
-	vertical-align: middle;
-	margin: auto 5px;
-	height: 32px;
-	line-height: 30px;
-	border: 1px solid #666666;
-	background-color: #FFF;
-	border-radius: 4px;
-	cursor: pointer;
-	text-align: center;
+#editor_footer{
+
+	margin: 0 30px;
 
 }
 
-#editor_footer button.slider,
-#editor_footer div.file_input{
 
-	width: 32px;
+div.editor_slider{
+
+	position: relative;
+	margin: 10px 0;
+	height: 26px;
 
 }
 
-#editor span.icon{
+button.slider{
 
-	display: inline-block;
-	vertical-align: middle;
+	z-index: 2;
+	position: absolute;
+	top: 0; left: 0;
+	margin-left: -13px;
+	width: 26px;
+	height: 26px;
+
+}
+
+span.slider_track{
+
+	position: relative;
+	top: 11px;
+	display: block;
+	width: 100%;
+	height: 4px;
+	background-color: #E6E6E6;
+
+}
+
+span.trail{
+
+	display: block;
+	width: 0;
+	height: 100%;
+	background-color: #9219DD;
 
 }
 
 /* ----------------------------------- */
 
-#editor_footer div.editor_slider_container{
-
-	padding: 10px 15px;
-	border-bottom: 1px solid #EFEFEF;
-
-}
-
-#editor_footer div.editor_slider{
+#thumbnail_selector{
 
 	position: relative;
-	height: 32px;
-	overflow: hidden;
+	padding-right: 83px;
 
 }
 
-#editor_footer .slider_container{
+#thumbnail_time{
 
 	position: absolute;
-	left: 0; right: 32px;
+	top: 0; right: 0;
+	width: 60px;
+	height: 100%;
+	border: none;
+	text-align: center;
+	background-color: #E6E6E6;
 
 }
 
-#video_thumbnail .slider_container{
+div.thumbnail_slider{
 
-	right: 102px;
-
-}
-
-#editor_footer button.slider{
-
-	position: absolute;
-	margin: 0;
-	left: 0;
-	outline: none;
-	cursor: move;
+	background-color: #E6E6E6;
 
 }
 
-#editor_footer #scale_slider{
-	
-	border-radius: 16px;
-	background-color: #666;
+button.thumbnail_slider{
 
-}
-
-#editor_footer #thumbnail_slider{
-	
-	width: 32px;
-	border: 4px solid #666;
+	border-radius: 4px;
+	border: 4px solid #9219DD;
 	background-color: transparent;
 
 }
 
-#editor_footer #thumbnail_slider > .splitter{
-	
+span.splitter{
+
 	display: block;
-	margin: 0 auto;
+	margin: auto;
+	width: 2px;
 	height: 100%;
-	width: 1px;
-	background-color: #666;
+	background-color: #9219DD;
+}
+
+/* ----------------------------------- */
+
+div.thumbnail_slider{
+
+	background-color: #E6E6E6;
 
 }
 
-#editor_footer .slider_bar_container{
+button.scale_slider{
 
-	margin: 0 16px;
-	background-color: #DDD;
-
-}
-
-#editor_footer .scale_bar{
-	
-	margin-top: 14px;
-	height: 4px;
-	border-radius: 2px;
-
-}
-
-#editor_footer .thumbnail_bar{
-	
-	margin-right: 86px;
-	height: 32px;
-	border-radius: 4px;
-
-}
-
-
-#editor_footer .thumbnail_input{
-
-	position: absolute;
-	top: 0; right: 0;
-	height: 100%;
-	width: 60px;
-	border-radius: 4px;
-	background-color: #DDD;
-	overflow: hidden;
-
-}
-
-#editor_footer .thumbnail_input > input{
-
-	padding: 0 10px;
-	width: 100%;
-	height: 100%;
-	border: none;
-	outline: none;
-	background-color: #DDD;
-	text-align: center;
+	border-radius: 100%;
+	background-color: #9219DD;
+	box-shadow: 0 0 2px 0.5px rgba(51, 51, 51, 0.2);
 
 }
 
 /* ----------------------------------- */
 
-#editor_footer > .editor_actions{
+div.editor_actions button,
+div.editor_actions .file_input{
 
 	display: inline-block;
-	vertical-align: top;
-	padding: 10px 0;
-	max-width: 320px;
-	
-}
-
-div.editor_actions button{
-
-	-webkit-box-sizing: initial;
-
-}
-
-div.editor_actions #editor_submit{
-
-	padding: 0 10px;
+	vertical-align: middle;
+	margin: 10px 5px;
+	height: 26px;
+	border-radius: 4px;
 	background-color: #666;
 	color: #FFF;
+
+}
+
+#editor_submit{
+
+	padding: 0 8px;
 
 }
 
@@ -495,7 +455,7 @@ div.editor_actions #editor_submit{
 
 	outline: none;
 	border-radius: 4px;
-	background-color: rgba(255, 255, 255, 0.6);
+	background-color: rgba(0, 0, 0, 0.5);
 
 }
 

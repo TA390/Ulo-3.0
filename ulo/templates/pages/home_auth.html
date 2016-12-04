@@ -172,90 +172,93 @@
 
 				<div class="post_data cf">
 
-					<div class="post_panel">
-
-						<a class="title" href="{% url 'posts:detail' post.id %}" title="Post Detail" data-apl="true">
-							<h1 class="post_title thin">{{ post.title }}</h1>
-						</a>
-
-						<div class="post_meta">
-							
-							<span class="views ellipsis">{{ post.views }}&nbsp;view{% if post.views != 1 %}s{% endif %}</span>
-							<span class="separator"></span>
-							<span class="published">{{ post.published|short_date }}</span>
+					<a class="title" href="{% url 'posts:detail' post.id %}" title="{{ post.title }}" data-apl="true">
 					
-						</div>
+						<h1 class="post_title thin">{{ post.title }}</h1>
+					
+					</a>
 
-					</div>
 
-
-					<div class="post_actions post_panel">
+					<div class="post_actions">
 
 						<form class="post_vote_form" action="{% url 'posts:vote' post.id %}" method="get">
 				
 						{% for option in post.options %}<div class="vote">
 
 							{% if option.vote_id == None %}
+							
+								<button class="vote" name="vote" value="{{ option.option_id }}" type="submit" title="{{ option.text }}">
 
-								<button class="vote" name="vote" value="{{ option.option_id }}" data-count="{{ option.count }}" type="submit" title="{{ option.text }}">
+									<span {% if option.icon == '' %}class="vote_icon" style="background-color:{{ option.colour }}"{% else %}class="vote_icon font_icon {{ option.icon }}"{% endif %}></span>
 
-									<span {% if option.icon == '' %}class="vote" style="background-color:{{ option.colour }}"{% else %}class="font_icon {{ option.icon }}"{% endif %}></span>
+									<div class="vote_data">
+
+										<span class="vote_text bold ellipsis">{{ option.text }}</span>
+										<span class="vote_count abbr_count ellipsis">{{ option.count|abbreviate }}</span>
+										<span class="full_count">{{ option.count }}</span>
+
+									</div>
 
 								</button>
 							
 							{% else %}
-							
+
 								<input name="voted" type="hidden" value="{{ option.vote_id }}">
 
-								<button class="vote" name="vote" value="{{ option.option_id }}" data-count="{{ option.count }}" type="submit" title="{{ option.text }}">
+								<button class="vote selected" name="vote" value="{{ option.option_id }}" type="submit" title="{{ option.text }}">
 
-									<span {% if option.icon == '' %}class="selected" style="background-color:{{ option.colour }}"{% else %}class="selected font_icon {{ option.icon }}"{% endif %}></span>
+									<span {% if option.icon == '' %}class="vote_icon" style="background-color:{{ option.colour }}"{% else %}class="vote_icon font_icon {{ option.icon }}"{% endif %}></span>
+
+									<div class="vote_data">
+
+										<span class="vote_text bold ellipsis">{{ option.text }}</span>
+										<span class="abbr_count ellipsis">{{ option.count|abbreviate }}</span>
+										<span class="full_count">{{ option.count }}</span>
+
+									</div>
 
 								</button>
-							
+
 							{% endif %}
-
-							<div class="vote_data">
-
-								<span class="vote_text ellipsis">{{ option.text }}</span>
-								<span class="vote_count full_count ellipsis">{{ option.count }}</span>
-
-							</div>
-
+			
 							</div>{% endfor %}
 				
 						</form>
 
-						<a class="toggle_actions_menu" href="{% url 'posts:actions' post.id %}" title="Post actions" data-toggle="post_menu" data-id="{{ post.id }}"{% if post.user_id == user.id %} data-is-owner="true"{% endif %}>
-
-							<span class="icon icon_menu"></span>
-							<span class="hide">Post actions</span>
-						
-						</a>
-
 					</div>
 
+					<div class="post_user">
 
-					<div class="post_user post_panel">
-					
+						<div class="user_actions">
+
+							<a class="toggle_actions_menu" href="{% url 'posts:actions' post.id %}" title="Post actions" data-toggle="post_menu" data-id="{{ post.id }}"{% if post.user_id == user.id %} data-is-owner="true"{% endif %}>
+
+								<span class="icon icon_menu"></span>
+								<span class="hide">Post actions</span>
+							
+							</a>
+
+						</div>
+
 						<div class="user_profile">
 
 							<a href="{% url 'users:profile' post.username %}" class="profile" data-apl="true" title="{{ post.name }}">
-						
+							
 								<img class="user_thumbnail" src="{{ MEDIA_URL }}{{ post.user_thumbnail }}">
 
 								<div class="user_names">
-									
-									<h2 class="name thin ellipsis">{{ post.name }}</h2>
+										
+									<span class="name bold ellipsis">{{ post.name }}</span>
 									<span class="username ellipsis">@{{ post.username }}</span>
-									
+										
 								</div>
 
 							</a>
 
 						</div>
-					
+
 					</div>
+
 
 				</div>
 				<!-- END .post_data -->
