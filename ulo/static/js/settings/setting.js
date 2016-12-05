@@ -13,8 +13,6 @@
 	*/
 	function SettingTabs(){
 
-		this.jqxhr = null;
-
 		this.cls = "selected";
 
 		var tabs = Ulo.get("tabs").getElementsByTagName("a");
@@ -272,6 +270,18 @@
 		if(data.html===undefined){
 
 			this.storeState(form);
+
+		}
+
+		if(Ulo.EmailConfirmation){
+
+			 var email = this.getField("email");
+
+			 if(email){
+
+			 	Ulo.EmailConfirmation.update(email.value);
+
+			 }
 
 		}
 

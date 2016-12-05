@@ -242,32 +242,33 @@
 
         <!-- end messages ================================================================ -->
 
-        <!-- email confirmation ====================================================== -->
+        <main role="main" id="main_content" class="container" data-token-id="{{ csrf_token }}"{% if user.is_authenticated %} data-auth-id="{{ user.id }}"{% endif %}>
 
-        {% if user.email_confirmed == False %}
-<!--             <div id="email_confirmation">
+            <!-- email confirmation ====================================================== -->
+
+            {% if user.email_confirmed == False %}
+            <div class="email_confirmation">
+                
                 <form id="email_confirmation_form" class="container box_border" action="{% url 'accounts:resend_verification' %}" method="get">
 
                     <p class="confirmation_text">
-                        A confirmation message has been sent to <b>{{user.email}}</b>. Confirm your email address to complete your account registration.
+                        A confirmation message has been sent to <b class="email_address">{{user.email}}</b>. Confirm your email address to complete your account registration.
                     </p>
                     
-                    <button id="resend_confirmation" type="submit">
+                    <button class="resend_confirmation" type="submit">
                         Resend Email Confirmation
                     </button>
                     
-                    <a data-apl="true" id="change_email" class="bold" href="{% url 'settings:account' %}">
+                    <a data-apl="true" class="change_email" class="bold" href="{% url 'settings:account' %}">
                         Change&nbsp;email&nbsp;address
                     </a>
             
                 </form>
             
-            </div> -->
-        {% endif %}
+            </div>
+            {% endif %}
 
-        <!-- END email confirmation ================================================== -->
-
-        <main role="main" id="main_content" class="container" data-token-id="{{ csrf_token }}"{% if user.is_authenticated %} data-auth-id="{{ user.id }}"{% endif %}>
+            <!-- END email confirmation ================================================== -->
 
             {% block content %}{% endblock content %}
             

@@ -3266,11 +3266,11 @@ Draggable.prototype = {
 				Ulo.Session.update(xhr, fragment);
 
 
-				// if(Ulo.EmailConfirmation!==undefined){
+				if(Ulo.EmailConfirmation!==undefined){
 
-				// 	Ulo.EmailConfirmation.register();
+					Ulo.EmailConfirmation.register();
 
-				// }
+				}
 
 			}
 
@@ -4477,6 +4477,83 @@ Draggable.prototype = {
 	/************************************************************************************/
 
 	/* END Pip */
+	/* -------------------------------------------------------------------------------- */
+
+
+
+
+	/* EMAIL CONFIRMATION */
+	/* -------------------------------------------------------------------------------- */
+
+	function EmailConfirmation(){
+
+		this.register();
+
+	}
+
+	EmailConfirmation.prototype = {
+
+		constructor: EmailConfirmation,
+
+		/* ---------------------------------------------------------------------------- */
+
+		register: function(context){
+
+			$(Ulo.get("email_confirmation_form")).on("submit", this.submit);
+
+		},
+
+		/* ---------------------------------------------------------------------------- */
+
+		update: function(email){
+
+			var element = Ulo.get("email_confirmation_form", ".email_address");
+
+			if(element !== null){
+
+				Ulo.empty(element).appendChild(document.createTextNode(email));
+
+			}
+
+		},
+
+		/* ---------------------------------------------------------------------------- */
+
+		submit: function(e){
+
+			e.preventDefault();
+
+			if(Ulo.requestAvailable()){
+
+				Ulo.request({
+
+						type: "GET", 
+						url: this.getAttribute("action"), 
+						cache: false
+					
+					})
+				
+					.done(function(data, sc, xhr){
+
+						Ulo.messages(data.messages);
+
+				});
+
+			}
+			
+		},
+
+		/* ---------------------------------------------------------------------------- */
+
+	}
+
+	/************************************************************************************/
+
+	Ulo.newClass(EmailConfirmation, "EmailConfirmation");
+
+	/************************************************************************************/
+
+	/* END EMAIL CONFIRMATION */
 	/* -------------------------------------------------------------------------------- */
 
 

@@ -51,6 +51,32 @@
 <!-- Main Content -->
 <main role="main" id="main_content" class="container">
 
+    <!-- email confirmation ====================================================== -->
+
+    {% if user.email_confirmed == False %}
+    <div class="email_confirmation">
+                
+        <form id="email_confirmation_form" class="container box_border" action="{% url 'accounts:resend_verification' %}" method="get">
+
+            <p class="confirmation_text">
+                A confirmation message has been sent to <b class="email_address">{{user.email}}</b>. Confirm your email address to complete your account registration.
+            </p>
+            
+            <button class="resend_confirmation" type="submit">
+                Resend Email Confirmation
+            </button>
+            
+            <a data-apl="true" class="change_email" class="bold" href="{% url 'settings:account' %}">
+                Change&nbsp;email&nbsp;address
+            </a>
+    
+        </form>
+    
+    </div>
+    {% endif %}
+
+    <!-- END email confirmation ================================================== -->
+
 	{% block content %}{% endblock content %}
 
 </main>
