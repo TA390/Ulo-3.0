@@ -3260,14 +3260,10 @@ Draggable.prototype = {
 
 
 				/*
-					Update the session if the csrf token and/or authenticated user id
-					has changed. This is determined by comparing the values from the 
-					request (xhr) and the data attributes set on the old page (current_main). 
-
-					The new values for the csrf token and the user id are set on the new
-					page container (main).
+					Update the session if it has change. Call Session.update after 
+					replacing the old page with the new page.
 				*/
-				// Ulo.Session.update(xhr, current_main, fragment);
+				Ulo.Session.update(xhr, fragment);
 
 
 				// if(Ulo.EmailConfirmation!==undefined){
@@ -3615,9 +3611,9 @@ Draggable.prototype = {
 
 								++current_main.loading;
 
-								$( css[i] ).on("load", {self: this, arguments: arguments}, this.cssLoad);
+								$(css[i]).on("load", {self: this, arguments: arguments}, this.cssLoad);
 								
-								$( css[i] ).on("error", {self: this}, this.cssError);
+								$(css[i]).on("error", {self: this}, this.cssError);
 
 							} else{
 
@@ -3895,11 +3891,20 @@ Draggable.prototype = {
 
 	function Session(){
 
+		this.timestamp = new Date().getTime();
+
+		window.sessionStorage.setItem('timestamp', this.timestamp);
+
+
 		var main = Ulo.getMain();
 
 		this.token = main.getAttribute("data-token-id") || null;
 
+		window.sessionStorage.setItem('token', this.token_id);
+
 		this.auth_id = main.getAttribute("data-auth-id") || null;
+
+		window.sessionStorage.setItem('auth_id', this.auth_id);
 
 		main.removeAttribute("data-token-id");
 
@@ -3915,7 +3920,7 @@ Draggable.prototype = {
 
 		isOwner: function(id){
 
-			return this.auth_id !== null && this.auth_id == id;
+			return this.isAuthenticated() && this.auth_id == id;
 
 		},
 
@@ -3952,15 +3957,36 @@ Draggable.prototype = {
 		*/
 		set: function(xhr){
 
-			this.token = xhr.getResponseHeader("token-id");
+			if(this._hasUserChanged(xhr)){
 
-			this.auth_id = xhr.getResponseHeader("auth-id");
+				this.timestamp = new Date().getTime();
+
+				window.sessionStorage.setItem('timestamp', this.timestamp);
+
+				this.token = xhr.getResponseHeader("token-id");
+
+				window.sessionStorage.setItem('token', this.token_id);
+
+				this.auth_id = xhr.getResponseHeader("auth-id");
+
+				window.sessionStorage.setItem('auth_id', this.auth_id);
+
+			}
+
+			var timestamp = window.sessionStorage.getItem("timestamp");
+
+			if(timestamp > this.timestamp){
+
+				this.timestamp = timestamp;
+
+			}
 
 		},
 
 		/* ---------------------------------------------------------------------------- */
 		/*
 			@param xhr: XMLHttpRequest.
+			@param fragment: Document fragment.
 		*/
 		update: function(xhr, fragment){
 
@@ -3968,9 +3994,9 @@ Draggable.prototype = {
 
 				console.log("SESSION CHANGED!");
 
-				Ulo.Session.set(xhr);
+				this.set(xhr);
 
-				this.setTokens(this.token);
+				this.setTokens();
 
 				var nav = Ulo.getFragment(fragment, "nav_ul");
 
@@ -3984,7 +4010,18 @@ Draggable.prototype = {
 
 			}
 
-			
+		},
+
+		/* ---------------------------------------------------------------------------- */
+		/*
+			@param xhr: XMLHttpRequest.
+		*/
+		_hasUserChanged: function(xhr){
+
+			var auth_id = xhr.getResponseHeader("auth-id");
+
+			return (auth_id === "None" ? null : auth_id) !== this.auth_id;
+
 		},
 
 		/* ---------------------------------------------------------------------------- */
@@ -3993,7 +4030,16 @@ Draggable.prototype = {
 		*/
 		hasChanged: function(xhr){
 
-			return xhr.getResponseHeader("session-changed") !== null
+			console.log("Has changed: ", xhr.getResponseHeader("auth-id"), this.auth_id);
+
+			;
+
+			return (
+
+				this._hasUserChanged(xhr) ||
+				window.sessionStorage.getItem("timestamp") != this.timestamp
+
+			);
 
 		},
 

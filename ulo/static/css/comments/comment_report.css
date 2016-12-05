@@ -1,0 +1,364 @@
+/* -------------------------------------------------------------------------- */
+
+#comment_report{
+
+
+	display: table;
+	table-layout: fixed;
+	margin: auto;
+	width: 100%;
+	height: 100%;
+	max-width: 600px;
+	text-align: left;
+	
+}
+
+#comment_report.hide{
+
+	display: none;
+
+}
+
+#comment_report > .centre{
+
+	display: table-cell;
+	vertical-align: middle;
+
+}
+
+#comment_report div.wrapper{
+
+	margin: 10px;
+	padding: 20px;
+	border-radius: 4px;
+	background-color: #FFF;
+
+}
+
+#comment_report div.fill{
+
+	background-color: #E9F7F8;
+
+}
+
+/* -------------------------------------------------------------------------- */
+
+#comment_report div.header{
+
+	margin-bottom: 40px;
+	overflow: hidden;
+
+}
+
+#comment_report h1{
+
+	display: block;
+	margin: 0;
+	font-size: 24px;
+	overflow: hidden;
+
+}
+
+#comment_report .back{
+
+	display: block;
+	float: right;
+	cursor: pointer;
+
+}
+
+/* -------------------------------------------------------------------------- */
+
+#comment_report div.summary{
+
+	position: relative;
+	margin: 40px 0;
+
+}
+
+#comment_report div.thumbnail{
+
+	position: absolute;
+	top: 0; left: 0;
+
+}
+
+#comment_report img{
+
+	display: block;
+	width: 40px;
+	height: auto;
+	border-radius: 4px;
+
+}
+
+#comment_report div.text{
+
+	margin-left: 50px;
+
+}
+
+#comment_report span.names{
+
+	display: block;
+
+}
+
+#comment_report p.comment{
+
+	margin: 0;
+	word-wrap: break-word;
+
+}
+
+/* -------------------------------------------------------------------------- */
+
+#comment_report p.help_text{
+
+	margin: 10px 0;
+	font-size: 16px;
+
+}
+
+#comment_report p.validation{
+
+	margin: 10px 0;
+	color: #1C82DA;
+
+}
+
+#comment_report_form_errors{
+
+	margin: 40px 0;
+
+}
+
+#comment_report div.field{
+
+	margin: 20px 0;
+
+}
+
+#post_report ul input,
+#comment_report label{
+
+	margin: 5px 0;
+	cursor: pointer;
+
+}
+
+#comment_report ul input{
+
+	margin-right: 5px;
+	width: 14px;
+	height: 14px;
+
+}
+
+/* -------------------------------------------------------------------------- */
+
+#comment_report div.submit_container{
+
+	margin-top: 40px;
+	text-align: center;
+
+}
+
+#comment_report_submit{
+
+	padding: 10px 15px;
+	border: none;
+	border-radius: 4px;
+	background-color: #333;
+	color: #FFF;
+
+}
+
+/* -------------------------------------------------------------------------- */
+
+
+/*
+#comment_report{
+
+	margin: 0 auto;
+	display: table;
+	table-layout: fixed;
+	width: 100%;
+	max-width: 400px;
+	height: 100%;
+	text-align: left;
+
+}
+
+#comment_report.hide{
+
+	display: none;
+
+}
+
+#comment_report > .centre{
+
+	padding: 10px;
+	display: table-cell;
+	vertical-align: middle;
+
+}
+
+#comment_report .panel{
+
+	margin: 20px auto;
+
+}*/
+
+/* -------------------------------------------------------------------------- */
+
+/*#comment_report h1{
+
+	float: left;
+	margin: 0;
+	line-height: 32px;
+	font-size: 24px;
+
+}
+
+#comment_report h1.white{
+
+	color: #FFF;
+
+}
+
+#comment_report div.header > a,
+#comment_report div.header > button{
+
+	float: right;
+	background-color: transparent;
+
+}*/
+
+/* -------------------------------------------------------------------------- */
+
+/*#comment_report_form div.comment_summary{
+
+	padding-bottom: 20px;
+	border-bottom: 1px solid #FFF;
+
+}
+
+#comment_report_form img.thumbnail{
+
+	float: left;
+	margin-right: 10px;
+	width: 36px;
+	height: 36px;
+	border-radius: 4px;
+
+}
+
+#comment_report_form span.name,
+#comment_report_form span.username{
+
+
+}
+
+#comment_report_form span.name{
+
+	font-size: 14px;
+
+}
+
+#comment_report_form span.username{
+
+	font-size: 12px;
+
+}
+
+#comment_report p.comment_text{
+
+	margin: 5px 0 0 46px;
+	word-wrap: break-word;
+
+}*/
+
+/* -------------------------------------------------------------------------- */
+
+/*#comment_report_form{
+
+	margin-top: 20px;
+	padding: 0 20px;
+	background-color: #E9F7F8;
+	overflow: hidden;
+	border-radius: 4px;
+
+}
+
+#comment_report p.validation{
+
+	margin: 10px 0;
+
+}
+
+#comment_report p.error{
+
+	color: #000;
+
+}
+
+#comment_report_form p.help_text{
+
+	font-size: 16px;
+
+}*/
+
+/* -------------------------------------------------------------------------- */
+
+/*#comment_report_form ul{
+
+	margin: 20px 0;
+
+}
+
+#comment_report_form li{
+
+	margin-bottom: 10px;
+
+}
+
+#comment_report_form li:last-child{
+
+	margin-bottom: 0;
+
+}
+
+#comment_report_form li > label,
+#comment_report_form li > label > input{
+
+	cursor: pointer;
+
+}
+
+#comment_report_form li > label > input{
+
+	margin: 0 5px 0 0;
+	width: 14px;
+	height: 14px;
+
+}*/
+
+/* -------------------------------------------------------------------------- */
+
+/*#comment_report_submit{
+
+	display: block;
+
+	padding: 10px 15px;
+	border: none;
+	border-radius: 4px;
+
+	cursor: pointer;
+
+}*/
+
+/* -------------------------------------------------------------------------- */
+
+
+

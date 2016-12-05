@@ -30,7 +30,7 @@ class AjaxRequestMiddleware(object):
 		# Code to be executed for each request before
 		# the view (and later middleware) are called.
 
-		is_authenticated = request.user.is_authenticated
+		is_authenticated = request.user.id
 
 
 		# Call view.
@@ -48,17 +48,9 @@ class AjaxRequestMiddleware(object):
 				response['Content-Length'] = str(len(response.content))
 
 
-			if is_authenticated != request.user.is_authenticated:
+			response['auth-id'] = request.user.id
 
-				print('SESSION CHANGED')
-
-				response['session-changed'] = True
-
-				response['token-id'] = get_token(request)
-
-				if request.user.is_authenticated:
-
-					response['auth-id'] = request.user.id
+			response['token-id'] = get_token(request)					
 
 
 			# print( request.META.get('CSRF_COOKIE') ) 
