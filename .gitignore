@@ -59,5 +59,9 @@ node_modules/
 # User-uploaded media
 ulo/media/
 
+# Static files
+ulo/static/fonts
+ulo/static/images
+
 # Sqlite
 ulo/db.sqlite3
